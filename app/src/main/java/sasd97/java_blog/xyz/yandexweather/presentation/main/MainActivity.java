@@ -17,8 +17,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
-import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
+import sasd97.java_blog.xyz.yandexweather.navigation.fragments.AppFragmentRouter;
 import sasd97.java_blog.xyz.yandexweather.navigation.Router;
+import sasd97.java_blog.xyz.yandexweather.navigation.fragments.FragmentCommand;
 
 public class MainActivity extends MvpAppCompatActivity
         implements MainView,
@@ -30,7 +31,7 @@ public class MainActivity extends MvpAppCompatActivity
 
     @InjectPresenter MainPresenter mainPresenter;
 
-    private Router<Fragment> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
+    private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class MainActivity extends MvpAppCompatActivity
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-        WeatherApp.getMainComponent().inject(this);
+        WeatherApp.get(this).getMainComponent().inject(this);
 
         setSupportActionBar(toolbar);
 

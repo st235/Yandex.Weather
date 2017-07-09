@@ -7,7 +7,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import sasd97.java_blog.xyz.yandexweather.navigation.AppActivityRouter;
+import sasd97.java_blog.xyz.yandexweather.navigation.activities.ActivityCommand;
+import sasd97.java_blog.xyz.yandexweather.navigation.activities.AppActivityRouter;
 import sasd97.java_blog.xyz.yandexweather.navigation.Router;
 
 /**
@@ -19,7 +20,7 @@ public class NavigationModule {
 
     @Provides
     @Singleton
-    public Router<Integer> provideActivitiesRouter(Context context, SparseArray<Class<?>> activitiesMap) {
-        return new AppActivityRouter(context, activitiesMap);
+    public Router<ActivityCommand> provideActivitiesRouter() {
+        return new AppActivityRouter();
     }
 }

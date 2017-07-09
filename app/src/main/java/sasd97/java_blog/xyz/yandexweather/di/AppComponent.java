@@ -6,6 +6,7 @@ import dagger.Component;
 import sasd97.java_blog.xyz.yandexweather.di.modules.AppModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.MainModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.NavigationModule;
+import sasd97.java_blog.xyz.yandexweather.di.modules.SplashScreenModule;
 import sasd97.java_blog.xyz.yandexweather.presentation.splash.SplashScreenActivity;
 
 /**
@@ -15,7 +16,6 @@ import sasd97.java_blog.xyz.yandexweather.presentation.splash.SplashScreenActivi
 @Component(modules = {AppModule.class, NavigationModule.class})
 @Singleton
 public interface AppComponent {
-    void inject(SplashScreenActivity activity);
-
-    MainComponent plusMainViewSubComponent(MainModule mainModule);
+    MainComponent plusMainComponent(MainModule module);
+    SplashScreenComponent plusSplashScreenComponent(SplashScreenModule module);
 }

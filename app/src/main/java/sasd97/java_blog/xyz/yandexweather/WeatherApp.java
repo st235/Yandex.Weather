@@ -1,13 +1,17 @@
 package sasd97.java_blog.xyz.yandexweather;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.annotation.NonNull;
 
 import sasd97.java_blog.xyz.yandexweather.di.AppComponent;
 import sasd97.java_blog.xyz.yandexweather.di.DaggerAppComponent;
 import sasd97.java_blog.xyz.yandexweather.di.MainComponent;
+import sasd97.java_blog.xyz.yandexweather.di.SplashScreenComponent;
 import sasd97.java_blog.xyz.yandexweather.di.modules.AppModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.MainModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.NavigationModule;
+import sasd97.java_blog.xyz.yandexweather.di.modules.SplashScreenModule;
 
 /**
  * Created by alexander on 07/07/2017.
@@ -15,8 +19,13 @@ import sasd97.java_blog.xyz.yandexweather.di.modules.NavigationModule;
 
 public class WeatherApp extends Application {
 
-    private static AppComponent appComponent;
-    private static MainComponent mainComponent;
+    private AppComponent appComponent;
+    private MainComponent mainComponent;
+    private SplashScreenComponent splashScreenComponent;
+
+    public static WeatherApp get(@NonNull Context context) {
+        return (WeatherApp) context.getApplicationContext();
+    }
 
     @Override
     public void onCreate() {
@@ -25,13 +34,18 @@ public class WeatherApp extends Application {
         appComponent = buildAppComponent();
     }
 
-    public static AppComponent getAppComponent() {
+    public AppComponent getAppComponent() {
         return appComponent;
     }
 
-    public static MainComponent getMainComponent() {
-        if (mainComponent == null) mainComponent = appComponent.plusMainViewSubComponent(new MainModule());
+    public MainComponent getMainComponent() {
+        if (mainComponent == null) mainComponent = appComponent.plusMainComponent(new MainModule());
         return mainComponent;
+    }
+
+    public SplashScreenComponent getSplashScreenComponent() {
+        if (splashScreenComponent == null) splashScreenComponent = appComponent.plusSplashScreenComponent(new SplashScreenModule());
+        return splashScreenComponent;
     }
 
     private AppComponent buildAppComponent() {
