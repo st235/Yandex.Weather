@@ -18,7 +18,7 @@ public class Replace extends FragmentCommandDecorator {
     }
 
     @Override
-    public FragmentTransaction onApply(FragmentTransaction transaction) {
+    protected FragmentTransaction onApply(FragmentTransaction transaction) {
         return transaction.replace(getContainer(), destinationFragment);
     }
 }

@@ -38,5 +38,5 @@ public abstract class FragmentCommandDecorator implements FragmentCommand {
         return t;
     }
 
-    public abstract FragmentTransaction onApply(FragmentTransaction transaction);
+    protected abstract FragmentTransaction onApply(FragmentTransaction transaction);
 }

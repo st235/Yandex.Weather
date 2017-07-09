@@ -1,9 +1,39 @@
 package sasd97.java_blog.xyz.yandexweather.navigation.activities;
 
+import android.app.Activity;
+import android.content.Intent;
+
+import java.lang.ref.WeakReference;
+
 /**
  * Created by alexander on 09/07/2017.
  */
 
-public interface ActivityCommandDecorator extends ActivityCommand {
-    void setNext(ActivityCommand command);
+public abstract class ActivityCommandDecorator implements ActivityCommand {
+
+    private WeakReference<Activity> currentActivity;
+
+    private ActivityCommand wrapped;
+
+    protected ActivityCommandDecorator(Activity currentActivity) {
+        this.currentActivity = new WeakReference<>(currentActivity);
+    }
+
+    public void setNext(ActivityCommand wrapped) {
+        this.wrapped = wrapped;
+    }
+
+    @Override
+    public void apply() {
+        Activity activity = currentActivity.get();
+        if (activity == null) return;
+        onApply(activity);
+        if (wrapped != null) wrapped.apply();
+    }
+
+    protected abstract void onApply(Activity activity);
+
+    protected Intent obtainIntent(Activity from, Class<?> to) {
+        return new Intent(from, to);
+    }
 }

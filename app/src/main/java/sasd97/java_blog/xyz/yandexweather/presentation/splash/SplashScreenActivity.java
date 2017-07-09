@@ -10,7 +10,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.navigation.activities.ActivityCommand;
 import sasd97.java_blog.xyz.yandexweather.navigation.activities.ActivityCommandDecorator;
-import sasd97.java_blog.xyz.yandexweather.navigation.activities.AppActivityRouter;
 import sasd97.java_blog.xyz.yandexweather.navigation.activities.Finish;
 import sasd97.java_blog.xyz.yandexweather.navigation.activities.MoveForward;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;

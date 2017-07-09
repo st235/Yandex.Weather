@@ -3,7 +3,6 @@ package sasd97.java_blog.xyz.yandexweather.presentation.main;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,9 +14,10 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
-import sasd97.java_blog.xyz.yandexweather.navigation.fragments.AppFragmentRouter;
+import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
 import sasd97.java_blog.xyz.yandexweather.navigation.Router;
 import sasd97.java_blog.xyz.yandexweather.navigation.fragments.FragmentCommand;
 
@@ -31,6 +31,7 @@ public class MainActivity extends MvpAppCompatActivity
 
     @InjectPresenter MainPresenter mainPresenter;
 
+    private Unbinder unbinder;
     private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);;
 
     @Override
@@ -38,7 +39,7 @@ public class MainActivity extends MvpAppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
         WeatherApp.get(this).getMainComponent().inject(this);
 
         setSupportActionBar(toolbar);
@@ -50,7 +51,11 @@ public class MainActivity extends MvpAppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         mainPresenter.setRouter(fragmentRouter);
 
-        if (savedInstanceState == null) mainPresenter.open();
+        if (savedInstanceState == null) onInit();
+    }
+
+    private void onInit() {
+        mainPresenter.open();
     }
 
     @Override
@@ -72,5 +77,11 @@ public class MainActivity extends MvpAppCompatActivity
     @Override
     public void closeDrawer() {
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 }

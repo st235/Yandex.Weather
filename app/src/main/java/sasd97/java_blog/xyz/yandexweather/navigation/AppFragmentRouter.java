@@ -1,13 +1,12 @@
-package sasd97.java_blog.xyz.yandexweather.navigation.fragments;
+package sasd97.java_blog.xyz.yandexweather.navigation;
 
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-import sasd97.java_blog.xyz.yandexweather.navigation.Router;
+import sasd97.java_blog.xyz.yandexweather.navigation.fragments.FragmentCommand;
 
 /**
  * Created by alexander on 07/07/2017.
