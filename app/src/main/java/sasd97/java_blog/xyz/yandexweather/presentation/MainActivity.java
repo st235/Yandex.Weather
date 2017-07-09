@@ -7,11 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
+import com.arellomobile.mvp.MvpView;
 
 import javax.inject.Inject;
 
@@ -21,15 +21,15 @@ import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.presentation.navigation.AppFragmentRouter;
 import sasd97.java_blog.xyz.yandexweather.presentation.navigation.Router;
-import sasd97.java_blog.xyz.yandexweather.presentation.navigation.keepers.AppFragmentRouterKeeper;
 import sasd97.java_blog.xyz.yandexweather.presentation.navigation.keepers.RouterKeeper;
 
-public class WeatherActivity extends MvpAppCompatActivity
+public class MainActivity extends MvpAppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
+
     @Inject RouterKeeper<Fragment> fragmentRouterKeeper;
 
     private Router<Fragment> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
@@ -65,6 +65,11 @@ public class WeatherActivity extends MvpAppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+
+        }
+
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

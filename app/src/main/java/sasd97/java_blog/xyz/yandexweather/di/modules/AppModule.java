@@ -7,8 +7,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import sasd97.java_blog.xyz.yandexweather.presentation.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.SplashScreenActivity;
-import sasd97.java_blog.xyz.yandexweather.presentation.WeatherActivity;
 
 import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.AppActivityRouter.SPLASH_SCREEN_ACTIVITY;
 import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.AppActivityRouter.WEATHER_ACTIVITY;
@@ -37,7 +37,7 @@ public class AppModule {
     public SparseArray<Class<?>> provideActivitiesMap() {
         SparseArray<Class<?>> activitiesMap = new SparseArray<>();
         activitiesMap.put(SPLASH_SCREEN_ACTIVITY, SplashScreenActivity.class);
-        activitiesMap.put(WEATHER_ACTIVITY, WeatherActivity.class);
+        activitiesMap.put(WEATHER_ACTIVITY, MainActivity.class);
         return activitiesMap;
     }
 }

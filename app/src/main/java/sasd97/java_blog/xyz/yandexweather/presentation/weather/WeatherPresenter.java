@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.presentation.presenters;
+package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
 /**
  * Created by alexander on 07/07/2017.

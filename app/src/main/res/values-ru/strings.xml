@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Navigation drawer region -->
+    <string name="main_activity_navigation_weather">Погода</string>
+    <string name="main_activity_navigation_common_group">Общее</string>
+    <string name="main_activity_navigation_settings">Настройки</string>
+    <string name="main_activity_navigation_about">О приложении</string>
+    <!-- Endregion -->
+
 </resources>
