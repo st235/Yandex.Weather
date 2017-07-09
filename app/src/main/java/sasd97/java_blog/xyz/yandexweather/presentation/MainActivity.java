@@ -8,10 +8,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
-import com.arellomobile.mvp.MvpView;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 
 import javax.inject.Inject;
 
@@ -19,18 +20,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
-import sasd97.java_blog.xyz.yandexweather.presentation.navigation.AppFragmentRouter;
-import sasd97.java_blog.xyz.yandexweather.presentation.navigation.Router;
-import sasd97.java_blog.xyz.yandexweather.presentation.navigation.keepers.RouterKeeper;
+import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
+import sasd97.java_blog.xyz.yandexweather.navigation.Router;
 
 public class MainActivity extends MvpAppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements MainView,
+        NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
 
-    @Inject RouterKeeper<Fragment> fragmentRouterKeeper;
+    @InjectPresenter MainPresenter mainPresenter;
 
     private Router<Fragment> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
 
@@ -40,23 +41,29 @@ public class MainActivity extends MvpAppCompatActivity
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-        WeatherApp.getAppComponent().inject(this);
+        WeatherApp.getMainComponent().inject(this);
 
         setSupportActionBar(toolbar);
-
-        fragmentRouterKeeper.setRouter(fragmentRouter);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+        mainPresenter.setRouter(fragmentRouter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mainPresenter.open();
     }
 
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+            closeDrawer();
             return;
         }
 
@@ -65,12 +72,12 @@ public class MainActivity extends MvpAppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()) {
-
-        }
-
-        drawer.closeDrawer(GravityCompat.START);
+        mainPresenter.navigateTo(item.getItemId());
         return true;
+    }
+
+    @Override
+    public void closeDrawer() {
+        drawer.closeDrawer(GravityCompat.START);
     }
 }

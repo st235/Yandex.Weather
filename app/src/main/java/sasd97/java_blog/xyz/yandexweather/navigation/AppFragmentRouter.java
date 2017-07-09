@@ -1,7 +1,6 @@
-package sasd97.java_blog.xyz.yandexweather.presentation.navigation;
+package sasd97.java_blog.xyz.yandexweather.navigation;
 
 import android.support.annotation.IdRes;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;

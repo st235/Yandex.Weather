@@ -10,8 +10,8 @@ import dagger.Provides;
 import sasd97.java_blog.xyz.yandexweather.presentation.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.SplashScreenActivity;
 
-import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.AppActivityRouter.SPLASH_SCREEN_ACTIVITY;
-import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.AppActivityRouter.WEATHER_ACTIVITY;
+import static sasd97.java_blog.xyz.yandexweather.navigation.AppActivityRouter.SPLASH_SCREEN_ACTIVITY;
+import static sasd97.java_blog.xyz.yandexweather.navigation.AppActivityRouter.WEATHER_ACTIVITY;
 
 /**
  * Created by alexander on 09/07/2017.

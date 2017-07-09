@@ -7,7 +7,9 @@
             android:title="@string/main_activity_navigation_weather"
             />
 
-        <item android:title="@string/main_activity_navigation_common_group">
+        <item
+            android:title="@string/main_activity_navigation_common_group"
+            android:checkable="true">
             <menu>
                 <item
                     android:id="@+id/main_activity_navigation_about"

@@ -4,7 +4,9 @@ import android.app.Application;
 
 import sasd97.java_blog.xyz.yandexweather.di.AppComponent;
 import sasd97.java_blog.xyz.yandexweather.di.DaggerAppComponent;
+import sasd97.java_blog.xyz.yandexweather.di.MainComponent;
 import sasd97.java_blog.xyz.yandexweather.di.modules.AppModule;
+import sasd97.java_blog.xyz.yandexweather.di.modules.MainModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.NavigationModule;
 
 /**
@@ -14,6 +16,7 @@ import sasd97.java_blog.xyz.yandexweather.di.modules.NavigationModule;
 public class WeatherApp extends Application {
 
     private static AppComponent appComponent;
+    private static MainComponent mainComponent;
 
     @Override
     public void onCreate() {
@@ -24,6 +27,11 @@ public class WeatherApp extends Application {
 
     public static AppComponent getAppComponent() {
         return appComponent;
+    }
+
+    public static MainComponent getMainComponent() {
+        if (mainComponent == null) mainComponent = appComponent.plusMainViewSubComponent(new MainModule());
+        return mainComponent;
     }
 
     public AppComponent buildAppComponent() {

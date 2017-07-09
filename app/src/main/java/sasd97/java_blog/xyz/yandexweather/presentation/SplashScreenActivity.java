@@ -9,7 +9,8 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import javax.inject.Inject;
 
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
-import sasd97.java_blog.xyz.yandexweather.presentation.navigation.Router;
+import sasd97.java_blog.xyz.yandexweather.navigation.AppActivityRouter;
+import sasd97.java_blog.xyz.yandexweather.navigation.Router;
 
 /**
  * Created by alexander on 07/07/2017.

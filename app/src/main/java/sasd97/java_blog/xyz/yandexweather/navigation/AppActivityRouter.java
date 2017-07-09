@@ -1,13 +1,10 @@
-package sasd97.java_blog.xyz.yandexweather.presentation.navigation;
+package sasd97.java_blog.xyz.yandexweather.navigation;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
