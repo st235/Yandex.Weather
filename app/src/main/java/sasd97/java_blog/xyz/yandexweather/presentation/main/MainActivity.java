@@ -31,7 +31,7 @@ public class MainActivity extends MvpAppCompatActivity
 
     @InjectPresenter MainPresenter mainPresenter;
 
-    private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
+    private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +49,8 @@ public class MainActivity extends MvpAppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
         mainPresenter.setRouter(fragmentRouter);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        mainPresenter.open();
+        if (savedInstanceState == null) mainPresenter.open();
     }
 
     @Override
