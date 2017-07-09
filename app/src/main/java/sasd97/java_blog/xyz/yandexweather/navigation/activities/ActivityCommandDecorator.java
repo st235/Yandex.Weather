@@ -11,9 +11,8 @@ import java.lang.ref.WeakReference;
 
 public abstract class ActivityCommandDecorator implements ActivityCommand {
 
-    private WeakReference<Activity> currentActivity;
-
     private ActivityCommand wrapped;
+    private WeakReference<Activity> currentActivity;
 
     protected ActivityCommandDecorator(Activity currentActivity) {
         this.currentActivity = new WeakReference<>(currentActivity);

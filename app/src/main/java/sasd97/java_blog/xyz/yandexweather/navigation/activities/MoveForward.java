@@ -1,9 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.navigation.activities;
 
 import android.app.Activity;
-import android.content.Intent;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Created by alexander on 09/07/2017.

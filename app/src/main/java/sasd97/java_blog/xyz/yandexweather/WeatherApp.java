@@ -3,6 +3,7 @@ package sasd97.java_blog.xyz.yandexweather;
 import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatDelegate;
 
 import sasd97.java_blog.xyz.yandexweather.di.AppComponent;
 import sasd97.java_blog.xyz.yandexweather.di.DaggerAppComponent;
@@ -18,6 +19,10 @@ import sasd97.java_blog.xyz.yandexweather.di.modules.SplashScreenModule;
  */
 
 public class WeatherApp extends Application {
+
+    static {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+    }
 
     private AppComponent appComponent;
     private MainComponent mainComponent;
