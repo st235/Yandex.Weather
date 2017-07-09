@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.presentation;
+package sasd97.java_blog.xyz.yandexweather.presentation.main;
 
 import com.arellomobile.mvp.MvpView;
 

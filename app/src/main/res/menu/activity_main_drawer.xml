@@ -8,17 +8,18 @@
             />
 
         <item
-            android:title="@string/main_activity_navigation_common_group"
-            android:checkable="true">
+            android:title="@string/main_activity_navigation_common_group">
             <menu>
                 <item
                     android:id="@+id/main_activity_navigation_about"
                     android:icon="@drawable/ic_info_outline_black_24dp"
+                    android:checkable="true"
                     android:title="@string/main_activity_navigation_about"
                     />
                 <item
                     android:id="@+id/main_activity_navigation_settings"
                     android:icon="@drawable/ic_settings_black_24dp"
+                    android:checkable="true"
                     android:title="@string/main_activity_navigation_settings"
                     />
             </menu>

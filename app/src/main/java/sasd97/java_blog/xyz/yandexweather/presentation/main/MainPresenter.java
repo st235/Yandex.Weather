@@ -1,8 +1,7 @@
-package sasd97.java_blog.xyz.yandexweather.presentation;
+package sasd97.java_blog.xyz.yandexweather.presentation.main;
 
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;

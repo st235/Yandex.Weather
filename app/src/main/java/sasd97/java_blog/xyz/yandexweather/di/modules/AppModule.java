@@ -7,8 +7,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import sasd97.java_blog.xyz.yandexweather.presentation.MainActivity;
-import sasd97.java_blog.xyz.yandexweather.presentation.SplashScreenActivity;
+import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
+import sasd97.java_blog.xyz.yandexweather.presentation.splash.SplashScreenActivity;
 
 import static sasd97.java_blog.xyz.yandexweather.navigation.AppActivityRouter.SPLASH_SCREEN_ACTIVITY;
 import static sasd97.java_blog.xyz.yandexweather.navigation.AppActivityRouter.WEATHER_ACTIVITY;
