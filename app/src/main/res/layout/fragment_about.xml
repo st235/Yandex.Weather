@@ -20,8 +20,8 @@
             android:background="@drawable/backfield_red_circle">
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
                 android:tint="@color/colorWhite"
                 app:srcCompat="@drawable/ic_sun_black_24dp" />
