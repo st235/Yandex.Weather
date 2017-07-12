@@ -5,4 +5,5 @@ package sasd97.java_blog.xyz.yandexweather.data.net;
  */
 
 public interface WeatherApi {
+
 }
