@@ -11,6 +11,6 @@ import sasd97.java_blog.xyz.yandexweather.data.models.ResponseWeather;
 
 public interface WeatherApi {
 
-    @GET("/weather")
+    @GET("weather")
     Observable<ResponseWeather> getWeather(@Query("id") String cityId, @Query("appid") String apiKey);
 }

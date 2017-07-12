@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.data;
+package sasd97.java_blog.xyz.yandexweather.domain.weather;
 
 import android.support.annotation.NonNull;
 
@@ -9,6 +9,6 @@ import sasd97.java_blog.xyz.yandexweather.data.models.ResponseWeather;
  * Created by alexander on 12/07/2017.
  */
 
-public interface AppRepository {
+public interface WeatherInteractor {
     Observable<ResponseWeather> getWeather(@NonNull String cityId, @NonNull String apiKey);
 }

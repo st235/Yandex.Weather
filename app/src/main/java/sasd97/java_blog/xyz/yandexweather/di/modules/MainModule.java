@@ -6,8 +6,14 @@ import android.util.SparseArray;
 import dagger.Module;
 import dagger.Provides;
 import sasd97.java_blog.xyz.yandexweather.R;
+import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
+import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
+import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
+import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherPresenter;
+import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
+import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -30,5 +36,19 @@ public class MainModule {
     @MainScope
     public MainPresenter provideMainPresenter(Context context, SparseArray<String> fragmentTagsConfig) {
         return new MainPresenter(context, fragmentTagsConfig);
+    }
+
+    @Provides
+    @MainScope
+    public WeatherInteractor provideWeatherInteractor(AppRepository repository) {
+        return new WeatherInteractorImpl(repository);
+    }
+
+    @Provides
+    @MainScope
+    public WeatherPresenter provideWeatherPresenter(Context context,
+                                                    RxSchedulersAbs schedulers,
+                                                    WeatherInteractor interactor) {
+        return new WeatherPresenter(context, schedulers, interactor);
     }
 }
