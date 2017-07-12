@@ -33,6 +33,7 @@ public class SplashScreenActivity extends MvpAppCompatActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WeatherApp.get(this).getSplashScreenComponent().inject(this);
+        presenter.onDebug();
         presenter.onLoad(loadNext());
     }
 
