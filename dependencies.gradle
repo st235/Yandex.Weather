@@ -11,11 +11,12 @@ ext.versions = [
         androidGradlePlugin          : '2.3.3',
 
         dagger                       : '2.11',
-        retrofit                     : '2.3.0',
         moxy                         : '1.5.3',
+
+        retrofit                     : '2.3.0',
+
         rxjava                       : '2.0.6',
         rxandroid                    : '2.0.1',
-        rxadapter                    : '1.0.0',
 
         supportLibs                  : '25.3.1',
         constraint                   : '1.0.2',
@@ -43,10 +44,10 @@ ext.libraries = [
 
         retrofit                : "com.squareup.retrofit2:retrofit:$versions.retrofit",
         retrofitGson            : "com.squareup.retrofit2:converter-gson:$versions.retrofit",
+        rxadapter               : "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit",
 
         rxjava                  : "io.reactivex.rxjava2:rxjava:$versions.rxjava",
         rxandroid               : "io.reactivex.rxjava2:rxandroid:$versions.rxandroid",
-        rxadapter               : "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$versions.rxadapter",
 
         supportAnnotations      : "com.android.support:support-annotations:$versions.supportLibs",
         supportAppCompat        : "com.android.support:appcompat-v7:$versions.supportLibs",
