@@ -1,5 +1,9 @@
 package sasd97.java_blog.xyz.yandexweather.di.modules;
 
+import android.content.Context;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
+
 import dagger.Module;
 import dagger.Provides;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
@@ -14,7 +18,7 @@ public class MainModule {
 
     @Provides
     @MainScope
-    public MainPresenter provideMainPresenter() {
-        return new MainPresenter();
+    public MainPresenter provideMainPresenter(Context context, SparseArray<String> fragmentTagsConfig) {
+        return new MainPresenter(context, fragmentTagsConfig);
     }
 }

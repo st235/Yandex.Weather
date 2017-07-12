@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +32,14 @@ public class MainActivity extends MvpAppCompatActivity
     @BindView(R.id.nav_view) NavigationView navigationView;
 
     @InjectPresenter MainPresenter mainPresenter;
+
+    @ProvidePresenter
+    public MainPresenter providePresenter() {
+        return WeatherApp
+                .get(this)
+                .getMainComponent()
+                .getMainPresenter();
+    }
 
     private Unbinder unbinder;
     private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
@@ -62,6 +71,11 @@ public class MainActivity extends MvpAppCompatActivity
     @Override
     public void selectNavigationItem(int id) {
         navigationView.setCheckedItem(id);
+    }
+
+    @Override
+    public void updateToolbar(String title) {
+        getSupportActionBar().setTitle(title);
     }
 
     @Override
