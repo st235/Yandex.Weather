@@ -7,7 +7,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -27,6 +26,9 @@ public class MainActivity extends MvpAppCompatActivity
         implements MainView,
         NavigationView.OnNavigationItemSelectedListener {
 
+    private Unbinder unbinder;
+    private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
+
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
@@ -40,9 +42,6 @@ public class MainActivity extends MvpAppCompatActivity
                 .getMainComponent()
                 .getMainPresenter();
     }
-
-    private Unbinder unbinder;
-    private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

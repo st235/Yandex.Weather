@@ -2,7 +2,7 @@ package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +13,6 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
-import sasd97.java_blog.xyz.yandexweather.data.models.Weather;
-import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -46,5 +44,9 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     public void onResume() {
         super.onResume();
         presenter.loadWeather();
+
+        ((AppCompatActivity) getActivity())
+                .getSupportActionBar()
+                .setTitle(R.string.main_activity_navigation_weather);
     }
 }

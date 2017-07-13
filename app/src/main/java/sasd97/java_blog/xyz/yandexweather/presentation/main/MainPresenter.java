@@ -1,10 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.main;
 
-import android.content.Context;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.util.SparseArray;
-import android.util.SparseIntArray;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -27,15 +23,10 @@ import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView> {
 
-    private Context context;
-    private SparseArray<String> fragmentTagsConfig;
     private Router<FragmentCommand> fragmentRouter;
     private Stack<Integer> menuItemsStack = new Stack<>();
 
-    public MainPresenter(@NonNull Context context,
-                         @NonNull SparseArray<String> fragmentTagsConfig) {
-        this.context = context;
-        this.fragmentTagsConfig = fragmentTagsConfig;
+    public MainPresenter() {
     }
 
     public void setRouter(Router<FragmentCommand> fragmentRouter) {
@@ -57,15 +48,12 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     private boolean isSameFragmentAtTheTop(@IdRes int id) {
-        String topTag = findFragmentTag(menuItemsStack.peek());
-        return topTag.equals(findFragmentTag(id));
+        return id == menuItemsStack.peek();
     }
 
     private void replaceFragment(@IdRes int id) {
         Replace replace;
-        String tag = findFragmentTag(id);
         menuItemsStack.add(id);
-        getViewState().updateToolbar(tag);
 
         switch (id) {
             case R.id.main_activity_navigation_weather:
@@ -81,13 +69,9 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 return;
         }
 
-        replace.setNext(new AddToBackStack(tag));
+        replace.setNext(new AddToBackStack());
         fragmentRouter.pushForward(replace);
         getViewState().closeDrawer();
-    }
-
-    private String findFragmentTag(@IdRes int id) {
-        return fragmentTagsConfig.get(id);
     }
 
     public void onBackClicked() {
@@ -95,6 +79,5 @@ public class MainPresenter extends MvpPresenter<MainView> {
         if (menuItemsStack.isEmpty()) return;
         int id = menuItemsStack.peek();
         getViewState().selectNavigationItem(id);
-        getViewState().updateToolbar(findFragmentTag(id));
     }
 }
