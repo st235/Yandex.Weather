@@ -45,6 +45,7 @@ public class UpdateWeatherJob extends Job {
         new JobRequest.Builder(TAG)
                 .setPeriodic(TimeUnit.MINUTES.toMillis(15), TimeUnit.MINUTES.toMillis(5))
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                .setUpdateCurrent(true)
                 .setPersisted(true)
                 .build()
                 .schedule();
