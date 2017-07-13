@@ -26,16 +26,20 @@ public class MainPresenter extends MvpPresenter<MainView> {
     private Router<FragmentCommand> fragmentRouter;
     private Stack<Integer> menuItemsStack = new Stack<>();
 
-    public MainPresenter() {
-    }
-
     public void setRouter(Router<FragmentCommand> fragmentRouter) {
         this.fragmentRouter = fragmentRouter;
     }
 
-    public void open() {
+    public void openWeatherFragment() {
         fragmentRouter.pushForward(new Replace(WeatherFragment.newInstance()));
         menuItemsStack.push(R.id.main_activity_navigation_weather);
+    }
+
+    public void onBackClicked() {
+        menuItemsStack.pop();
+        if (menuItemsStack.isEmpty()) return;
+        int id = menuItemsStack.peek();
+        getViewState().selectNavigationItem(id);
     }
 
     public void navigateTo(@IdRes int id) {
@@ -72,12 +76,5 @@ public class MainPresenter extends MvpPresenter<MainView> {
         replace.setNext(new AddToBackStack());
         fragmentRouter.pushForward(replace);
         getViewState().closeDrawer();
-    }
-
-    public void onBackClicked() {
-        menuItemsStack.pop();
-        if (menuItemsStack.isEmpty()) return;
-        int id = menuItemsStack.peek();
-        getViewState().selectNavigationItem(id);
     }
 }

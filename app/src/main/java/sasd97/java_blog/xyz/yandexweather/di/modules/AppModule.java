@@ -38,22 +38,6 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public Retrofit provideRetrofit() {
-        return new Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("http://api.openweathermap.org/data/2.5/")
-                .build();
-    }
-
-    @Provides
-    @Singleton
-    public WeatherApi provideApi(Retrofit retrofit) {
-        return retrofit.create(WeatherApi.class);
-    }
-
-    @Provides
-    @Singleton
     public RxSchedulersAbs provideSchedulers() {
         return new RxSchedulers();
     }

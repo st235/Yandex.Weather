@@ -1,6 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.main;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -64,28 +65,12 @@ public class MainActivity extends MvpAppCompatActivity
     }
 
     private void onInit() {
-        mainPresenter.open();
+        mainPresenter.openWeatherFragment();
     }
 
     @Override
-    public void selectNavigationItem(int id) {
+    public void selectNavigationItem(@IdRes int id) {
         navigationView.setCheckedItem(id);
-    }
-
-    @Override
-    public void updateToolbar(String title) {
-        getSupportActionBar().setTitle(title);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            closeDrawer();
-            return;
-        }
-
-        mainPresenter.onBackClicked();
-        super.onBackPressed();
     }
 
     @Override
@@ -103,5 +88,16 @@ public class MainActivity extends MvpAppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            closeDrawer();
+            return;
+        }
+
+        mainPresenter.onBackClicked();
+        super.onBackPressed();
     }
 }
