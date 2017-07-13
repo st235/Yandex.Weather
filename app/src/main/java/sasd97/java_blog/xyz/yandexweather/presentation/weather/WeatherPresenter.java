@@ -31,17 +31,4 @@ public class WeatherPresenter extends MvpPresenter<MvpView> {
         this.interactor = interactor;
         this.schedulers = schedulers;
     }
-
-    public void loadWeather() {
-        interactor
-        .getWeather("5601538", context.getString(R.string.open_weather_api_key))
-        .compose(schedulers.getIOToMainTransformer())
-        .onErrorReturn(t -> {
-            t.printStackTrace();
-            return new ResponseWeather();
-        })
-        .subscribe(w -> {
-            Log.d("TAG", w.toString());
-        });
-    }
 }

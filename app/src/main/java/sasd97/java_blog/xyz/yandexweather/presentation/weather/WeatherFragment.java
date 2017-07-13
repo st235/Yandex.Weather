@@ -43,8 +43,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @Override
     public void onResume() {
         super.onResume();
-        presenter.loadWeather();
-
         ((AppCompatActivity) getActivity())
                 .getSupportActionBar()
                 .setTitle(R.string.main_activity_navigation_weather);
