@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.components;
+package sasd97.java_blog.xyz.richtextview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,8 +8,6 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import sasd97.java_blog.xyz.yandexweather.R;
-import sasd97.java_blog.xyz.yandexweather.utils.FontUtils;
 
 /**
  * Created by alexander on 14/07/2017.
@@ -43,9 +41,9 @@ public class RichTextView extends AppCompatTextView {
         if (typedArray == null) return;
 
         String fontAsset = typedArray.getString(R.styleable.RichTextView_fontAsset);
-        if (FontUtils.isStringEmpty(fontAsset)) return;
+        if (FontProvider.isStringEmpty(fontAsset)) return;
 
-        Typeface font = FontUtils.getInstance().getFont(fontAsset);
+        Typeface font = FontProvider.getInstance().getFont(fontAsset);
         int style = getTypeface() != null ? getTypeface().getStyle() : Typeface.NORMAL;
         if (font != null) setTypeface(font, style);
         else Log.e(TAG, String.format("Typeface %1$s not loaded", fontAsset));

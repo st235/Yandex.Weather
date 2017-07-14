@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
+import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +20,7 @@ public class UpdateWeatherJob extends Job {
     public static final String TAG = "job.weather.update";
 
     private AppRepository repository;
+    private Gson gson = new Gson();
 
     public UpdateWeatherJob(@NonNull AppRepository repository) {
         this.repository = repository;
@@ -27,6 +29,12 @@ public class UpdateWeatherJob extends Job {
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
+        String moscowId = "524901";
+
+        repository
+                .getWeather(moscowId)
+                .subscribe(weather -> repository.saveWeather(moscowId, gson.toJson(weather)));
+
         return Result.SUCCESS;
     }
 

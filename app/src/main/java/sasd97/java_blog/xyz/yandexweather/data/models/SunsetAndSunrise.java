@@ -8,15 +8,15 @@ public class SunsetAndSunrise {
 
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private int id;
 
     @SerializedName("type")
     @Expose
-    private Integer type;
+    private int type;
 
     @SerializedName("message")
     @Expose
-    private Double message;
+    private double message;
 
     @SerializedName("country")
     @Expose
@@ -24,21 +24,21 @@ public class SunsetAndSunrise {
 
     @SerializedName("sunrise")
     @Expose
-    private Integer sunriseTime;
+    private long sunriseTime;
 
     @SerializedName("sunset")
     @Expose
-    private Integer sunsetTime;
+    private long sunsetTime;
 
-    public Integer getType() {
+    public int getType() {
         return type;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public Double getMessage() {
+    public double getMessage() {
         return message;
     }
 
@@ -46,11 +46,11 @@ public class SunsetAndSunrise {
         return country;
     }
 
-    public Integer getSunriseTime() {
+    public long getSunriseTime() {
         return sunriseTime;
     }
 
-    public Integer getSunsetTime() {
+    public long getSunsetTime() {
         return sunsetTime;
     }
 

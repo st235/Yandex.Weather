@@ -1,17 +1,19 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.text.SpannableString;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -22,6 +24,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
+import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
+import sasd97.java_blog.xyz.yandexweather.presentation.models.WeatherType;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -34,6 +38,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_type) TextView weatherType;
     @BindView(R.id.fragment_weather_card) CardView weatherCard;
     @BindView(R.id.fragment_weather_delimiter) View weatherDelimiter;
+    @BindView(R.id.fragment_weather_wind_speed) TextView weatherWindSpeed;
     @BindView(R.id.fragment_weather_temperature) TextView weatherTemperature;
     @BindView(R.id.fragment_weather_swipe_to_refresh) SwipeRefreshLayout swipeRefreshLayout;
 
@@ -66,51 +71,30 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,
                 R.color.colorPrimaryDark, R.color.colorPrimary);
 
-        weatherIcon.setText(R.string.all_weather_sunny);
+        swipeRefreshLayout.setOnRefreshListener(presenter::fetchWeather);
     }
 
     @Override
-    public void setSunny() {
-        updateWeatherTheme(R.color.colorSunnyCard, R.color.colorSunnyText);
+    public void setWeather(@NonNull WeatherModel weather, @NonNull WeatherType type) {
+        updateWeatherTheme(type.getCardColor(), type.getTextColor());
+        updateWeather(weather, type.getIconRes(), type.getTitleRes());
     }
 
     @Override
-    public void setClearSky() {
-
+    public void stopRefreshing() {
+        if (!swipeRefreshLayout.isRefreshing()) return;
+        swipeRefreshLayout.setRefreshing(false);
     }
 
-    @Override
-    public void setFoggy() {
-
-    }
-
-    @Override
-    public void setCloudy() {
-
-    }
-
-    @Override
-    public void setRainy() {
-
-    }
-
-    @Override
-    public void setSnowy() {
-
-    }
-
-    @Override
-    public void setThunder() {
-
-    }
-
-    @Override
-    public void setDrizzle() {
-
-    }
-
-    private void updateWeather() {
-
+    private void updateWeather(@NonNull WeatherModel weather,
+                               @StringRes int weatherIconId,
+                               @StringRes int weatherTypeId) {
+        weatherTemperature.setText(obtainTemperatureText(R.string.weather_fragment_current_temperature,
+                weather.getTemperature(), weather.getMinTemperature()));
+        weatherIcon.setText(weatherIconId);
+        weatherType.setText(weatherTypeId);
+        weatherCity.setText(weather.getCity());
+        weatherWindSpeed.setText(getString(R.string.weather_fragment_wind_speed, weather.getWindSpeed()));
     }
 
     private void updateWeatherTheme(@ColorRes int cardColorId,
@@ -125,6 +109,16 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         weatherType.setTextColor(textColor);
         weatherTemperature.setTextColor(textColor);
         weatherDelimiter.setBackgroundColor(textColor);
+    }
+
+    private SpannableString obtainTemperatureText(@StringRes int temperatureTextId,
+                                                  double temperature,
+                                                  double minTemperature) {
+        int temperatureLength = String.valueOf(temperature).length();
+        String temperatureText = getString(temperatureTextId, temperature, minTemperature);
+        SpannableString spannableString = new SpannableString(temperatureText);
+        spannableString.setSpan(new RelativeSizeSpan(1.5f), 0, 3 + temperatureLength, 0);
+        return spannableString;
     }
 
     @Override

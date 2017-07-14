@@ -2,6 +2,9 @@ ext.versions = [
         code                         : 3,
         name                         : '0.0.3',
 
+        richTextViewCode             : 4,
+        richTextViewName             : '0.0.1',
+
         minSdk                       : 15,
         targetSdk                    : 25,
         compileSdk                   : 25,
@@ -14,7 +17,6 @@ ext.versions = [
         moxy                         : '1.5.3',
 
         retrofit                     : '2.3.0',
-        room                         : '1.0.0-alpha3',
 
         rxjava                       : '2.0.6',
         rxandroid                    : '2.0.1',
@@ -36,6 +38,8 @@ ext.gradlePlugins = [
 ]
 
 ext.libraries = [
+        richTextView            : project(':lib-richtextview'),
+
         dagger                  : "com.google.dagger:dagger:$versions.dagger",
         daggerCompiler          : "com.google.dagger:dagger-compiler:$versions.dagger",
 

@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.utils;
+package sasd97.java_blog.xyz.richtextview;
 
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
@@ -11,22 +11,22 @@ import java.util.Map;
  * Created by alexander on 14/07/2017.
  */
 
-public class FontUtils {
+public class FontProvider {
 
-    private static FontUtils instance;
+    private static FontProvider instance;
 
     private AssetManager assetsManager;
     private Map<String, Typeface> fonts = new HashMap<>();
 
-    private FontUtils(AssetManager assetsManager) {
+    private FontProvider(AssetManager assetsManager) {
         this.assetsManager = assetsManager;
     }
 
-    public static void init(AssetManager mgr) {
-        instance = new FontUtils(mgr);
+    public static void init(AssetManager assetManager) {
+        instance = new FontProvider(assetManager);
     }
 
-    public static FontUtils getInstance() {
+    public static FontProvider getInstance() {
         return instance;
     }
 

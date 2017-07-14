@@ -8,17 +8,17 @@ public class Wind {
 
     @SerializedName("speed")
     @Expose
-    private Double speed;
+    private double speed;
 
     @SerializedName("deg")
     @Expose
-    private Double degrees;
+    private double degrees;
 
-    public Double getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
-    public Double getDegrees() {
+    public double getDegrees() {
         return degrees;
     }
 

@@ -48,13 +48,14 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
     //tests
     androidTestCompile(libraries.espressoCore, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile libraries.junit
+
+    //built-in
+    compile libraries.richTextView
 
     //support library
     compile libraries.supportDesign

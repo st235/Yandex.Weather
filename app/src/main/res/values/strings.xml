@@ -12,19 +12,36 @@
     <!-- Endregion -->
 
     <!-- Weather icons -->
-    <string name="all_weather_sunny" translatable="false">&#xf00d;</string>
-    <string name="all_weather_clear_night" translatable="false">&#xf02e;</string>
-    <string name="all_weather_foggy" translatable="false">&#xf014;</string>
-    <string name="all_weather_cloudy" translatable="false">&#xf013;</string>
-    <string name="all_weather_rainy" translatable="false">&#xf019;</string>
-    <string name="all_weather_snowy" translatable="false">&#xf01b;</string>
-    <string name="all_weather_thunder" translatable="false">&#xf01e;</string>
-    <string name="all_weather_drizzle" translatable="false">&#xf01c;</string>
+    <string name="all_weather_sunny_icon" translatable="false">&#xf00d;</string>
+    <string name="all_weather_clear_night_icon" translatable="false">&#xf02e;</string>
+    <string name="all_weather_foggy_icon" translatable="false">&#xf014;</string>
+    <string name="all_weather_cloudy_icon" translatable="false">&#xf013;</string>
+    <string name="all_weather_rainy_icon" translatable="false">&#xf019;</string>
+    <string name="all_weather_snowy_icon" translatable="false">&#xf01b;</string>
+    <string name="all_weather_thunder_icon" translatable="false">&#xf01e;</string>
+    <string name="all_weather_drizzle_icon" translatable="false">&#xf01c;</string>
+    <string name="all_weather_wind_speed" translatable="false">&#xf082;</string>
+    <!-- Endregion -->
+
+    <!-- Weather titles -->
+    <string name="all_weather_sunny_title">Sunny</string>
+    <string name="all_weather_clear_night_title">Clear sky</string>
+    <string name="all_weather_foggy_title">Foggy</string>
+    <string name="all_weather_cloudy_title">Cloudy</string>
+    <string name="all_weather_rainy_title">Rainy</string>
+    <string name="all_weather_snowy_title">Snowy</string>
+    <string name="all_weather_thunder_title">Thunder</string>
+    <string name="all_weather_drizzle_title">Drizzle</string>
     <!-- Endregion -->
 
     <!-- About fragment -->
     <string name="about_fragment_description">Application for the weather monitor.
         Mobilization was carried out within the framework of the project.</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>
+    <!-- Endregion -->
+
+    <!-- Weather fragment -->
+    <string name="weather_fragment_current_temperature">&#xf055; %1$.2f°/%2$.2f°</string>
+    <string name="weather_fragment_wind_speed">&#xf082; %1$.2f m/s</string>
     <!-- Endregion -->
 </resources>

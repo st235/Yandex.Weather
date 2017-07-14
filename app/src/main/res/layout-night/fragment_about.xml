@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:background="@drawable/backfield_red_circle"
             android:gravity="center"
-            android:text="@string/all_weather_sunny_icon"
+            android:text="@string/all_weather_clear_night_icon"
             android:textColor="@color/colorWhite"
             android:textSize="70sp"
             app:fontAsset="weather_icons.ttf"
@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
             android:gravity="center"
+            android:textColor="@color/colorWhite"
             android:text="@string/about_fragment_description"
             android:textSize="20sp" />
     </LinearLayout>
@@ -40,6 +41,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/about_fragment_footer"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorWhite"
         android:textSize="18sp" />
 </RelativeLayout>

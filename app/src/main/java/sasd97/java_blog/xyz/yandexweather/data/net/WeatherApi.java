@@ -15,5 +15,5 @@ public interface WeatherApi {
     String WEATHER_API_KEY = "38c3816a0d5664a2d18c447348f50f09";
 
     @GET("weather")
-    Observable<ResponseBody> getWeather(@Query("id") String cityId, @Query("appid") String apiKey);
+    Observable<ResponseWeather> getWeather(@Query("id") String cityId, @Query("appid") String apiKey);
 }

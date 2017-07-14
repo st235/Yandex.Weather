@@ -42,7 +42,7 @@ public class ResponseWeather {
     @Expose
     private Integer dt;
 
-    @SerializedName("sunsetAndSunrise")
+    @SerializedName("sys")
     @Expose
     private SunsetAndSunrise sunsetAndSunrise;
 

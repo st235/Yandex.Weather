@@ -9,6 +9,7 @@ import com.evernote.android.job.JobManager;
 
 import javax.inject.Inject;
 
+import sasd97.java_blog.xyz.richtextview.FontProvider;
 import sasd97.java_blog.xyz.yandexweather.background.UpdateWeatherJob;
 import sasd97.java_blog.xyz.yandexweather.di.AppComponent;
 import sasd97.java_blog.xyz.yandexweather.di.DaggerAppComponent;
@@ -16,7 +17,6 @@ import sasd97.java_blog.xyz.yandexweather.di.MainComponent;
 import sasd97.java_blog.xyz.yandexweather.di.modules.AppModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.MainModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.NavigationModule;
-import sasd97.java_blog.xyz.yandexweather.utils.FontUtils;
 
 /**
  * Created by alexander on 07/07/2017.
@@ -31,7 +31,6 @@ public class WeatherApp extends Application {
     private AppComponent appComponent;
     private MainComponent mainComponent;
 
-    @Inject FontUtils fontUtils;
     @Inject JobManager jobManager;
 
     public static WeatherApp get(@NonNull Context context) {
@@ -48,6 +47,7 @@ public class WeatherApp extends Application {
 
     private void onInit() {
         UpdateWeatherJob.scheduleJob();
+        FontProvider.init(getAssets());
     }
 
     public AppComponent getAppComponent() {
