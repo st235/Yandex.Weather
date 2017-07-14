@@ -60,6 +60,7 @@ dependencies {
     compile libraries.supportDesign
     compile libraries.supportAppCompat
     compile libraries.supportConstraint
+    compile libraries.supportCardView
 
     //http
     compile libraries.retrofit
@@ -82,10 +83,6 @@ dependencies {
     compile libraries.rxjava
     compile libraries.rxandroid
     compile libraries.rxadapter
-
-    //room
-    compile libraries.room
-    annotationProcessor libraries.roomCompiler
 
     //android job
     compile libraries.androidJob

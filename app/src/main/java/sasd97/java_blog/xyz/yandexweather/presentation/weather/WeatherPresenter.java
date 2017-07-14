@@ -1,15 +1,10 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.arellomobile.mvp.MvpView;
 
-import sasd97.java_blog.xyz.yandexweather.R;
-import sasd97.java_blog.xyz.yandexweather.data.models.ResponseWeather;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
 
@@ -18,17 +13,20 @@ import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
  */
 
 @InjectViewState
-public class WeatherPresenter extends MvpPresenter<MvpView> {
+public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
-    private Context context;
     private RxSchedulersAbs schedulers;
     private WeatherInteractor interactor;
 
-    public WeatherPresenter(@NonNull Context context,
-                            @NonNull RxSchedulersAbs schedulers,
+    public WeatherPresenter(@NonNull RxSchedulersAbs schedulers,
                             @NonNull WeatherInteractor interactor) {
-        this.context = context;
         this.interactor = interactor;
         this.schedulers = schedulers;
+    }
+
+    @Override
+    public void attachView(WeatherView view) {
+        super.attachView(view);
+        view.setSunny();
     }
 }

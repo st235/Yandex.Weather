@@ -13,19 +13,17 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <FrameLayout
+        <sasd97.java_blog.xyz.yandexweather.components.RichTextView
             android:layout_width="128dp"
             android:layout_height="128dp"
             android:layout_gravity="center"
-            android:background="@drawable/backfield_red_circle">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_gravity="center"
-                android:tint="@color/colorWhite"
-                app:srcCompat="@drawable/ic_sun_black_24dp" />
-        </FrameLayout>
+            android:background="@drawable/backfield_red_circle"
+            android:gravity="center"
+            android:text="@string/all_weather_sunny"
+            android:textColor="@color/colorWhite"
+            android:textSize="70sp"
+            app:fontAsset="weather_icons.ttf"
+            />
 
         <TextView
             android:layout_width="wrap_content"

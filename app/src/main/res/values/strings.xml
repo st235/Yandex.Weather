@@ -11,6 +11,17 @@
     <string name="main_activity_navigation_about">About</string>
     <!-- Endregion -->
 
+    <!-- Weather icons -->
+    <string name="all_weather_sunny" translatable="false">&#xf00d;</string>
+    <string name="all_weather_clear_night" translatable="false">&#xf02e;</string>
+    <string name="all_weather_foggy" translatable="false">&#xf014;</string>
+    <string name="all_weather_cloudy" translatable="false">&#xf013;</string>
+    <string name="all_weather_rainy" translatable="false">&#xf019;</string>
+    <string name="all_weather_snowy" translatable="false">&#xf01b;</string>
+    <string name="all_weather_thunder" translatable="false">&#xf01e;</string>
+    <string name="all_weather_drizzle" translatable="false">&#xf01c;</string>
+    <!-- Endregion -->
+
     <!-- About fragment -->
     <string name="about_fragment_description">Application for the weather monitor.
         Mobilization was carried out within the framework of the project.</string>

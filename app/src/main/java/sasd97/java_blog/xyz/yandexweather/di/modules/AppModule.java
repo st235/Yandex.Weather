@@ -1,6 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.di.modules;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.support.annotation.NonNull;
 
 import javax.inject.Singleton;
@@ -10,6 +11,7 @@ import dagger.Provides;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepositoryImpl;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
+import sasd97.java_blog.xyz.yandexweather.utils.FontUtils;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
 
@@ -35,6 +37,13 @@ public class AppModule {
 
     @Provides
     @Singleton
+    @NonNull
+    public AssetManager provideAssetsManager() {
+        return context.getAssets();
+    }
+
+    @Provides
+    @Singleton
     public RxSchedulersAbs provideSchedulers() {
         return new RxSchedulers();
     }
@@ -43,5 +52,12 @@ public class AppModule {
     @Singleton
     public AppRepository provideRepository(WeatherApi api) {
         return new AppRepositoryImpl(api);
+    }
+
+    @Provides
+    @Singleton
+    public FontUtils provideFontUtils(AssetManager assetManager) {
+        FontUtils.init(assetManager);
+        return FontUtils.getInstance();
     }
 }

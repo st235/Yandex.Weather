@@ -2,10 +2,8 @@ package sasd97.java_blog.xyz.yandexweather;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 
 import com.evernote.android.job.JobManager;
 
@@ -18,14 +16,13 @@ import sasd97.java_blog.xyz.yandexweather.di.MainComponent;
 import sasd97.java_blog.xyz.yandexweather.di.modules.AppModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.MainModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.NavigationModule;
+import sasd97.java_blog.xyz.yandexweather.utils.FontUtils;
 
 /**
  * Created by alexander on 07/07/2017.
  */
 
 public class WeatherApp extends Application {
-
-    private static final String TAG = WeatherApp.class.getCanonicalName();
 
     static {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
@@ -34,6 +31,7 @@ public class WeatherApp extends Application {
     private AppComponent appComponent;
     private MainComponent mainComponent;
 
+    @Inject FontUtils fontUtils;
     @Inject JobManager jobManager;
 
     public static WeatherApp get(@NonNull Context context) {
@@ -45,24 +43,11 @@ public class WeatherApp extends Application {
         super.onCreate();
         appComponent = buildAppComponent();
         getAppComponent().inject(this);
-        onDebug();
         onInit();
     }
 
     private void onInit() {
         UpdateWeatherJob.scheduleJob();
-    }
-
-    public void onDebug() {
-        if (!BuildConfig.DEBUG) return;
-        Log.i(TAG, "Application is in debug mode");
-
-        StrictMode.setThreadPolicy(
-                new StrictMode.ThreadPolicy.Builder()
-                .detectNetwork()
-                .penaltyDeath()
-                .build()
-        );
     }
 
     public AppComponent getAppComponent() {

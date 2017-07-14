@@ -1,7 +1,5 @@
 package sasd97.java_blog.xyz.yandexweather.di.modules;
 
-import android.content.Context;
-
 import dagger.Module;
 import dagger.Provides;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
@@ -33,9 +31,8 @@ public class MainModule {
 
     @Provides
     @MainScope
-    public WeatherPresenter provideWeatherPresenter(Context context,
-                                                    RxSchedulersAbs schedulers,
+    public WeatherPresenter provideWeatherPresenter(RxSchedulersAbs schedulers,
                                                     WeatherInteractor interactor) {
-        return new WeatherPresenter(context, schedulers, interactor);
+        return new WeatherPresenter(schedulers, interactor);
     }
 }

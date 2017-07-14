@@ -7,4 +7,12 @@ import com.arellomobile.mvp.MvpView;
  */
 
 public interface WeatherView extends MvpView {
+    void setSunny();
+    void setClearSky();
+    void setFoggy();
+    void setCloudy();
+    void setRainy();
+    void setSnowy();
+    void setThunder();
+    void setDrizzle();
 }

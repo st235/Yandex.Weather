@@ -3,6 +3,7 @@ package sasd97.java_blog.xyz.yandexweather.data;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 import sasd97.java_blog.xyz.yandexweather.data.models.ResponseWeather;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 
@@ -19,7 +20,7 @@ public class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Observable<ResponseWeather> getWeather(@NonNull String cityId, @NonNull String apiKey) {
-        return weatherApi.getWeather(cityId, apiKey);
+    public Observable<ResponseBody> getWeather(@NonNull String cityId) {
+        return weatherApi.getWeather(cityId, WeatherApi.WEATHER_API_KEY);
     }
 }

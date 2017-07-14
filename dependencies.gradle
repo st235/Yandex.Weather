@@ -53,9 +53,6 @@ ext.libraries = [
         rxjava                  : "io.reactivex.rxjava2:rxjava:$versions.rxjava",
         rxandroid               : "io.reactivex.rxjava2:rxandroid:$versions.rxandroid",
 
-        room                    : "android.arch.persistence.room:runtime:$versions.room",
-        roomCompiler            : "android.arch.persistence.room:compiler:$versions.room",
-
         androidJob              : "com.evernote:android-job:$versions.androidJob",
         googlePlayServicesGcm   : "com.google.android.gms:play-services-gcm:$versions.googlePlayServices",
 

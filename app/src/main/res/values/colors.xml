@@ -4,4 +4,10 @@
     <color name="colorPrimaryDark">#AF0F17</color>
     <color name="colorAccent">#2D3A4B</color>
     <color name="colorWhite">#FFFFFF</color>
+    
+    <color name="colorGreyMd200">#EEEEEE</color>
+    <color name="colorGreyMd600">#757575</color>
+
+    <color name="colorSunnyCard">#F98F69</color>
+    <color name="colorSunnyText">#FAFAF7</color>
 </resources>
