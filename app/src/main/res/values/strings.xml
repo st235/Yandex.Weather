@@ -23,7 +23,7 @@
 
     <string name="all_weather_ms">m/s</string>
     <string name="all_weather_kmh">km/h</string>
-    <string name="all_weather_mmhg">mm hg</string>
+    <string name="all_weather_mmhg">mmHg</string>
     <string name="all_weather_pascal">hPa</string>
     <!-- Endregion -->
 
@@ -38,5 +38,13 @@
     <string name="weather_fragment_current_temperature_extreme">%1$.0f %3$s\n%2$.0f %3$s</string>
     <string name="weather_fragment_wind_speed">&#xf082; %1$.2f %2$s\n&#xf079; %3$d %4$s</string>
     <string name="weather_fragment_humidity">&#xf04e; %1$d %%</string>
+    <!-- Endregion -->
+
+    <!-- Settings fragment -->
+    <string name="settings_fragment_base_group">Common</string>
+    <string name="settings_fragment_service_group">Weather update</string>
+    <string name="settings_fragment_temperature">&#xf053; Temperature</string>
+    <string name="settings_fragment_pressure">&#xf079; Pressure</string>
+    <string name="settings_fragment_wind_speed">&#xf021; Wind Speed</string>
     <!-- Endregion -->
 </resources>

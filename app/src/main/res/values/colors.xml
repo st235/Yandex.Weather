@@ -3,10 +3,14 @@
     <color name="colorPrimary">#D9363C</color>
     <color name="colorPrimaryDark">#AF0F17</color>
     <color name="colorAccent">#2D3A4B</color>
+    <color name="colorTextPrimary">#424242</color>
+    <color name="colorTextSecondary">#FAFAF7</color>
     <color name="colorWhite">#FFFFFF</color>
     
     <color name="colorGreyMd200">#EEEEEE</color>
     <color name="colorGreyMd600">#757575</color>
+    <color name="colorGreyMd800">#424242</color>
+    <color name="colorGreyMd900">#212121</color>
 
     <color name="colorSunnyCard">#F98F69</color>
     <color name="colorSunnyText">#FAFAF7</color>

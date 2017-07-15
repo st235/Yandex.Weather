@@ -33,6 +33,7 @@ public class UpdateWeatherJob extends Job {
 
         repository
                 .getWeather(repository.getCity())
+                .doOnError(Throwable::printStackTrace)
                 .subscribe(weather -> {
                     Log.i(TAG, weather.toString());
                     repository.saveWeatherToCache(repository.getCity(), gson.toJson(weather));

@@ -9,6 +9,6 @@
     <string name="all_weather_thunder_icon" translatable="false">&#xf01e;</string>
     <string name="all_weather_drizzle_icon" translatable="false">&#xf01c;</string>
     <string name="all_weather_wind_speed" translatable="false">&#xf082;</string>
-    <string name="all_weather_celsius" translatable="false">&#xf042;C</string>
-    <string name="all_weather_fahrenheit" translatable="false">&#xf042;F</string>
+    <string name="all_weather_celsius" translatable="false">°C</string>
+    <string name="all_weather_fahrenheit" translatable="false">°F</string>
 </resources>

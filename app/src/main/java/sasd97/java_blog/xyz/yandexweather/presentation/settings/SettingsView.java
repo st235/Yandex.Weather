@@ -7,4 +7,5 @@ import com.arellomobile.mvp.MvpView;
  */
 
 public interface SettingsView extends MvpView {
+    void highlightSettings();
 }
