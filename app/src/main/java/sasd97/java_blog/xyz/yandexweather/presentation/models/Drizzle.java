@@ -11,7 +11,7 @@ public class Drizzle implements WeatherType {
 
     @Override
     public boolean isApplicable(WeatherModel weather) {
-        return weather.getWeatherId() == 300;
+        return weather.getWeatherId() / 100 == 3;
     }
 
     @Override

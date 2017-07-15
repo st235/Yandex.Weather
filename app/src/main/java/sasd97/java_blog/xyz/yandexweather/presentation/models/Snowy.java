@@ -11,7 +11,7 @@ public class Snowy implements WeatherType {
 
     @Override
     public boolean isApplicable(WeatherModel weather) {
-        return weather.getWeatherId() == 600;
+        return weather.getWeatherId() / 100 == 6;
     }
 
     @Override

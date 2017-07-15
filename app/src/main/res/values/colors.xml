@@ -14,21 +14,21 @@
     <color name="colorClearNightCard">#1D2129</color>
     <color name="colorClearNightText">#FAFAF7</color>
 
-    <color name="colorFoggyCard">#F98F69</color>
+    <color name="colorFoggyCard">#A6B0C4</color>
     <color name="colorFoggyText">#FAFAF7</color>
 
-    <color name="colorCloudyCard">#F98F69</color>
+    <color name="colorCloudyCard">#8C909B</color>
     <color name="colorCloudyText">#FAFAF7</color>
 
-    <color name="colorRainyCard">#F98F69</color>
+    <color name="colorRainyCard">#E16B65</color>
     <color name="colorRainyText">#FAFAF7</color>
 
-    <color name="colorSnowyCard">#F98F69</color>
-    <color name="colorSnowyText">#FAFAF7</color>
+    <color name="colorSnowyCard">#FAF9F9</color>
+    <color name="colorSnowyText">#76716F</color>
 
-    <color name="colorThunderCard">#F98F69</color>
-    <color name="colorThunderText">#FAFAF7</color>
+    <color name="colorThunderCard">#EDD17D</color>
+    <color name="colorThunderText">#1D2129</color>
 
-    <color name="colorDrizzleCard">#F98F69</color>
+    <color name="colorDrizzleCard">#8797A0</color>
     <color name="colorDrizzleText">#FAFAF7</color>
 </resources>

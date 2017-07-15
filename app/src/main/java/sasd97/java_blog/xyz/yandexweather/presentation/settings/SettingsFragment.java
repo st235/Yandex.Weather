@@ -8,14 +8,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import sasd97.java_blog.xyz.yandexweather.R;
+import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 
 /**
  * Created by alexander on 09/07/2017.
  */
 
-public class SettingsFragment extends MvpAppCompatFragment {
+public class SettingsFragment extends MvpAppCompatFragment implements SettingsView {
+
+    @InjectPresenter SettingsPresenter presenter;
+
+    @ProvidePresenter
+    public SettingsPresenter providePresenter() {
+        return WeatherApp
+                .get(getContext())
+                .getMainComponent()
+                .getSettingsPresenter();
+    }
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();

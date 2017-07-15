@@ -11,7 +11,7 @@ public class Rainy implements WeatherType {
 
     @Override
     public boolean isApplicable(WeatherModel weather) {
-        return weather.getWeatherId() == 500;
+        return weather.getWeatherId() / 100 == 5;
     }
 
     @Override

@@ -68,7 +68,7 @@ public class CacheStorage implements Storage<String> {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(openFile(key)));
             StringBuilder sb = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 sb.append(line).append("\n");
             }

@@ -11,7 +11,7 @@ public class Cloudy implements WeatherType {
 
     @Override
     public boolean isApplicable(WeatherModel weather) {
-        return false;
+        return weather.getWeatherId() != 800 && weather.getWeatherId() / 100 == 8;
     }
 
     @Override

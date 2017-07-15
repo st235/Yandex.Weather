@@ -11,18 +11,6 @@
     <string name="main_activity_navigation_about">About</string>
     <!-- Endregion -->
 
-    <!-- Weather icons -->
-    <string name="all_weather_sunny_icon" translatable="false">&#xf00d;</string>
-    <string name="all_weather_clear_night_icon" translatable="false">&#xf02e;</string>
-    <string name="all_weather_foggy_icon" translatable="false">&#xf014;</string>
-    <string name="all_weather_cloudy_icon" translatable="false">&#xf013;</string>
-    <string name="all_weather_rainy_icon" translatable="false">&#xf019;</string>
-    <string name="all_weather_snowy_icon" translatable="false">&#xf01b;</string>
-    <string name="all_weather_thunder_icon" translatable="false">&#xf01e;</string>
-    <string name="all_weather_drizzle_icon" translatable="false">&#xf01c;</string>
-    <string name="all_weather_wind_speed" translatable="false">&#xf082;</string>
-    <!-- Endregion -->
-
     <!-- Weather titles -->
     <string name="all_weather_sunny_title">Sunny</string>
     <string name="all_weather_clear_night_title">Clear sky</string>
@@ -32,6 +20,11 @@
     <string name="all_weather_snowy_title">Snowy</string>
     <string name="all_weather_thunder_title">Thunder</string>
     <string name="all_weather_drizzle_title">Drizzle</string>
+
+    <string name="all_weather_ms">m/s</string>
+    <string name="all_weather_kmh">km/h</string>
+    <string name="all_weather_mmhg">mm hg</string>
+    <string name="all_weather_pascal">hPa</string>
     <!-- Endregion -->
 
     <!-- About fragment -->
@@ -41,7 +34,9 @@
     <!-- Endregion -->
 
     <!-- Weather fragment -->
-    <string name="weather_fragment_current_temperature">&#xf055; %1$.2f°/%2$.2f°</string>
-    <string name="weather_fragment_wind_speed">&#xf082; %1$.2f m/s</string>
+    <string name="weather_fragment_current_temperature">&#xf055; %1$.0f %2$s</string>
+    <string name="weather_fragment_current_temperature_extreme">%1$.0f %3$s\n%2$.0f %3$s</string>
+    <string name="weather_fragment_wind_speed">&#xf082; %1$.2f %2$s\n&#xf079; %3$d %4$s</string>
+    <string name="weather_fragment_humidity">&#xf04e; %1$d %%</string>
     <!-- Endregion -->
 </resources>

@@ -8,41 +8,41 @@ public class WeatherInfo {
 
     @SerializedName("temp")
     @Expose
-    private Double temp;
+    private float temp;
 
     @SerializedName("pressure")
     @Expose
-    private Integer pressure;
+    private int pressure;
 
     @SerializedName("humidity")
     @Expose
-    private Integer humidity;
+    private int humidity;
 
     @SerializedName("temp_min")
     @Expose
-    private Double tempMin;
+    private float tempMin;
 
     @SerializedName("temp_max")
     @Expose
-    private Double tempMax;
+    private float tempMax;
 
-    public Double getTemp() {
+    public float getTemp() {
         return temp;
     }
 
-    public Integer getPressure() {
+    public int getPressure() {
         return pressure;
     }
 
-    public Integer getHumidity() {
+    public int getHumidity() {
         return humidity;
     }
 
-    public Double getTempMin() {
+    public float getTempMin() {
         return tempMin;
     }
 
-    public Double getTempMax() {
+    public float getTempMax() {
         return tempMax;
     }
 

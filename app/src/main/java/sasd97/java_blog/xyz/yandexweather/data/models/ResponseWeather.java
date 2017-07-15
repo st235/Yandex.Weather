@@ -40,7 +40,7 @@ public class ResponseWeather {
 
     @SerializedName("dt")
     @Expose
-    private Integer dt;
+    private Integer updateTime;
 
     @SerializedName("sys")
     @Expose
@@ -82,8 +82,8 @@ public class ResponseWeather {
         return clouds;
     }
 
-    public Integer getDt() {
-        return dt;
+    public Integer getUpdateTime() {
+        return updateTime;
     }
 
     public SunsetAndSunrise getSunsetAndSunrise() {
@@ -113,7 +113,7 @@ public class ResponseWeather {
         sb.append(", visibility=").append(visibility);
         sb.append(", wind=").append(wind);
         sb.append(", clouds=").append(clouds);
-        sb.append(", dt=").append(dt);
+        sb.append(", dt=").append(updateTime);
         sb.append(", sunsetAndSunrise=").append(sunsetAndSunrise);
         sb.append(", name='").append(name).append('\'');
         sb.append(", cod=").append(cod);

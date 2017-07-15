@@ -1,7 +1,5 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.models;
 
-import android.util.Log;
-
 import java.util.Date;
 
 import sasd97.java_blog.xyz.yandexweather.R;
@@ -19,6 +17,7 @@ public class Sunny implements WeatherType {
 
         boolean timeCondition =
                 currentTime >= weather.getSunRiseTime() && currentTime < weather.getSunSetTime();
+
         return timeCondition && weather.getWeatherId() == 800;
     }
 

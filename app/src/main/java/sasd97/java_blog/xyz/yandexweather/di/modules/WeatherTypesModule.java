@@ -4,6 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoSet;
 import sasd97.java_blog.xyz.yandexweather.presentation.models.ClearSky;
+import sasd97.java_blog.xyz.yandexweather.presentation.models.Cloudy;
 import sasd97.java_blog.xyz.yandexweather.presentation.models.Drizzle;
 import sasd97.java_blog.xyz.yandexweather.presentation.models.Foggy;
 import sasd97.java_blog.xyz.yandexweather.presentation.models.Rainy;
@@ -29,6 +30,12 @@ public class WeatherTypesModule {
     @IntoSet
     public WeatherType provideClearSky() {
         return new ClearSky();
+    }
+
+    @Provides
+    @IntoSet
+    public WeatherType provideCloudy() {
+        return new Cloudy();
     }
 
     @Provides

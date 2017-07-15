@@ -19,8 +19,8 @@ public class UpdateWeatherJob extends Job {
 
     public static final String TAG = "job.weather.update";
 
-    private AppRepository repository;
     private Gson gson = new Gson();
+    private AppRepository repository;
 
     public UpdateWeatherJob(@NonNull AppRepository repository) {
         this.repository = repository;
@@ -29,18 +29,21 @@ public class UpdateWeatherJob extends Job {
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
-        String moscowId = "524901";
+        Log.i(TAG, "Update is started");
 
         repository
-                .getWeather(moscowId)
-                .subscribe(weather -> repository.saveWeather(moscowId, gson.toJson(weather)));
+                .getWeather(repository.getCity())
+                .subscribe(weather -> {
+                    Log.i(TAG, weather.toString());
+                    repository.saveWeatherToCache(repository.getCity(), gson.toJson(weather));
+                });
 
         return Result.SUCCESS;
     }
 
-    public static void scheduleJob() {
+    public static void scheduleJob(int minutes) {
         new JobRequest.Builder(TAG)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(15), TimeUnit.MINUTES.toMillis(5))
+                .setPeriodic(TimeUnit.MINUTES.toMillis(minutes), TimeUnit.MINUTES.toMillis(5))
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                 .setUpdateCurrent(true)
                 .setPersisted(true)

@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import sasd97.java_blog.xyz.richtextview.FontProvider;
 import sasd97.java_blog.xyz.yandexweather.background.UpdateWeatherJob;
+import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.di.AppComponent;
 import sasd97.java_blog.xyz.yandexweather.di.DaggerAppComponent;
 import sasd97.java_blog.xyz.yandexweather.di.MainComponent;
@@ -32,6 +33,7 @@ public class WeatherApp extends Application {
     private MainComponent mainComponent;
 
     @Inject JobManager jobManager;
+    @Inject AppRepository repository;
 
     public static WeatherApp get(@NonNull Context context) {
         return (WeatherApp) context.getApplicationContext();
@@ -46,8 +48,8 @@ public class WeatherApp extends Application {
     }
 
     private void onInit() {
-        UpdateWeatherJob.scheduleJob();
         FontProvider.init(getAssets());
+        UpdateWeatherJob.scheduleJob(repository.getWeatherUpdateInterval());
     }
 
     public AppComponent getAppComponent() {

@@ -11,7 +11,7 @@ public class Foggy implements WeatherType {
 
     @Override
     public boolean isApplicable(WeatherModel weather) {
-        return weather.getWeatherId() == 700;
+        return weather.getWeatherId() / 100 == 7;
     }
 
     @Override

@@ -1,0 +1,48 @@
+package sasd97.java_blog.xyz.yandexweather.domain.settings;
+
+import android.support.annotation.NonNull;
+
+import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
+
+/**
+ * Created by alexander on 15/07/2017.
+ */
+
+public class SettingsInteractorImpl implements SettingsInteractor {
+
+    private AppRepository repository;
+
+    public SettingsInteractorImpl(@NonNull AppRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public void saveTemperatureUnits(int units) {
+        repository.saveTemperatureUnits(units);
+    }
+
+    @Override
+    public int getTemperatureUnits() {
+        return repository.getTemperatureUnits();
+    }
+
+    @Override
+    public void savePressureUnits(int units) {
+        repository.savePressureUnits(units);
+    }
+
+    @Override
+    public int getPressureUnits() {
+        return repository.getPressureUnits();
+    }
+
+    @Override
+    public void saveSpeedUnits(int units) {
+        repository.saveSpeedUnits(units);
+    }
+
+    @Override
+    public int getSpeedUnits() {
+        return repository.getSpeedUnits();
+    }
+}

@@ -12,6 +12,11 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
  */
 
 public interface WeatherInteractor {
+    @NonNull String getCityId();
     Observable<WeatherModel> getWeather(@NonNull String cityId);
     Observable<WeatherModel> updateWeather(@NonNull String cityId);
+
+    int getTemperatureUnits();
+    int getPressureUnits();
+    int getSpeedUnits();
 }

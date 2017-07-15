@@ -12,14 +12,15 @@ public class WeatherModel {
     private String city;
     private int humidity;
     private int pressure;
-    private double temperature;
-    private double minTemperature;
-    private double maxTemperature;
-    private double windDegree;
-    private double windSpeed;
+    private float temperature;
+    private float minTemperature;
+    private float maxTemperature;
+    private float windDegree;
+    private float windSpeed;
     private int clouds;
     private long sunRiseTime;
     private long sunSetTime;
+    private long updateTime;
 
     private WeatherModel(@NonNull Builder builder) {
         this.weatherId = builder.weatherId;
@@ -34,6 +35,7 @@ public class WeatherModel {
         this.clouds = builder.clouds;
         this.sunRiseTime = builder.sunRiseTime;
         this.sunSetTime = builder.sunSetTime;
+        this.updateTime = builder.updateTime;
     }
 
     public int getWeatherId() {
@@ -52,23 +54,23 @@ public class WeatherModel {
         return pressure;
     }
 
-    public double getTemperature() {
+    public float getTemperature() {
         return temperature;
     }
 
-    public double getMinTemperature() {
+    public float getMinTemperature() {
         return minTemperature;
     }
 
-    public double getMaxTemperature() {
+    public float getMaxTemperature() {
         return maxTemperature;
     }
 
-    public double getWindDegree() {
+    public float getWindDegree() {
         return windDegree;
     }
 
-    public double getWindSpeed() {
+    public float getWindSpeed() {
         return windSpeed;
     }
 
@@ -82,6 +84,10 @@ public class WeatherModel {
 
     public long getSunSetTime() {
         return sunSetTime;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
     }
 
     @Override
@@ -105,14 +111,34 @@ public class WeatherModel {
         private String city;
         private int humidity;
         private int pressure;
-        private double temperature;
-        private double minTemperature;
-        private double maxTemperature;
-        private double windDegree;
-        private double windSpeed;
+        private float temperature;
+        private float minTemperature;
+        private float maxTemperature;
+        private float windDegree;
+        private float windSpeed;
         private int clouds;
         private long sunRiseTime;
         private long sunSetTime;
+        private long updateTime;
+
+        public Builder() {
+        }
+
+        public Builder(@NonNull WeatherModel weather) {
+            weatherId = weather.getWeatherId();
+            city = weather.getCity();
+            humidity = weather.getHumidity();
+            pressure = weather.getPressure();
+            temperature = weather.getTemperature();
+            minTemperature = weather.getMinTemperature();
+            maxTemperature = weather.getMaxTemperature();
+            windDegree = weather.getWindDegree();
+            windSpeed = weather.getWindSpeed();
+            clouds = weather.getClouds();
+            sunRiseTime = weather.getSunRiseTime();
+            sunSetTime = weather.getSunSetTime();
+            updateTime = weather.getUpdateTime();
+        }
 
         public Builder weatherId(int weatherId) {
             this.weatherId = weatherId;
@@ -134,27 +160,27 @@ public class WeatherModel {
             return this;
         }
 
-        public Builder temperature(double temperature) {
+        public Builder temperature(float temperature) {
             this.temperature = temperature;
             return this;
         }
 
-        public Builder minTemperature(double minTemperature) {
+        public Builder minTemperature(float minTemperature) {
             this.minTemperature = minTemperature;
             return this;
         }
 
-        public Builder maxTemperature(double maxTemperature) {
+        public Builder maxTemperature(float maxTemperature) {
             this.maxTemperature = maxTemperature;
             return this;
         }
 
-        public Builder windDegree(double windDegree) {
+        public Builder windDegree(float windDegree) {
             this.windDegree = windDegree;
             return this;
         }
 
-        public Builder windSpeed(double windSpeed) {
+        public Builder windSpeed(float windSpeed) {
             this.windSpeed = windSpeed;
             return this;
         }
@@ -171,6 +197,11 @@ public class WeatherModel {
 
         public Builder sunSetTime(long sunSetTime) {
             this.sunSetTime = sunSetTime;
+            return this;
+        }
+
+        public Builder updateTime(long updateTime) {
+            this.updateTime = updateTime;
             return this;
         }
 

@@ -3,8 +3,6 @@ package sasd97.java_blog.xyz.yandexweather.data;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
-import okhttp3.ResponseBody;
-import sasd97.java_blog.xyz.yandexweather.data.models.ResponseWeather;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
 /**
@@ -12,7 +10,33 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
  */
 
 public interface AppRepository {
-    String getCacheWeather(@NonNull String cityId);
-    void saveWeather(@NonNull String cityId, @NonNull String json);
+    //constants
+    String CITY_PREFS_KEY = "app.prefs.city";
+    String UNITS_TEMPERATURE_PREFS_KEY = "app.prefs.temperature.units";
+    String UNITS_PRESSURE_PREFS_KEY = "app.prefs.pressure.units";
+    String UNITS_SPEED_PREFS_KEY = "app.prefs.speed.units";
+    String WEATHER_UPDATE_INTERVAL_PREFS_KEY = "app.prefs.weather.update.interval";
+
+    //net
     Observable<WeatherModel> getWeather(@NonNull String cityId);
+
+    //cache
+    String getCacheWeather(@NonNull String cityId);
+    void saveWeatherToCache(@NonNull String cityId, @NonNull String json);
+
+    //prefs
+    void saveCity(@NonNull String cityId);
+    String getCity();
+
+    void saveWeatherUpdateInterval(int minutes);
+    int getWeatherUpdateInterval();
+
+    void saveTemperatureUnits(int units);
+    int getTemperatureUnits();
+
+    void savePressureUnits(int units);
+    int getPressureUnits();
+
+    void saveSpeedUnits(int units);
+    int getSpeedUnits();
 }

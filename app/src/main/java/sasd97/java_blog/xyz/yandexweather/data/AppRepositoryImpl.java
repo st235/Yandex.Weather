@@ -3,10 +3,8 @@ package sasd97.java_blog.xyz.yandexweather.data;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
-import okhttp3.ResponseBody;
-import sasd97.java_blog.xyz.yandexweather.data.models.ResponseWeather;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
-import sasd97.java_blog.xyz.yandexweather.data.storages.CacheStorage;
+import sasd97.java_blog.xyz.yandexweather.data.storages.Storage;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
 /**
@@ -16,22 +14,15 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 public class AppRepositoryImpl implements AppRepository {
 
     private WeatherApi weatherApi;
-    private CacheStorage cacheStorage;
+    private Storage<String> cacheStorage;
+    private Storage<String> prefsStorage;
 
     public AppRepositoryImpl(@NonNull WeatherApi weatherApi,
-                             @NonNull CacheStorage cacheStorage) {
+                             @NonNull Storage<String> cacheStorage,
+                             @NonNull Storage<String> prefsStorage) {
         this.weatherApi = weatherApi;
         this.cacheStorage = cacheStorage;
-    }
-
-    @Override
-    public String getCacheWeather(@NonNull String cityId) {
-        return this.cacheStorage.getString(cityId, null);
-    }
-
-    @Override
-    public void saveWeather(@NonNull String cityId, @NonNull String json) {
-        cacheStorage.put(cityId, json);
+        this.prefsStorage = prefsStorage;
     }
 
     @Override
@@ -49,8 +40,69 @@ public class AppRepositoryImpl implements AppRepository {
                                 .windDegree(w.getWind().getDegrees())
                                 .windSpeed(w.getWind().getSpeed())
                                 .clouds(w.getClouds().getPercentile())
-                                .sunRiseTime(w.getSunsetAndSunrise().getSunriseTime())
-                                .sunSetTime(w.getSunsetAndSunrise().getSunsetTime())
+                                .sunRiseTime(w.getSunsetAndSunrise().getSunriseTime() * 1000)
+                                .sunSetTime(w.getSunsetAndSunrise().getSunsetTime() * 1000)
+                                .updateTime(w.getUpdateTime())
                             .build());
+    }
+
+    @Override
+    public String getCacheWeather(@NonNull String cityId) {
+        return this.cacheStorage.getString(cityId, null);
+    }
+
+    @Override
+    public void saveWeatherToCache(@NonNull String cityId, @NonNull String json) {
+        cacheStorage.put(cityId, json);
+    }
+
+    @Override
+    public void saveCity(@NonNull String cityId) {
+        prefsStorage.put(CITY_PREFS_KEY, cityId);
+    }
+
+    @Override
+    public String getCity() {
+        return prefsStorage.getString(CITY_PREFS_KEY, "524901");
+    }
+
+    @Override
+    public void saveWeatherUpdateInterval(int minutes) {
+        prefsStorage.put(WEATHER_UPDATE_INTERVAL_PREFS_KEY, minutes);
+    }
+
+    @Override
+    public int getWeatherUpdateInterval() {
+        return prefsStorage.getInteger(WEATHER_UPDATE_INTERVAL_PREFS_KEY, 15);
+    }
+
+    @Override
+    public void saveTemperatureUnits(int units) {
+        prefsStorage.put(UNITS_TEMPERATURE_PREFS_KEY, units);
+    }
+
+    @Override
+    public int getTemperatureUnits() {
+        return prefsStorage.getInteger(UNITS_TEMPERATURE_PREFS_KEY, 0);
+    }
+
+    @Override
+    public void savePressureUnits(int units) {
+        prefsStorage.put(UNITS_PRESSURE_PREFS_KEY, units);
+    }
+
+    @Override
+    public int getPressureUnits() {
+        return prefsStorage.getInteger(UNITS_PRESSURE_PREFS_KEY, 0);
+    }
+
+    @Override
+    public void saveSpeedUnits(int units) {
+        prefsStorage.put(UNITS_SPEED_PREFS_KEY, units);
+    }
+
+    @Override
+    public int getSpeedUnits() {
+        return prefsStorage.getInteger(UNITS_SPEED_PREFS_KEY, 0);
     }
 }

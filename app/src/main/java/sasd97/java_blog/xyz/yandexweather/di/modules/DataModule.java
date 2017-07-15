@@ -11,6 +11,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 import sasd97.java_blog.xyz.yandexweather.data.storages.CacheStorage;
+import sasd97.java_blog.xyz.yandexweather.data.storages.PrefsStorage;
 
 /**
  * Created by alexander on 13/07/2017.
@@ -37,7 +38,13 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public CacheStorage provideCacheStore(Context context) {
+    public CacheStorage provideCacheStorage(Context context) {
         return new CacheStorage(context.getCacheDir());
+    }
+
+    @Provides
+    @Singleton
+    public PrefsStorage providePrefsStorage(Context context) {
+        return new PrefsStorage(context);
     }
 }

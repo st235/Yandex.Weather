@@ -11,7 +11,7 @@ public class Thunder implements WeatherType {
 
     @Override
     public boolean isApplicable(WeatherModel weather) {
-        return weather.getWeatherId() == 200;
+        return weather.getWeatherId() / 100 == 2;
     }
 
     @Override

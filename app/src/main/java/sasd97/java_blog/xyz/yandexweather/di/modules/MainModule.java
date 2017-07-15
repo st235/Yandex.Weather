@@ -1,15 +1,21 @@
 package sasd97.java_blog.xyz.yandexweather.di.modules;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import dagger.Module;
 import dagger.Provides;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
+import sasd97.java_blog.xyz.yandexweather.domain.converters.Converter;
+import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractor;
+import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.models.WeatherType;
+import sasd97.java_blog.xyz.yandexweather.presentation.settings.SettingsPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherPresenter;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
 
@@ -28,8 +34,9 @@ public class MainModule {
 
     @Provides
     @MainScope
-    public WeatherInteractor provideWeatherInteractor(AppRepository repository) {
-        return new WeatherInteractorImpl(repository);
+    public WeatherInteractor provideWeatherInteractor(AppRepository repository,
+                                                      Map<String, List<Converter<Integer, Float>>> converters) {
+        return new WeatherInteractorImpl(repository, converters);
     }
 
     @Provides
@@ -38,5 +45,18 @@ public class MainModule {
                                                     Set<WeatherType> weatherTypes,
                                                     WeatherInteractor interactor) {
         return new WeatherPresenter(schedulers, weatherTypes, interactor);
+    }
+
+    @Provides
+    @MainScope
+    public SettingsInteractor provideSettingsInteractor(AppRepository repository) {
+        return new SettingsInteractorImpl(repository);
+    }
+
+    @Provides
+    @MainScope
+    public SettingsPresenter provideSettingsPresenter(RxSchedulersAbs schedulers,
+                                                      SettingsInteractor interactor) {
+        return new SettingsPresenter(schedulers, interactor);
     }
 }

@@ -1,12 +1,15 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.Set;
 
+import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
+import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.presentation.models.WeatherType;
@@ -18,8 +21,6 @@ import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
 
 @InjectViewState
 public class WeatherPresenter extends MvpPresenter<WeatherView> {
-
-    private static final String TAG = WeatherPresenter.class.getCanonicalName();
 
     private RxSchedulersAbs schedulers;
     private WeatherInteractor interactor;
@@ -37,15 +38,27 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     public void attachView(WeatherView view) {
         super.attachView(view);
 
-        interactor.getWeather("5601538")
+        interactor.getWeather(interactor.getCityId())
                 .compose(schedulers.getIOToMainTransformer())
                 .subscribe(this::chooseWeather);
     }
 
     public void fetchWeather() {
-        interactor.updateWeather("5601538")
+        interactor.updateWeather(interactor.getCityId())
                 .compose(schedulers.getIOToMainTransformer())
                 .subscribe(this::chooseWeather);
+    }
+
+    public boolean isCelsius() {
+        return interactor.getTemperatureUnits() == ConvertersConfig.TEMPERATURE_CELSIUS;
+    }
+
+    public boolean isMs() {
+        return interactor.getSpeedUnits() == ConvertersConfig.SPEED_MS;
+    }
+
+    public boolean isMmHg() {
+        return interactor.getPressureUnits() == ConvertersConfig.PRESSURE_MMHG;
     }
 
     private void chooseWeather(@NonNull WeatherModel weather) {
