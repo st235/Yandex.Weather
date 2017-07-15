@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Я.Погода</string>
 
     <!-- Navigation drawer region -->
     <string name="main_activity_navigation_weather">Погода</string>
@@ -8,8 +9,40 @@
     <string name="main_activity_navigation_about">О приложении</string>
     <!-- Endregion -->
 
+    <!-- Weather titles -->
+    <string name="all_weather_sunny_title">Солнце</string>
+    <string name="all_weather_clear_night_title">Ясная ночь</string>
+    <string name="all_weather_foggy_title">Туман</string>
+    <string name="all_weather_cloudy_title">Облачно</string>
+    <string name="all_weather_rainy_title">Дождь</string>
+    <string name="all_weather_snowy_title">Снег</string>
+    <string name="all_weather_thunder_title">Гроза</string>
+    <string name="all_weather_drizzle_title">Изморось</string>
+
+    <string name="all_weather_ms">м/с</string>
+    <string name="all_weather_kmh">км/ч</string>
+    <string name="all_weather_mmhg">мм.рт.ст.</string>
+    <string name="all_weather_pascal">гПа</string>
+    <!-- Endregion -->
+
+
     <!-- About fragment -->
     <string name="about_fragment_description">Погодное приложение. Сделано в рамках проекта "Мобилизация".</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>
+    <!-- Endregion -->
+
+    <!-- Weather fragment -->
+    <string name="weather_fragment_current_temperature">&#xf055; %1$.0f %2$s</string>
+    <string name="weather_fragment_current_temperature_extreme">%1$.0f %3$s\n%2$.0f %3$s</string>
+    <string name="weather_fragment_wind_speed">&#xf082; %1$.2f %2$s\n&#xf079; %3$d %4$s</string>
+    <string name="weather_fragment_humidity">&#xf04e; %1$d %%</string>
+    <!-- Endregion -->
+
+    <!-- Settings fragment -->
+    <string name="settings_fragment_base_group">Единицы измерения</string>
+    <string name="settings_fragment_service_group">Обновление погоды</string>
+    <string name="settings_fragment_temperature">&#xf053; Температура</string>
+    <string name="settings_fragment_pressure">&#xf079; Давление</string>
+    <string name="settings_fragment_wind_speed">&#xf021; Скорость ветра</string>
     <!-- Endregion -->
 </resources>

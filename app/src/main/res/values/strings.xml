@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Weather</string>
+    <string name="app_name">Weather</string>
     <string name="app_alias" translatable="false">#Yamblz.Weather</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
@@ -41,7 +41,7 @@
     <!-- Endregion -->
 
     <!-- Settings fragment -->
-    <string name="settings_fragment_base_group">Common</string>
+    <string name="settings_fragment_base_group">Units</string>
     <string name="settings_fragment_service_group">Weather update</string>
     <string name="settings_fragment_temperature">&#xf053; Temperature</string>
     <string name="settings_fragment_pressure">&#xf079; Pressure</string>
