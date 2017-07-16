@@ -4,10 +4,13 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -27,7 +30,11 @@ import sasd97.java_blog.xyz.yandexweather.WeatherApp;
  * Created by alexander on 09/07/2017.
  */
 
-public class SettingsFragment extends MvpAppCompatFragment implements SettingsView {
+public class SettingsFragment extends MvpAppCompatFragment
+        implements SettingsView, SelectIntervalFragment.OnSelectItemListener {
+
+    @BindView(R.id.fragment_settings_update_interval) TextView updateInterval;
+    @BindView(R.id.fragment_settings_update_interval_switcher) SwitchCompat serviceSwitcher;
 
     @BindViews({R.id.fragment_settings_temperature_celsius,
             R.id.fragment_settings_temperature_fahrenheit})
@@ -86,6 +93,19 @@ public class SettingsFragment extends MvpAppCompatFragment implements SettingsVi
 
         if (presenter.isMmHg()) enableButton(R.id.fragment_settings_pressure_mmhg, pressureButtons);
         else enableButton(R.id.fragment_settings_pressure_pascal, pressureButtons);
+
+        if (presenter.isServiceEnabled()) showSwitcherGroup();
+        else hideSwitcherGroup();
+    }
+
+    @OnClick(R.id.fragment_settings_update_interval_switcher)
+    public void onSwitchBackgroundServiceClick(View v) {
+        presenter.switchBackgroundServiceState();
+    }
+
+    @OnClick(R.id.fragment_settings_update_interval)
+    public void onChangeIntervalClick(View v) {
+        new SelectIntervalFragment().show(getChildFragmentManager(), "S");
     }
 
     @OnClick({R.id.fragment_settings_temperature_celsius,
@@ -112,6 +132,20 @@ public class SettingsFragment extends MvpAppCompatFragment implements SettingsVi
         presenter.savePressure(v.getId());
     }
 
+    @Override
+    public void showSwitcherGroup() {
+        serviceSwitcher.setChecked(true);
+        updateInterval.setVisibility(View.VISIBLE);
+        updateInterval.setText(getString(R.string.settings_fragment_change_period,
+                presenter.getCurrentInterval()));
+    }
+
+    @Override
+    public void hideSwitcherGroup() {
+        serviceSwitcher.setChecked(false);
+        updateInterval.setVisibility(View.GONE);
+    }
+
     private void deselectGroup(List<Button> group) {
         for (Button button: group) {
             button.setTextColor(textColor);
@@ -125,5 +159,11 @@ public class SettingsFragment extends MvpAppCompatFragment implements SettingsVi
             button.setTextColor(highlightTextColor);
             button.getBackground().setColorFilter(highlightBgColor, PorterDuff.Mode.MULTIPLY);
         }
+    }
+
+    @Override
+    public void onIntervalSelected(int minutes) {
+        updateInterval.setText(getString(R.string.settings_fragment_change_period,
+                presenter.getCurrentInterval()));
     }
 }

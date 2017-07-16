@@ -8,6 +8,7 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.Set;
 
+import io.reactivex.disposables.Disposable;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;

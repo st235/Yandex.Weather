@@ -16,6 +16,7 @@ public interface AppRepository {
     String UNITS_PRESSURE_PREFS_KEY = "app.prefs.pressure.units";
     String UNITS_SPEED_PREFS_KEY = "app.prefs.speed.units";
     String WEATHER_UPDATE_INTERVAL_PREFS_KEY = "app.prefs.weather.update.interval";
+    String BACKGROUND_SERVICE_PREFS_KEY = "app.prefs.bg.service.state";
 
     //net
     Observable<WeatherModel> getWeather(@NonNull String cityId);
@@ -25,6 +26,9 @@ public interface AppRepository {
     void saveWeatherToCache(@NonNull String cityId, @NonNull String json);
 
     //prefs
+    boolean getBackgroundServiceMode();
+    boolean switchBackgroundServiceMode();
+
     void saveCity(@NonNull String cityId);
     String getCity();
 

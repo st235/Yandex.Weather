@@ -6,7 +6,6 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
-import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 
 /**
  * Created by alexander on 13/07/2017.

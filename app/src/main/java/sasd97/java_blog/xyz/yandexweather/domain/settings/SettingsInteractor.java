@@ -5,6 +5,11 @@ package sasd97.java_blog.xyz.yandexweather.domain.settings;
  */
 
 public interface SettingsInteractor {
+    boolean getBackgroundServiceState();
+    boolean switchBackgroundServiceState();
+
+    int getUpdateInterval();
+
     void saveTemperatureUnits(int units);
     int getTemperatureUnits();
 

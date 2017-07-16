@@ -1,5 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.di.modules;
 
+import com.evernote.android.job.JobManager;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -9,12 +11,15 @@ import dagger.Provides;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.Converter;
+import sasd97.java_blog.xyz.yandexweather.domain.settings.SelectIntervalInteractor;
+import sasd97.java_blog.xyz.yandexweather.domain.settings.SelectIntervalInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.models.WeatherType;
+import sasd97.java_blog.xyz.yandexweather.presentation.settings.SelectIntervalPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.settings.SettingsPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherPresenter;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
@@ -49,8 +54,9 @@ public class MainModule {
 
     @Provides
     @MainScope
-    public SettingsInteractor provideSettingsInteractor(AppRepository repository) {
-        return new SettingsInteractorImpl(repository);
+    public SettingsInteractor provideSettingsInteractor(JobManager jobManager,
+                                                        AppRepository repository) {
+        return new SettingsInteractorImpl(jobManager, repository);
     }
 
     @Provides
@@ -58,5 +64,17 @@ public class MainModule {
     public SettingsPresenter provideSettingsPresenter(RxSchedulersAbs schedulers,
                                                       SettingsInteractor interactor) {
         return new SettingsPresenter(schedulers, interactor);
+    }
+
+    @Provides
+    @MainScope
+    public SelectIntervalInteractor provideSelectIntervalInteractor(AppRepository repository) {
+        return new SelectIntervalInteractorImpl(repository);
+    }
+
+    @Provides
+    @MainScope
+    public SelectIntervalPresenter provideSelectIntervalPresenter(SelectIntervalInteractor interactor) {
+        return new SelectIntervalPresenter(interactor);
     }
 }

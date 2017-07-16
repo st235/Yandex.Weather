@@ -9,8 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.text.SpannableString;
-import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,7 +110,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         weatherHumidity.setText(getString(R.string.weather_fragment_humidity,
                 weather.getHumidity()));
 
-        weatherLastRefresh.setText(obtainRefreshTime(weather.getUpdateTime() * 1000));
+        weatherLastRefresh.setText(obtainRefreshTime(weather.getUpdateTime()));
 
         weatherIcon.setText(weatherIconId);
         weatherType.setText(weatherTypeId);

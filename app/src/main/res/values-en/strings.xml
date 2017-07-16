@@ -38,11 +38,27 @@
     <string name="weather_fragment_humidity">&#xf04e; %1$d %%</string>
     <!-- Endregion -->
 
+
     <!-- Settings fragment -->
     <string name="settings_fragment_base_group">Units</string>
     <string name="settings_fragment_service_group">Weather update</string>
     <string name="settings_fragment_temperature">&#xf053; Temperature</string>
     <string name="settings_fragment_pressure">&#xf079; Pressure</string>
     <string name="settings_fragment_wind_speed">&#xf021; Wind Speed</string>
+    <string name="settings_fragment_change_period">&#xf091; Change interval. Current: %1$d min.</string>
+    <string name="settings_fragment_available_intervals_title">Set interval</string>
+    <string name="settings_fragment_available_intervals_cancel">Cancel</string>
+    <string name="settings_fragment_available_intervals_ok">OK</string>
+    <string name="settings_fragment_available_intervals_switcher">Enable background updates</string>
+
+    <string-array name="settings_fragment_available_interval_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>45 minutes</item>
+        <item>60 minutes</item>
+        <item>75 minutes</item>
+        <item>90 minutes</item>
+        <item>120 minutes</item>
+    </string-array>
     <!-- Endregion -->
 </resources>

@@ -2,6 +2,7 @@ package sasd97.java_blog.xyz.yandexweather.presentation.settings;
 
 import android.support.annotation.NonNull;
 
+import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import sasd97.java_blog.xyz.yandexweather.R;
@@ -13,6 +14,7 @@ import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
  * Created by alexander on 15/07/2017.
  */
 
+@InjectViewState
 public class SettingsPresenter extends MvpPresenter<SettingsView> {
 
     private RxSchedulersAbs schedulers;
@@ -28,6 +30,12 @@ public class SettingsPresenter extends MvpPresenter<SettingsView> {
     public void attachView(SettingsView view) {
         super.attachView(view);
         view.highlightSettings();
+    }
+
+    public void switchBackgroundServiceState() {
+        boolean state = interactor.switchBackgroundServiceState();
+        if (state) getViewState().showSwitcherGroup();
+        else getViewState().hideSwitcherGroup();
     }
 
     public void saveTemperature(int id) {
@@ -61,6 +69,14 @@ public class SettingsPresenter extends MvpPresenter<SettingsView> {
                 interactor.savePressureUnits(ConvertersConfig.PRESSURE_PASCAL);
                 break;
         }
+    }
+
+    public int getCurrentInterval() {
+        return interactor.getUpdateInterval();
+    }
+
+    public boolean isServiceEnabled() {
+        return interactor.getBackgroundServiceState();
     }
 
     public boolean isCelsius() {

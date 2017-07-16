@@ -44,5 +44,20 @@
     <string name="settings_fragment_temperature">&#xf053; Температура</string>
     <string name="settings_fragment_pressure">&#xf079; Давление</string>
     <string name="settings_fragment_wind_speed">&#xf021; Скорость ветра</string>
+    <string name="settings_fragment_change_period">&#xf091; Изменить период обновления. Текущий: %1$d мин.</string>
+    <string name="settings_fragment_available_intervals_title">Доступные режимы</string>
+    <string name="settings_fragment_available_intervals_cancel">Отмена</string>
+    <string name="settings_fragment_available_intervals_ok">Применить</string>
+    <string name="settings_fragment_available_intervals_switcher">Разрешить работу в фоне</string>
+
+    <string-array name="settings_fragment_available_interval_titles">
+        <item>15 минут</item>
+        <item>30 минут</item>
+        <item>45 минут</item>
+        <item>60 минут</item>
+        <item>75 минут</item>
+        <item>90 минут</item>
+        <item>120 минут</item>
+    </string-array>
     <!-- Endregion -->
 </resources>

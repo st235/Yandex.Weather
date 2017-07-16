@@ -29,7 +29,7 @@ public class UpdateWeatherJob extends Job {
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
-        Log.i(TAG, "Update is started");
+        Log.i(TAG, "Update had been started");
 
         repository
                 .getWeather(repository.getCity())
@@ -37,13 +37,14 @@ public class UpdateWeatherJob extends Job {
                 .subscribe(weather -> {
                     Log.i(TAG, weather.toString());
                     repository.saveWeatherToCache(repository.getCity(), gson.toJson(weather));
-                });
+                })
+                .dispose();
 
         return Result.SUCCESS;
     }
 
-    public static void scheduleJob(int minutes) {
-        new JobRequest.Builder(TAG)
+    public static int scheduleJob(int minutes) {
+        return new JobRequest.Builder(TAG)
                 .setPeriodic(TimeUnit.MINUTES.toMillis(minutes), TimeUnit.MINUTES.toMillis(5))
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                 .setUpdateCurrent(true)

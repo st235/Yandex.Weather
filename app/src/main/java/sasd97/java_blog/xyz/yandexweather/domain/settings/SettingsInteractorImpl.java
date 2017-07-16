@@ -2,6 +2,9 @@ package sasd97.java_blog.xyz.yandexweather.domain.settings;
 
 import android.support.annotation.NonNull;
 
+import com.evernote.android.job.JobManager;
+
+import sasd97.java_blog.xyz.yandexweather.background.UpdateWeatherJob;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 
 /**
@@ -10,10 +13,34 @@ import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 
 public class SettingsInteractorImpl implements SettingsInteractor {
 
+    private JobManager jobManager;
     private AppRepository repository;
 
-    public SettingsInteractorImpl(@NonNull AppRepository repository) {
+    public SettingsInteractorImpl(@NonNull JobManager jobManager,
+                                  @NonNull AppRepository repository) {
+        this.jobManager = jobManager;
         this.repository = repository;
+    }
+
+    @Override
+    public boolean getBackgroundServiceState() {
+        return repository.getBackgroundServiceMode();
+    }
+
+    @Override
+    public boolean switchBackgroundServiceState() {
+        boolean state = repository.switchBackgroundServiceMode();
+        if (state) {
+            UpdateWeatherJob.scheduleJob(repository.getWeatherUpdateInterval());
+        } else {
+            jobManager.cancelAllForTag(UpdateWeatherJob.TAG);
+        }
+        return state;
+    }
+
+    @Override
+    public int getUpdateInterval() {
+        return repository.getWeatherUpdateInterval();
     }
 
     @Override

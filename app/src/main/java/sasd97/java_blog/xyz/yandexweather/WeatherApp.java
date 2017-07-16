@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 
 import com.evernote.android.job.JobManager;
 
@@ -49,6 +50,12 @@ public class WeatherApp extends Application {
 
     private void onInit() {
         FontProvider.init(getAssets());
+        onScheduleJob();
+    }
+
+    private void onScheduleJob() {
+        if (!repository.getBackgroundServiceMode()) return;
+        if (jobManager.getAllJobRequestsForTag(UpdateWeatherJob.TAG).size() > 0) return;
         UpdateWeatherJob.scheduleJob(repository.getWeatherUpdateInterval());
     }
 

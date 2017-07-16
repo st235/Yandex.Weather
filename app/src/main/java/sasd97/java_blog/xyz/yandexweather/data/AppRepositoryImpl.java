@@ -2,6 +2,8 @@ package sasd97.java_blog.xyz.yandexweather.data;
 
 import android.support.annotation.NonNull;
 
+import java.util.Date;
+
 import io.reactivex.Observable;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 import sasd97.java_blog.xyz.yandexweather.data.storages.Storage;
@@ -42,7 +44,7 @@ public class AppRepositoryImpl implements AppRepository {
                                 .clouds(w.getClouds().getPercentile())
                                 .sunRiseTime(w.getSunsetAndSunrise().getSunriseTime() * 1000)
                                 .sunSetTime(w.getSunsetAndSunrise().getSunsetTime() * 1000)
-                                .updateTime(w.getUpdateTime())
+                                .updateTime(new Date().getTime())
                             .build());
     }
 
@@ -54,6 +56,18 @@ public class AppRepositoryImpl implements AppRepository {
     @Override
     public void saveWeatherToCache(@NonNull String cityId, @NonNull String json) {
         cacheStorage.put(cityId, json);
+    }
+
+    @Override
+    public boolean getBackgroundServiceMode() {
+        return prefsStorage.getBoolean(BACKGROUND_SERVICE_PREFS_KEY, true);
+    }
+
+    @Override
+    public boolean switchBackgroundServiceMode() {
+        boolean mode = getBackgroundServiceMode();
+        prefsStorage.put(BACKGROUND_SERVICE_PREFS_KEY, !mode);
+        return !mode;
     }
 
     @Override
