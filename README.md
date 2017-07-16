@@ -1,14 +1,8 @@
 # Yandex.Weather
 Homework Application. Made to display the weather.
 
-## Screens
-![icon](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/icon.png =270x480)
-![splash](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/splash.png =270x480)
-![settings](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/settings.png =270x480)
-![sunny](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/sunny.png =270x480)
-![rainy](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/rainy.png =270x480)
-![thunder](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/thunder.png =270x480)
-
+## API
+To display the weather was used an open API. [OpenWeatherAPI](https://openweathermap.org/)
 
 ## Icons
 Icons were taken from [here](https://github.com/erikflowers/weather-icons). 
