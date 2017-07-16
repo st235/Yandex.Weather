@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Created by Alexander Dadukin on 21.04.2016.
  */
@@ -14,7 +11,7 @@ import java.util.Set;
 public final class PrefsStorage implements Storage<String> {
 
     private static String TAG = "SHARED_PREFS";
-    private static String APP_PREFERENCES = "COMICS_PREFS";
+    private static String APP_PREFERENCES = "WEATHER_PREFS";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -36,8 +33,6 @@ public final class PrefsStorage implements Storage<String> {
             editor.putLong(key, (Long) value);
         } else if (value instanceof String) {
             editor.putString(key, (String) value);
-        } else if (value instanceof Set) {
-            editor.putStringSet(key, (Set<String>) value);
         }
 
         Log.d(TAG, "Putted key: " + key + " value: " + value);
@@ -68,11 +63,6 @@ public final class PrefsStorage implements Storage<String> {
     @Override
     public String getString(String key, String defaultValue) {
         return sharedPreferences.getString(key, defaultValue);
-    }
-
-    @Override
-    public Set<String> getStringSet(String key) {
-        return sharedPreferences.getStringSet(key, new HashSet<String>());
     }
 
     @Override

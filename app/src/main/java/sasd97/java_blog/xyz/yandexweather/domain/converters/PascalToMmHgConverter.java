@@ -15,6 +15,6 @@ public class PascalToMmHgConverter implements Converter<Integer, Float> {
 
     @Override
     public Float convert(Float input) {
-        return  input * SCALE_FACTOR;
+        return input * SCALE_FACTOR;
     }
 }

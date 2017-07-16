@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
 
 import com.arellomobile.mvp.MvpAppCompatDialogFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -24,7 +21,7 @@ import sasd97.java_blog.xyz.yandexweather.WeatherApp;
  * Created by alexander on 15/07/2017.
  */
 
-public class SelectIntervalFragment extends MvpAppCompatDialogFragment implements SelectIntervalView {
+public class SelectWeatherUpdateIntervalFragment extends MvpAppCompatDialogFragment implements SelectWeatherUpdateIntervalView {
 
     public interface OnSelectItemListener {
         void onIntervalSelected(int minutes);
@@ -34,13 +31,14 @@ public class SelectIntervalFragment extends MvpAppCompatDialogFragment implement
     private Unbinder unbinder;
     private OnSelectItemListener listener;
 
-    @InjectPresenter SelectIntervalPresenter presenter;
+    @InjectPresenter
+    SelectWeatherUpdateIntervalPresenter presenter;
 
     @BindArray(R.array.settings_fragment_available_interval_values) int[] values;
     @BindArray(R.array.settings_fragment_available_interval_titles) String[] titles;
 
     @ProvidePresenter
-    public SelectIntervalPresenter providePresenter() {
+    public SelectWeatherUpdateIntervalPresenter providePresenter() {
         return WeatherApp
                 .get(getContext())
                 .getMainComponent()
@@ -74,10 +72,8 @@ public class SelectIntervalFragment extends MvpAppCompatDialogFragment implement
 
         builder.setTitle(R.string.settings_fragment_available_intervals_title)
                 .setSingleChoiceItems(titles, findItemByValue(currentUpdateInterval), this::handleSelection)
-                .setPositiveButton(R.string.settings_fragment_available_intervals_ok, (DialogInterface dialog, int id) -> {
-                })
-                .setNegativeButton(R.string.settings_fragment_available_intervals_cancel, (DialogInterface dialog, int id) -> {
-                });
+                .setPositiveButton(R.string.settings_fragment_available_intervals_ok, null)
+                .setNegativeButton(R.string.settings_fragment_available_intervals_cancel,  null);
 
         return builder.create();
     }

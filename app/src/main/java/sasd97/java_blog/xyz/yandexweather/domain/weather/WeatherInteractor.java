@@ -3,8 +3,6 @@ package sasd97.java_blog.xyz.yandexweather.domain.weather;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
-import okhttp3.ResponseBody;
-import sasd97.java_blog.xyz.yandexweather.data.models.ResponseWeather;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
 /**
@@ -13,6 +11,7 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
 public interface WeatherInteractor {
     @NonNull String getCityId();
+
     Observable<WeatherModel> getWeather(@NonNull String cityId);
     Observable<WeatherModel> updateWeather(@NonNull String cityId);
 

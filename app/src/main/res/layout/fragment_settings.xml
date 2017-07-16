@@ -51,7 +51,7 @@
                         android:theme="@style/SettingsTitle"
                         app:fontAsset="weather_icons.ttf" />
 
-                    <Button
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/fragment_settings_temperature_celsius"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                         android:layout_toStartOf="@+id/fragment_settings_temperature_fahrenheit"
                         android:text="@string/all_weather_celsius" />
 
-                    <Button
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/fragment_settings_temperature_fahrenheit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                         android:theme="@style/SettingsTitle"
                         app:fontAsset="weather_icons.ttf" />
 
-                    <Button
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/fragment_settings_speed_ms"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                         android:layout_toStartOf="@+id/fragment_settings_speed_kmh"
                         android:text="@string/all_weather_ms" />
 
-                    <Button
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/fragment_settings_speed_kmh"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
                         android:theme="@style/SettingsTitle"
                         app:fontAsset="weather_icons.ttf" />
 
-                    <Button
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/fragment_settings_pressure_mmhg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -127,7 +127,7 @@
                         android:layout_toStartOf="@+id/fragment_settings_pressure_pascal"
                         android:text="@string/all_weather_mmhg" />
 
-                    <Button
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/fragment_settings_pressure_pascal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

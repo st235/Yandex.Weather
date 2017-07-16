@@ -23,18 +23,20 @@ public class SettingsInteractorImpl implements SettingsInteractor {
     }
 
     @Override
-    public boolean getBackgroundServiceState() {
-        return repository.getBackgroundServiceMode();
+    public boolean isBackgroundServiceEnabled() {
+        return repository.isBackgroundServiceEnabled();
     }
 
     @Override
     public boolean switchBackgroundServiceState() {
-        boolean state = repository.switchBackgroundServiceMode();
+        boolean state = repository.switchBackgroundServiceState();
+
         if (state) {
             UpdateWeatherJob.scheduleJob(repository.getWeatherUpdateInterval());
         } else {
             jobManager.cancelAllForTag(UpdateWeatherJob.TAG);
         }
+
         return state;
     }
 

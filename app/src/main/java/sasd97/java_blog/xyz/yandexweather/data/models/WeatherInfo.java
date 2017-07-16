@@ -1,4 +1,3 @@
-
 package sasd97.java_blog.xyz.yandexweather.data.models;
 
 import com.google.gson.annotations.Expose;

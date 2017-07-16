@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,26 +30,23 @@ import sasd97.java_blog.xyz.yandexweather.WeatherApp;
  */
 
 public class SettingsFragment extends MvpAppCompatFragment
-        implements SettingsView, SelectIntervalFragment.OnSelectItemListener {
+        implements SettingsView, SelectWeatherUpdateIntervalFragment.OnSelectItemListener {
+
+    @BindColor(R.color.colorTextPrimary) int ordinaryTextColor;
+    @BindColor(R.color.colorTextSecondary) int highlightTextColor;
+    @BindColor(R.color.colorPrimaryDark) int highlightBackgroundColor;
 
     @BindView(R.id.fragment_settings_update_interval) TextView updateInterval;
     @BindView(R.id.fragment_settings_update_interval_switcher) SwitchCompat serviceSwitcher;
 
-    @BindViews({R.id.fragment_settings_temperature_celsius,
-            R.id.fragment_settings_temperature_fahrenheit})
-    List<Button> temperatureButtons;
+    @BindViews({R.id.fragment_settings_temperature_celsius, R.id.fragment_settings_temperature_fahrenheit})
+    List<Button> temperatureButtonsGroup;
 
-    @BindViews({R.id.fragment_settings_speed_ms,
-            R.id.fragment_settings_speed_kmh})
-    List<Button> speedButtons;
+    @BindViews({R.id.fragment_settings_speed_ms, R.id.fragment_settings_speed_kmh})
+    List<Button> speedButtonsGroup;
 
-    @BindViews({R.id.fragment_settings_pressure_pascal,
-            R.id.fragment_settings_pressure_mmhg})
-    List<Button> pressureButtons;
-
-    @BindColor(R.color.colorTextPrimary) int textColor;
-    @BindColor(R.color.colorTextSecondary) int highlightTextColor;
-    @BindColor(R.color.colorPrimaryDark) int highlightBgColor;
+    @BindViews({R.id.fragment_settings_pressure_pascal, R.id.fragment_settings_pressure_mmhg})
+    List<Button> pressureButtonsGroup;
 
     @InjectPresenter SettingsPresenter presenter;
 
@@ -85,50 +81,47 @@ public class SettingsFragment extends MvpAppCompatFragment
 
     @Override
     public void highlightSettings() {
-        if (presenter.isCelsius()) enableButton(R.id.fragment_settings_temperature_celsius, temperatureButtons);
-        else enableButton(R.id.fragment_settings_temperature_fahrenheit, temperatureButtons);
+        enableButton(presenter.isCelsius() ? R.id.fragment_settings_temperature_celsius :
+                R.id.fragment_settings_temperature_fahrenheit, temperatureButtonsGroup);
 
-        if (presenter.isMs()) enableButton(R.id.fragment_settings_speed_ms, speedButtons);
-        else enableButton(R.id.fragment_settings_speed_kmh, speedButtons);
+        enableButton(presenter.isMs() ? R.id.fragment_settings_speed_ms :
+                R.id.fragment_settings_speed_kmh, speedButtonsGroup);
 
-        if (presenter.isMmHg()) enableButton(R.id.fragment_settings_pressure_mmhg, pressureButtons);
-        else enableButton(R.id.fragment_settings_pressure_pascal, pressureButtons);
+        enableButton(presenter.isMmHg() ? R.id.fragment_settings_pressure_mmhg :
+                R.id.fragment_settings_pressure_pascal, pressureButtonsGroup);
 
         if (presenter.isServiceEnabled()) showSwitcherGroup();
         else hideSwitcherGroup();
     }
 
     @OnClick(R.id.fragment_settings_update_interval_switcher)
-    public void onSwitchBackgroundServiceClick(View v) {
+    public void onSwitchBackgroundServiceStateClick(View v) {
         presenter.switchBackgroundServiceState();
     }
 
     @OnClick(R.id.fragment_settings_update_interval)
-    public void onChangeIntervalClick(View v) {
-        new SelectIntervalFragment().show(getChildFragmentManager(), "S");
+    public void onChangeWeatherUpdateIntervalClick(View v) {
+        new SelectWeatherUpdateIntervalFragment().show(getChildFragmentManager(), null);
     }
 
-    @OnClick({R.id.fragment_settings_temperature_celsius,
-            R.id.fragment_settings_temperature_fahrenheit})
-    public void onTemperatureClick(View v) {
-        deselectGroup(temperatureButtons);
-        enableButton(v.getId(), temperatureButtons);
+    @OnClick({R.id.fragment_settings_temperature_celsius, R.id.fragment_settings_temperature_fahrenheit})
+    public void onTemperatureGroupClick(View v) {
+        deselectGroup(temperatureButtonsGroup);
+        enableButton(v.getId(), temperatureButtonsGroup);
         presenter.saveTemperature(v.getId());
     }
 
-    @OnClick({R.id.fragment_settings_speed_ms,
-            R.id.fragment_settings_speed_kmh})
-    public void onSpeedClick(View v) {
-        deselectGroup(speedButtons);
-        enableButton(v.getId(), speedButtons);
+    @OnClick({R.id.fragment_settings_speed_ms, R.id.fragment_settings_speed_kmh})
+    public void onSpeedGroupClick(View v) {
+        deselectGroup(speedButtonsGroup);
+        enableButton(v.getId(), speedButtonsGroup);
         presenter.saveSpeed(v.getId());
     }
 
-    @OnClick({R.id.fragment_settings_pressure_pascal,
-            R.id.fragment_settings_pressure_mmhg})
-    public void onPressureClick(View v) {
-        deselectGroup(pressureButtons);
-        enableButton(v.getId(), pressureButtons);
+    @OnClick({R.id.fragment_settings_pressure_pascal, R.id.fragment_settings_pressure_mmhg})
+    public void onPressureGroupClick(View v) {
+        deselectGroup(pressureButtonsGroup);
+        enableButton(v.getId(), pressureButtonsGroup);
         presenter.savePressure(v.getId());
     }
 
@@ -146,9 +139,15 @@ public class SettingsFragment extends MvpAppCompatFragment
         updateInterval.setVisibility(View.GONE);
     }
 
+    @Override
+    public void onIntervalSelected(int minutes) {
+        updateInterval.setText(getString(R.string.settings_fragment_change_period,
+                presenter.getCurrentInterval()));
+    }
+
     private void deselectGroup(List<Button> group) {
         for (Button button: group) {
-            button.setTextColor(textColor);
+            button.setTextColor(ordinaryTextColor);
             button.getBackground().clearColorFilter();
         }
     }
@@ -157,13 +156,7 @@ public class SettingsFragment extends MvpAppCompatFragment
         for (Button button: group) {
             if (button.getId() != buttonId) continue;
             button.setTextColor(highlightTextColor);
-            button.getBackground().setColorFilter(highlightBgColor, PorterDuff.Mode.MULTIPLY);
+            button.getBackground().setColorFilter(highlightBackgroundColor, PorterDuff.Mode.MULTIPLY);
         }
-    }
-
-    @Override
-    public void onIntervalSelected(int minutes) {
-        updateInterval.setText(getString(R.string.settings_fragment_change_period,
-                presenter.getCurrentInterval()));
     }
 }

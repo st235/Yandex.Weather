@@ -32,20 +32,20 @@ public class AppRepositoryImpl implements AppRepository {
         return weatherApi
                 .getWeather(cityId, WeatherApi.WEATHER_API_KEY)
                 .map(w -> new WeatherModel.Builder()
-                                .city(w.getName())
-                                .weatherId(w.getWeather().get(0).getId())
-                                .humidity(w.getMain().getHumidity())
-                                .pressure(w.getMain().getPressure())
-                                .temperature(w.getMain().getTemp())
-                                .minTemperature(w.getMain().getTempMin())
-                                .maxTemperature(w.getMain().getTempMax())
-                                .windDegree(w.getWind().getDegrees())
-                                .windSpeed(w.getWind().getSpeed())
-                                .clouds(w.getClouds().getPercentile())
-                                .sunRiseTime(w.getSunsetAndSunrise().getSunriseTime() * 1000)
-                                .sunSetTime(w.getSunsetAndSunrise().getSunsetTime() * 1000)
-                                .updateTime(new Date().getTime())
-                            .build());
+                        .city(w.getName())
+                        .weatherId(w.getWeather().get(0).getId())
+                        .humidity(w.getMain().getHumidity())
+                        .pressure(w.getMain().getPressure())
+                        .temperature(w.getMain().getTemp())
+                        .minTemperature(w.getMain().getTempMin())
+                        .maxTemperature(w.getMain().getTempMax())
+                        .windDegree(w.getWind().getDegrees())
+                        .windSpeed(w.getWind().getSpeed())
+                        .clouds(w.getClouds().getPercentile())
+                        .sunRiseTime(w.getSunsetAndSunrise().getSunriseTime() * 1000)
+                        .sunSetTime(w.getSunsetAndSunrise().getSunsetTime() * 1000)
+                        .updateTime(new Date().getTime())
+                        .build());
     }
 
     @Override
@@ -59,13 +59,13 @@ public class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public boolean getBackgroundServiceMode() {
+    public boolean isBackgroundServiceEnabled() {
         return prefsStorage.getBoolean(BACKGROUND_SERVICE_PREFS_KEY, true);
     }
 
     @Override
-    public boolean switchBackgroundServiceMode() {
-        boolean mode = getBackgroundServiceMode();
+    public boolean switchBackgroundServiceState() {
+        boolean mode = isBackgroundServiceEnabled();
         prefsStorage.put(BACKGROUND_SERVICE_PREFS_KEY, !mode);
         return !mode;
     }

@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.presentation.models;
+package sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes;
 
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
@@ -7,30 +7,30 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
  * Created by alexander on 14/07/2017.
  */
 
-public class Thunder implements WeatherType {
+public class Snowy implements WeatherType {
 
     @Override
     public boolean isApplicable(WeatherModel weather) {
-        return weather.getWeatherId() / 100 == 2;
+        return weather.getWeatherId() / 100 == 6;
     }
 
     @Override
     public int getIconRes() {
-        return R.string.all_weather_thunder_icon;
+        return R.string.all_weather_snowy_icon;
     }
 
     @Override
     public int getTitleRes() {
-        return R.string.all_weather_thunder_title;
+        return R.string.all_weather_snowy_title;
     }
 
     @Override
     public int getCardColor() {
-        return R.color.colorThunderCard;
+        return R.color.colorSnowyCard;
     }
 
     @Override
     public int getTextColor() {
-        return R.color.colorThunderText;
+        return R.color.colorSnowyText;
     }
 }

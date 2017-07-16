@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.MvpView;
 
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.WeatherType;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 
 /**
  * Created by alexander on 12/07/2017.

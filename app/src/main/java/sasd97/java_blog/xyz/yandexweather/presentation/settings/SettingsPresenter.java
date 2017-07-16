@@ -76,7 +76,7 @@ public class SettingsPresenter extends MvpPresenter<SettingsView> {
     }
 
     public boolean isServiceEnabled() {
-        return interactor.getBackgroundServiceState();
+        return interactor.isBackgroundServiceEnabled();
     }
 
     public boolean isCelsius() {

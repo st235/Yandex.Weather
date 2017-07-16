@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.WeatherType;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -99,19 +99,14 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                                @StringRes int weatherTypeId) {
         weatherTemperature.setText(getString(R.string.weather_fragment_current_temperature,
                 weather.getTemperature(), obtainTemperatureTitle()));
-
         weatherTemperatureExtreme.setText(getString(R.string.weather_fragment_current_temperature_extreme,
                 weather.getMaxTemperature(), weather.getMinTemperature(), obtainTemperatureTitle()));
-
         weatherWindSpeed.setText(getString(R.string.weather_fragment_wind_speed,
                 weather.getWindSpeed(), obtainSpeedTitle(),
                 weather.getPressure(), obtainPressureTitle()));
-
         weatherHumidity.setText(getString(R.string.weather_fragment_humidity,
                 weather.getHumidity()));
-
         weatherLastRefresh.setText(obtainRefreshTime(weather.getUpdateTime()));
-
         weatherIcon.setText(weatherIconId);
         weatherType.setText(weatherTypeId);
         weatherCity.setText(weather.getCity());

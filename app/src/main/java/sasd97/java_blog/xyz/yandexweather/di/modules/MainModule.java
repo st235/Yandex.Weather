@@ -11,15 +11,15 @@ import dagger.Provides;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.Converter;
-import sasd97.java_blog.xyz.yandexweather.domain.settings.SelectIntervalInteractor;
-import sasd97.java_blog.xyz.yandexweather.domain.settings.SelectIntervalInteractorImpl;
+import sasd97.java_blog.xyz.yandexweather.domain.settings.SelectWeatherUpdateIntervalInteractor;
+import sasd97.java_blog.xyz.yandexweather.domain.settings.SelectWeatherUpdateIntervalInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.WeatherType;
-import sasd97.java_blog.xyz.yandexweather.presentation.settings.SelectIntervalPresenter;
+import sasd97.java_blog.xyz.yandexweather.presentation.settings.SelectWeatherUpdateIntervalPresenter;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.presentation.settings.SettingsPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherPresenter;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
@@ -68,13 +68,13 @@ public class MainModule {
 
     @Provides
     @MainScope
-    public SelectIntervalInteractor provideSelectIntervalInteractor(AppRepository repository) {
-        return new SelectIntervalInteractorImpl(repository);
+    public SelectWeatherUpdateIntervalInteractor provideSelectIntervalInteractor(AppRepository repository) {
+        return new SelectWeatherUpdateIntervalInteractorImpl(repository);
     }
 
     @Provides
     @MainScope
-    public SelectIntervalPresenter provideSelectIntervalPresenter(SelectIntervalInteractor interactor) {
-        return new SelectIntervalPresenter(interactor);
+    public SelectWeatherUpdateIntervalPresenter provideSelectIntervalPresenter(SelectWeatherUpdateIntervalInteractor interactor) {
+        return new SelectWeatherUpdateIntervalPresenter(interactor);
     }
 }

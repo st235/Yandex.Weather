@@ -7,17 +7,15 @@ import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import io.reactivex.Observable;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
-import sasd97.java_blog.xyz.yandexweather.data.models.Weather;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.Converter;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
-import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig.TEMPERATURE_CONVERTERS_KEY;
 import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig.PRESSURE_CONVERTERS_KEY;
 import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig.SPEED_CONVERTERS_KEY;
+import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig.TEMPERATURE_CONVERTERS_KEY;
 
 /**
  * Created by alexander on 12/07/2017.
@@ -52,11 +50,12 @@ public class WeatherInteractorImpl implements WeatherInteractor {
         String cacheWeather = repository.getCacheWeather(cityId);
         if (cacheWeather == null) return updateWeather(cityId);
 
-        Log.d(TAG, "Cache is provided.");
+        Log.i(TAG, "Cache provided.");
 
         Observable<WeatherModel> observable = Observable.just(cacheWeather)
                 .map(cache -> gson.fromJson(cache, WeatherModel.class));
-        return applyConverter(observable);
+
+        return convertModel(observable);
     }
 
     @Override
@@ -64,7 +63,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
         Observable<WeatherModel> observable = repository
                 .getWeather(cityId)
                 .doOnNext(w -> repository.saveWeatherToCache(cityId, gson.toJson(w)));
-        return applyConverter(observable);
+        return convertModel(observable);
     }
 
     @Override
@@ -82,7 +81,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
         return repository.getSpeedUnits();
     }
 
-    private Observable<WeatherModel> applyConverter(Observable<WeatherModel> weatherObservable) {
+    private Observable<WeatherModel> convertModel(Observable<WeatherModel> weatherObservable) {
         return weatherObservable
                 .map(w -> new WeatherModel.Builder(w)
                         .temperature(
@@ -110,7 +109,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
 
     private float applyConverter(int mode, float value,
                                  @NonNull List<Converter<Integer, Float>> converters) {
-        for(Converter<Integer, Float> converter: converters) {
+        for (Converter<Integer, Float> converter: converters) {
             if (converter.isApplicable(mode)) return converter.convert(value);
         }
         return value;

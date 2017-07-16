@@ -9,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Set;
 
 /**
  * Created by alexander on 14/07/2017.
@@ -22,7 +21,7 @@ public class CacheStorage implements Storage<String> {
     private File cacheDirectory;
 
     public CacheStorage(@NonNull File cacheDirectory) {
-            this.cacheDirectory = cacheDirectory;
+        this.cacheDirectory = cacheDirectory;
     }
 
     @Override
@@ -45,28 +44,60 @@ public class CacheStorage implements Storage<String> {
 
     @Override
     public boolean getBoolean(String key, boolean defaultValue) {
-        return false;
+        try {
+            BufferedReader reader = openFile(key);
+            String buffer = reader.readLine();
+            reader.close();
+            return Boolean.valueOf(buffer);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return defaultValue;
+        }
     }
 
     @Override
     public int getInteger(String key, int defaultValue) {
-        return 0;
+        try {
+            BufferedReader reader = openFile(key);
+            String buffer = reader.readLine();
+            reader.close();
+            return Integer.valueOf(buffer);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return defaultValue;
+        }
     }
 
     @Override
     public float getFloat(String key, float defaultValue) {
-        return 0;
+        try {
+            BufferedReader reader = openFile(key);
+            String buffer = reader.readLine();
+            reader.close();
+            return Float.valueOf(buffer);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return defaultValue;
+        }
     }
 
     @Override
     public long getLong(String key, long defaultValue) {
-        return 0;
+        try {
+            BufferedReader reader = openFile(key);
+            String buffer = reader.readLine();
+            reader.close();
+            return Long.valueOf(buffer);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return defaultValue;
+        }
     }
 
     @Override
     public String getString(String key, String defaultValue) {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(openFile(key)));
+            BufferedReader reader = openFile(key);
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
@@ -81,21 +112,19 @@ public class CacheStorage implements Storage<String> {
     }
 
     @Override
-    public Set<String> getStringSet(String key) {
-        return null;
-    }
-
-    @Override
     public void remove(String key) {
-
+        File file = new File(cacheDirectory, key);
+        file.delete();
     }
 
     @Override
     public void clear() {
+        cacheDirectory.delete();
     }
 
-    private FileInputStream openFile(String key) throws IOException {
+    private BufferedReader openFile(String key) throws IOException {
         File file = new File(cacheDirectory, key);
-        return new FileInputStream(file);
+        FileInputStream inputStream = new FileInputStream(file);
+        return new BufferedReader(new InputStreamReader(inputStream));
     }
 }

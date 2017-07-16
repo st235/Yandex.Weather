@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.presentation.models;
+package sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes;
 
 import java.util.Date;
 

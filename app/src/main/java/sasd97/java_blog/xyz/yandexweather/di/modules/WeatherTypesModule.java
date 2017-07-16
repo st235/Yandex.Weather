@@ -3,15 +3,15 @@ package sasd97.java_blog.xyz.yandexweather.di.modules;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoSet;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.ClearSky;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.Cloudy;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.Drizzle;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.Foggy;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.Rainy;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.Snowy;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.Sunny;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.Thunder;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.WeatherType;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.ClearSky;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.Cloudy;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.Drizzle;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.Foggy;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.Rainy;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.Snowy;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.Sunny;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.Thunder;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 
 /**
  * Created by alexander on 14/07/2017.

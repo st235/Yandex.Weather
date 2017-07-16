@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.presentation.models;
+package sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes;
 
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
@@ -7,30 +7,30 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
  * Created by alexander on 14/07/2017.
  */
 
-public class Cloudy implements WeatherType {
+public class Drizzle implements WeatherType {
 
     @Override
     public boolean isApplicable(WeatherModel weather) {
-        return weather.getWeatherId() != 800 && weather.getWeatherId() / 100 == 8;
+        return weather.getWeatherId() / 100 == 3;
     }
 
     @Override
     public int getIconRes() {
-        return R.string.all_weather_cloudy_icon;
+        return R.string.all_weather_drizzle_icon;
     }
 
     @Override
     public int getTitleRes() {
-        return R.string.all_weather_cloudy_title;
+        return R.string.all_weather_drizzle_title;
     }
 
     @Override
     public int getCardColor() {
-        return R.color.colorCloudyCard;
+        return R.color.colorDrizzleCard;
     }
 
     @Override
     public int getTextColor() {
-        return R.color.colorCloudyText;
+        return R.color.colorDrizzleText;
     }
 }

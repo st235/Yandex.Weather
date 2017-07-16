@@ -13,9 +13,9 @@ import sasd97.java_blog.xyz.yandexweather.domain.converters.KelvinToFahrenheitCo
 import sasd97.java_blog.xyz.yandexweather.domain.converters.MsToKmHConverter;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.PascalToMmHgConverter;
 
-import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig.TEMPERATURE_CONVERTERS_KEY;
 import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig.PRESSURE_CONVERTERS_KEY;
 import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig.SPEED_CONVERTERS_KEY;
+import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig.TEMPERATURE_CONVERTERS_KEY;
 
 /**
  * Created by alexander on 15/07/2017.

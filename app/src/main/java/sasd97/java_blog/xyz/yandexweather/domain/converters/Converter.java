@@ -6,5 +6,6 @@ package sasd97.java_blog.xyz.yandexweather.domain.converters;
 
 public interface Converter<M, V> {
     boolean isApplicable(M mode);
+
     V convert(V value);
 }

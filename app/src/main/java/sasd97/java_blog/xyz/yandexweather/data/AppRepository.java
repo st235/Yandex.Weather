@@ -23,11 +23,12 @@ public interface AppRepository {
 
     //cache
     String getCacheWeather(@NonNull String cityId);
+
     void saveWeatherToCache(@NonNull String cityId, @NonNull String json);
 
     //prefs
-    boolean getBackgroundServiceMode();
-    boolean switchBackgroundServiceMode();
+    boolean isBackgroundServiceEnabled();
+    boolean switchBackgroundServiceState();
 
     void saveCity(@NonNull String cityId);
     String getCity();

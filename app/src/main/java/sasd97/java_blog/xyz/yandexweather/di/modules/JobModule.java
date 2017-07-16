@@ -3,7 +3,6 @@ package sasd97.java_blog.xyz.yandexweather.di.modules;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
 
 import javax.inject.Singleton;
@@ -12,7 +11,6 @@ import dagger.Module;
 import dagger.Provides;
 import sasd97.java_blog.xyz.yandexweather.background.WeatherJobCreator;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
-import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 
 /**
  * Created by alexander on 13/07/2017.

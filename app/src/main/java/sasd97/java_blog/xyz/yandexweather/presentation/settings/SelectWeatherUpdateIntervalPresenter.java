@@ -6,18 +6,18 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import sasd97.java_blog.xyz.yandexweather.background.UpdateWeatherJob;
-import sasd97.java_blog.xyz.yandexweather.domain.settings.SelectIntervalInteractor;
+import sasd97.java_blog.xyz.yandexweather.domain.settings.SelectWeatherUpdateIntervalInteractor;
 
 /**
  * Created by alexander on 16/07/2017.
  */
 
 @InjectViewState
-public class SelectIntervalPresenter extends MvpPresenter<SelectIntervalView> {
+public class SelectWeatherUpdateIntervalPresenter extends MvpPresenter<SelectWeatherUpdateIntervalView> {
 
-    private SelectIntervalInteractor interactor;
+    private SelectWeatherUpdateIntervalInteractor interactor;
 
-    public SelectIntervalPresenter(@NonNull SelectIntervalInteractor interactor) {
+    public SelectWeatherUpdateIntervalPresenter(@NonNull SelectWeatherUpdateIntervalInteractor interactor) {
         this.interactor = interactor;
     }
 

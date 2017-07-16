@@ -8,11 +8,11 @@ import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
  * Created by alexander on 16/07/2017.
  */
 
-public class SelectIntervalInteractorImpl implements SelectIntervalInteractor {
+public class SelectWeatherUpdateIntervalInteractorImpl implements SelectWeatherUpdateIntervalInteractor {
 
     public AppRepository repository;
 
-    public SelectIntervalInteractorImpl(@NonNull AppRepository repository) {
+    public SelectWeatherUpdateIntervalInteractorImpl(@NonNull AppRepository repository) {
         this.repository = repository;
     }
 

@@ -1,19 +1,16 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.Set;
 
-import io.reactivex.disposables.Disposable;
-import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
-import sasd97.java_blog.xyz.yandexweather.presentation.models.WeatherType;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
 
 /**

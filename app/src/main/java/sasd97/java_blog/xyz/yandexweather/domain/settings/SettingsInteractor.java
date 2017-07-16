@@ -5,7 +5,7 @@ package sasd97.java_blog.xyz.yandexweather.domain.settings;
  */
 
 public interface SettingsInteractor {
-    boolean getBackgroundServiceState();
+    boolean isBackgroundServiceEnabled();
     boolean switchBackgroundServiceState();
 
     int getUpdateInterval();
