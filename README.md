@@ -1,6 +1,19 @@
 # Yandex.Weather
 Homework Application. Made to display the weather.
 
+## Screens
+![icon](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/icon.png)
+![splash](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/splash.png)
+![settings](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/settings.png)
+![sunny](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/sunny.png)
+![rainy](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/rainy.png)
+![thunder](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/thunder.png)
+
+
+## Icons
+Icons were taken from [here](https://github.com/erikflowers/weather-icons). 
+Weather Icons licensed under [SIL OFL 1.1](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)
+
 ## License
 
 MIT License

@@ -1,9 +1,9 @@
 ext.versions = [
-        code                         : 3,
-        name                         : '0.0.3',
+        code                         : 5,
+        name                         : '0.0.4',
 
         richTextViewCode             : 4,
-        richTextViewName             : '0.0.1',
+        richTextViewName             : '1.0.0',
 
         minSdk                       : 15,
         targetSdk                    : 25,
