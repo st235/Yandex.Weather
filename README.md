@@ -2,12 +2,12 @@
 Homework Application. Made to display the weather.
 
 ## Screens
-![icon](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/icon.png)
-![splash](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/splash.png)
-![settings](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/settings.png)
-![sunny](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/sunny.png)
-![rainy](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/rainy.png)
-![thunder](https://github.com/sasd97/Yandex.Weather/tree/feature/api/images/thunder.png)
+![icon](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/icon.png)
+![splash](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/splash.png)
+![settings](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/settings.png)
+![sunny](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/sunny.png)
+![rainy](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/rainy.png)
+![thunder](https://github.com/sasd97/Yandex.Weather/blob/feature/api/images/thunder.png)
 
 
 ## Icons
