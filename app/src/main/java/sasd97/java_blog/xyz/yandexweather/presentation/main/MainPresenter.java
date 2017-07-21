@@ -1,19 +1,16 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.main;
 
 import android.support.annotation.IdRes;
-import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.Stack;
 
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.navigation.Router;
 import sasd97.java_blog.xyz.yandexweather.navigation.fragments.FragmentCommand;
-import sasd97.java_blog.xyz.yandexweather.navigation.fragments.PushToBackStack;
+import sasd97.java_blog.xyz.yandexweather.navigation.fragments.AddToBackStack;
 import sasd97.java_blog.xyz.yandexweather.navigation.fragments.Replace;
 import sasd97.java_blog.xyz.yandexweather.presentation.about.AboutFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.settings.SettingsFragment;
@@ -33,12 +30,32 @@ public class MainPresenter extends MvpPresenter<MainView> {
         this.fragmentRouter = fragmentRouter;
     }
 
-    public void open() {
+    public void openWeatherFragment() {
         fragmentRouter.pushForward(new Replace(WeatherFragment.newInstance()));
         menuItemsStack.push(R.id.main_activity_navigation_weather);
     }
 
+    public void onBackClicked() {
+        menuItemsStack.pop();
+        if (menuItemsStack.isEmpty()) return;
+        int id = menuItemsStack.peek();
+        getViewState().selectNavigationItem(id);
+    }
+
     public void navigateTo(@IdRes int id) {
+        if (isSameFragmentAtTheTop(id)) {
+            getViewState().closeDrawer();
+            return;
+        }
+
+        replaceFragment(id);
+    }
+
+    private boolean isSameFragmentAtTheTop(@IdRes int id) {
+        return id == menuItemsStack.peek();
+    }
+
+    private void replaceFragment(@IdRes int id) {
         Replace replace;
         menuItemsStack.add(id);
 
@@ -56,14 +73,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 return;
         }
 
-        replace.setNext(new PushToBackStack());
+        replace.setNext(new AddToBackStack());
         fragmentRouter.pushForward(replace);
         getViewState().closeDrawer();
-    }
-
-    public void onBackClicked() {
-        menuItemsStack.pop();
-        if (menuItemsStack.isEmpty()) return;
-        getViewState().selectNavigationItem(menuItemsStack.peek());
     }
 }

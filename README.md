@@ -1,6 +1,13 @@
 # Yandex.Weather
 Homework Application. Made to display the weather.
 
+## API
+To display the weather was used an open API. [OpenWeatherAPI](https://openweathermap.org/)
+
+## Icons
+Icons were taken from [here](https://github.com/erikflowers/weather-icons). 
+Weather Icons licensed under [SIL OFL 1.1](http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)
+
 ## License
 
 MIT License

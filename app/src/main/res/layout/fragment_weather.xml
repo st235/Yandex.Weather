@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/colorGreyMd200"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_weather_swipe_to_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="weather"/>
+        android:padding="@dimen/content_outer_margin">
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/fragment_weather_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="@color/colorWhite"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardElevation="0dp">
+
+            <include layout="@layout/content_weather" />
+
+        </android.support.v7.widget.CardView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

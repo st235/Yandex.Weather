@@ -1,12 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorGreyMd200">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="settings"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/settings_fragment_base_group"
+            android:textColor="@color/colorGreyMd900"
+            android:textSize="22sp" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:padding="16dp">
+
+                    <sasd97.java_blog.xyz.richtextview.RichTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/fragment_settings_temperature_celsius"
+                        android:layout_toStartOf="@+id/fragment_settings_temperature_celsius"
+                        android:text="@string/settings_fragment_temperature"
+                        android:theme="@style/SettingsTitle"
+                        app:fontAsset="weather_icons.ttf" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/fragment_settings_temperature_celsius"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/fragment_settings_temperature_fahrenheit"
+                        android:layout_toStartOf="@+id/fragment_settings_temperature_fahrenheit"
+                        android:text="@string/all_weather_celsius" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/fragment_settings_temperature_fahrenheit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/all_weather_fahrenheit" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:padding="16dp">
+
+                    <sasd97.java_blog.xyz.richtextview.RichTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/fragment_settings_speed_ms"
+                        android:layout_toStartOf="@+id/fragment_settings_speed_ms"
+                        android:text="@string/settings_fragment_wind_speed"
+                        android:theme="@style/SettingsTitle"
+                        app:fontAsset="weather_icons.ttf" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/fragment_settings_speed_ms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/fragment_settings_speed_kmh"
+                        android:layout_toStartOf="@+id/fragment_settings_speed_kmh"
+                        android:text="@string/all_weather_ms" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/fragment_settings_speed_kmh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/all_weather_kmh" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:padding="16dp">
+
+                    <sasd97.java_blog.xyz.richtextview.RichTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/fragment_settings_pressure_mmhg"
+                        android:layout_toStartOf="@+id/fragment_settings_pressure_mmhg"
+                        android:text="@string/settings_fragment_pressure"
+                        android:theme="@style/SettingsTitle"
+                        app:fontAsset="weather_icons.ttf" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/fragment_settings_pressure_mmhg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/fragment_settings_pressure_pascal"
+                        android:layout_toStartOf="@+id/fragment_settings_pressure_pascal"
+                        android:text="@string/all_weather_mmhg" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/fragment_settings_pressure_pascal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:text="@string/all_weather_pascal" />
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/settings_fragment_service_group"
+            android:textColor="@color/colorGreyMd900"
+            android:textSize="22sp" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/fragment_settings_update_interval_switcher"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_fragment_available_intervals_switcher"
+                    android:textColor="@color/colorGreyMd900"
+                    android:textSize="18sp"
+                    android:padding="16dp" />
+
+                <sasd97.java_blog.xyz.richtextview.RichTextView
+                    android:id="@+id/fragment_settings_update_interval"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:padding="16dp"
+                    android:text="@string/settings_fragment_temperature"
+                    android:theme="@style/SettingsTitle"
+                    app:fontAsset="weather_icons.ttf" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

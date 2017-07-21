@@ -1,17 +1,18 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.main;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,17 +27,26 @@ public class MainActivity extends MvpAppCompatActivity
         implements MainView,
         NavigationView.OnNavigationItemSelectedListener {
 
+    private Unbinder unbinder;
+    private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
+
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.nav_view) NavigationView navigationView;
 
     @InjectPresenter MainPresenter mainPresenter;
 
-    private Unbinder unbinder;
-    private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
+    @ProvidePresenter
+    public MainPresenter providePresenter() {
+        return WeatherApp
+                .get(this)
+                .getMainComponent()
+                .getMainPresenter();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -56,23 +66,12 @@ public class MainActivity extends MvpAppCompatActivity
     }
 
     private void onInit() {
-        mainPresenter.open();
+        mainPresenter.openWeatherFragment();
     }
 
     @Override
-    public void selectNavigationItem(int id) {
+    public void selectNavigationItem(@IdRes int id) {
         navigationView.setCheckedItem(id);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            closeDrawer();
-            return;
-        }
-
-        mainPresenter.onBackClicked();
-        super.onBackPressed();
     }
 
     @Override
@@ -90,5 +89,16 @@ public class MainActivity extends MvpAppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            closeDrawer();
+            return;
+        }
+
+        mainPresenter.onBackClicked();
+        super.onBackPressed();
     }
 }

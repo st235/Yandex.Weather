@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="all_weather_sunny_icon" translatable="false">&#xf00d;</string>
+    <string name="all_weather_clear_night_icon" translatable="false">&#xf02e;</string>
+    <string name="all_weather_foggy_icon" translatable="false">&#xf014;</string>
+    <string name="all_weather_cloudy_icon" translatable="false">&#xf013;</string>
+    <string name="all_weather_rainy_icon" translatable="false">&#xf019;</string>
+    <string name="all_weather_snowy_icon" translatable="false">&#xf01b;</string>
+    <string name="all_weather_thunder_icon" translatable="false">&#xf01e;</string>
+    <string name="all_weather_drizzle_icon" translatable="false">&#xf01c;</string>
+    <string name="all_weather_wind_speed" translatable="false">&#xf082;</string>
+    <string name="all_weather_celsius" translatable="false">°C</string>
+    <string name="all_weather_fahrenheit" translatable="false">°F</string>
+</resources>

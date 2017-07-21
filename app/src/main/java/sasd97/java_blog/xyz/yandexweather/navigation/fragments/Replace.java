@@ -1,6 +1,5 @@
 package sasd97.java_blog.xyz.yandexweather.navigation.fragments;
 
-import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 

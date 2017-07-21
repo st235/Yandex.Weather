@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Weather</string>
 
     <!-- Navigation drawer region -->
     <string name="main_activity_navigation_weather">Weather</string>
@@ -8,9 +9,56 @@
     <string name="main_activity_navigation_about">About</string>
     <!-- Endregion -->
 
+    <!-- Weather titles -->
+    <string name="all_weather_sunny_title">Sunny</string>
+    <string name="all_weather_clear_night_title">Clear sky</string>
+    <string name="all_weather_foggy_title">Foggy</string>
+    <string name="all_weather_cloudy_title">Cloudy</string>
+    <string name="all_weather_rainy_title">Rainy</string>
+    <string name="all_weather_snowy_title">Snowy</string>
+    <string name="all_weather_thunder_title">Thunder</string>
+    <string name="all_weather_drizzle_title">Drizzle</string>
+
+    <string name="all_weather_ms">m/s</string>
+    <string name="all_weather_kmh">km/h</string>
+    <string name="all_weather_mmhg">mmHg</string>
+    <string name="all_weather_pascal">hPa</string>
+    <!-- Endregion -->
+
     <!-- About fragment -->
     <string name="about_fragment_description">Application for the weather monitor.
         Mobilization was carried out within the framework of the project.</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>
+    <!-- Endregion -->
+
+    <!-- Weather fragment -->
+    <string name="weather_fragment_current_temperature">&#xf055; %1$.0f %2$s</string>
+    <string name="weather_fragment_current_temperature_extreme">%1$.0f %3$s\n%2$.0f %3$s</string>
+    <string name="weather_fragment_wind_speed">&#xf082; %1$.2f %2$s\n&#xf079; %3$d %4$s</string>
+    <string name="weather_fragment_humidity">&#xf04e; %1$d %%</string>
+    <!-- Endregion -->
+
+
+    <!-- Settings fragment -->
+    <string name="settings_fragment_base_group">Units</string>
+    <string name="settings_fragment_service_group">Weather update</string>
+    <string name="settings_fragment_temperature">&#xf053; Temperature</string>
+    <string name="settings_fragment_pressure">&#xf079; Pressure</string>
+    <string name="settings_fragment_wind_speed">&#xf021; Wind Speed</string>
+    <string name="settings_fragment_change_period">&#xf091; Change interval. Current: %1$d min.</string>
+    <string name="settings_fragment_available_intervals_title">Set interval</string>
+    <string name="settings_fragment_available_intervals_cancel">Cancel</string>
+    <string name="settings_fragment_available_intervals_ok">OK</string>
+    <string name="settings_fragment_available_intervals_switcher">Enable background updates</string>
+
+    <string-array name="settings_fragment_available_interval_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>45 minutes</item>
+        <item>60 minutes</item>
+        <item>75 minutes</item>
+        <item>90 minutes</item>
+        <item>120 minutes</item>
+    </string-array>
     <!-- Endregion -->
 </resources>
