@@ -34,6 +34,8 @@ public final class PrefsStorage implements Storage<String> {
             editor.putLong(key, (Long) value);
         } else if (value instanceof String) {
             editor.putString(key, (String) value);
+        } else {
+            throw new IllegalArgumentException("Argument of provided type cannot be stored in prefs. (Type not supported)");
         }
 
         Log.d(TAG, "Putted key: " + key + " value: " + value);
