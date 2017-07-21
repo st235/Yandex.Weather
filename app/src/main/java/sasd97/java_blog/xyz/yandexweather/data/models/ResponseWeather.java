@@ -9,7 +9,7 @@ public class ResponseWeather {
 
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private int id;
 
     @SerializedName("coordinates")
     @Expose
@@ -29,7 +29,7 @@ public class ResponseWeather {
 
     @SerializedName("visibility")
     @Expose
-    private Integer visibility;
+    private int visibility;
 
     @SerializedName("wind")
     @Expose
@@ -41,7 +41,7 @@ public class ResponseWeather {
 
     @SerializedName("dt")
     @Expose
-    private Integer updateTime;
+    private int updateTime;
 
     @SerializedName("sys")
     @Expose
@@ -53,7 +53,7 @@ public class ResponseWeather {
 
     @SerializedName("cod")
     @Expose
-    private Integer cod;
+    private int cod;
 
     public Coordinates getCoordinates() {
         return coordinates;
@@ -71,7 +71,7 @@ public class ResponseWeather {
         return main;
     }
 
-    public Integer getVisibility() {
+    public int getVisibility() {
         return visibility;
     }
 
@@ -83,7 +83,7 @@ public class ResponseWeather {
         return clouds;
     }
 
-    public Integer getUpdateTime() {
+    public int getUpdateTime() {
         return updateTime;
     }
 
@@ -91,7 +91,7 @@ public class ResponseWeather {
         return sunsetAndSunrise;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -99,7 +99,7 @@ public class ResponseWeather {
         return name;
     }
 
-    public Integer getCod() {
+    public int getCod() {
         return cod;
     }
 

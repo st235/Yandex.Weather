@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
  * Created by alexander on 14/07/2017.
  */
 
-public class CacheStorage implements Storage<String> {
+public final class CacheStorage implements Storage<String> {
 
     private static final String TAG = CacheStorage.class.getCanonicalName();
 

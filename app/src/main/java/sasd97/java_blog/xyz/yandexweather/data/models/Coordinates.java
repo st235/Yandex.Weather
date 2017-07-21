@@ -7,17 +7,17 @@ public class Coordinates {
 
     @SerializedName("long")
     @Expose
-    private Double longitude;
+    private double longitude;
 
     @SerializedName("lat")
     @Expose
-    private Double latitude;
+    private double latitude;
 
-    public Double getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public Double getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 

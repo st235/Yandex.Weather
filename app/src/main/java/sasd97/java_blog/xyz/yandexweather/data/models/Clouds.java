@@ -7,9 +7,9 @@ public class Clouds {
 
     @SerializedName("all")
     @Expose
-    private Integer percentile;
+    private int percentile;
 
-    public Integer getPercentile() {
+    public int getPercentile() {
         return percentile;
     }
 

@@ -13,7 +13,7 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
  * Created by alexander on 12/07/2017.
  */
 
-public class AppRepositoryImpl implements AppRepository {
+public final class AppRepositoryImpl implements AppRepository {
 
     private WeatherApi weatherApi;
     private Storage<String> cacheStorage;
