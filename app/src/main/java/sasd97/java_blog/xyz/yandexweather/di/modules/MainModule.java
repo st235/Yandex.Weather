@@ -22,7 +22,7 @@ import sasd97.java_blog.xyz.yandexweather.presentation.settings.SelectWeatherUpd
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.presentation.settings.SettingsPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherPresenter;
-import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
+import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -46,7 +46,7 @@ public class MainModule {
 
     @Provides
     @MainScope
-    public WeatherPresenter provideWeatherPresenter(RxSchedulersAbs schedulers,
+    public WeatherPresenter provideWeatherPresenter(RxSchedulers schedulers,
                                                     Set<WeatherType> weatherTypes,
                                                     WeatherInteractor interactor) {
         return new WeatherPresenter(schedulers, weatherTypes, interactor);
@@ -61,7 +61,7 @@ public class MainModule {
 
     @Provides
     @MainScope
-    public SettingsPresenter provideSettingsPresenter(RxSchedulersAbs schedulers,
+    public SettingsPresenter provideSettingsPresenter(RxSchedulers schedulers,
                                                       SettingsInteractor interactor) {
         return new SettingsPresenter(schedulers, interactor);
     }

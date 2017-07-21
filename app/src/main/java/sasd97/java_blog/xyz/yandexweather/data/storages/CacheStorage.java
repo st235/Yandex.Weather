@@ -25,7 +25,7 @@ public final class CacheStorage implements Storage<String> {
     }
 
     @Override
-    public <T> Storage<String> put(String key, T value) {
+    public <T> Storage<String> put(@NonNull String key, @NonNull T value) {
         String representation = String.valueOf(value);
         FileOutputStream outputStream = null;
 

@@ -47,7 +47,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
 
     @Override
     public Observable<WeatherModel> getWeather(@NonNull String cityId) {
-        String cacheWeather = repository.getCacheWeather(cityId);
+        String cacheWeather = repository.getCachedWeather(cityId);
         if (cacheWeather == null) return updateWeather(cityId);
 
         Log.i(TAG, "Cache provided.");

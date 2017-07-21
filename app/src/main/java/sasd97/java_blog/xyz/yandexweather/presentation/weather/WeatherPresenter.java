@@ -11,7 +11,7 @@ import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
-import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
+import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 
 /**
  * Created by alexander on 12/07/2017.
@@ -20,11 +20,11 @@ import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
 @InjectViewState
 public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
-    private RxSchedulersAbs schedulers;
+    private RxSchedulers schedulers;
     private WeatherInteractor interactor;
     private Set<WeatherType> weatherTypes;
 
-    public WeatherPresenter(@NonNull RxSchedulersAbs schedulers,
+    public WeatherPresenter(@NonNull RxSchedulers schedulers,
                             @NonNull Set<WeatherType> weatherTypes,
                             @NonNull WeatherInteractor interactor) {
         this.interactor = interactor;
@@ -37,13 +37,13 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
         super.attachView(view);
 
         interactor.getWeather(interactor.getCityId())
-                .compose(schedulers.getIOToMainTransformer())
+                .compose(schedulers.getIoToMainTransformer())
                 .subscribe(this::chooseWeather);
     }
 
     public void fetchWeather() {
         interactor.updateWeather(interactor.getCityId())
-                .compose(schedulers.getIOToMainTransformer())
+                .compose(schedulers.getIoToMainTransformer())
                 .subscribe(this::chooseWeather);
     }
 

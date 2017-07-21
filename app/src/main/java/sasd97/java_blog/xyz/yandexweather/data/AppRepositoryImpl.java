@@ -49,7 +49,7 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public String getCacheWeather(@NonNull String cityId) {
+    public String getCachedWeather(@NonNull String cityId) {
         return this.cacheStorage.getString(cityId, null);
     }
 

@@ -37,8 +37,7 @@ public class UpdateWeatherJob extends Job {
                 .subscribe(weather -> {
                     Log.i(TAG, weather.toString());
                     repository.saveWeatherToCache(repository.getCity(), gson.toJson(weather));
-                })
-                .dispose();
+                });
 
         return Result.SUCCESS;
     }

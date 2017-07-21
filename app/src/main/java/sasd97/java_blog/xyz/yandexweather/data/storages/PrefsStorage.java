@@ -2,6 +2,7 @@ package sasd97.java_blog.xyz.yandexweather.data.storages;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 /**
@@ -22,7 +23,7 @@ public final class PrefsStorage implements Storage<String> {
     }
 
     @Override
-    public <T> Storage<String> put(String key, T value) {
+    public <T> Storage<String> put(@NonNull String key, @NonNull T value) {
         if (value instanceof Boolean) {
             editor.putBoolean(key, (Boolean) value);
         } else if (value instanceof Integer) {
