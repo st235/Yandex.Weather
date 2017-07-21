@@ -2,24 +2,51 @@ package sasd97.java_blog.xyz.yandexweather.domain.models;
 
 import android.support.annotation.NonNull;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Created by alexander on 14/07/2017.
  */
 
 public class WeatherModel {
 
+    @Expose
     private int weatherId;
+
+    @Expose
     private String city;
+
+    @Expose
     private int humidity;
+
+    @Expose
     private int pressure;
+
+    @Expose
     private float temperature;
+
+    @Expose
     private float minTemperature;
+
+    @Expose
     private float maxTemperature;
+
+    @Expose
     private float windDegree;
+
+    @Expose
     private float windSpeed;
+
+    @Expose
     private int clouds;
+
+    @Expose
     private long sunRiseTime;
+
+    @Expose
     private long sunSetTime;
+
+    @Expose
     private long updateTime;
 
     private WeatherModel(@NonNull Builder builder) {

@@ -19,10 +19,12 @@ public class UpdateWeatherJob extends Job {
 
     public static final String TAG = "job.weather.update";
 
-    private Gson gson = new Gson();
+    private Gson gson;
     private AppRepository repository;
 
-    public UpdateWeatherJob(@NonNull AppRepository repository) {
+    public UpdateWeatherJob(@NonNull Gson gson,
+                            @NonNull AppRepository repository) {
+        this.gson = gson;
         this.repository = repository;
     }
 

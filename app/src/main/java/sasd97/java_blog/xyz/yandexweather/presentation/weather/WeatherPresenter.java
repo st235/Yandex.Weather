@@ -7,6 +7,9 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.Set;
 
+import javax.inject.Inject;
+
+import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
@@ -17,6 +20,7 @@ import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
  * Created by alexander on 12/07/2017.
  */
 
+@MainScope
 @InjectViewState
 public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
@@ -24,6 +28,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     private WeatherInteractor interactor;
     private Set<WeatherType> weatherTypes;
 
+    @Inject
     public WeatherPresenter(@NonNull RxSchedulers schedulers,
                             @NonNull Set<WeatherType> weatherTypes,
                             @NonNull WeatherInteractor interactor) {

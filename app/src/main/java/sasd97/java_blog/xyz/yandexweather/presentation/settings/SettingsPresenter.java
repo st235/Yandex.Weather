@@ -5,7 +5,10 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import javax.inject.Inject;
+
 import sasd97.java_blog.xyz.yandexweather.R;
+import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractor;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
@@ -14,12 +17,14 @@ import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
  * Created by alexander on 15/07/2017.
  */
 
+@MainScope
 @InjectViewState
 public class SettingsPresenter extends MvpPresenter<SettingsView> {
 
     private RxSchedulers schedulers;
     private SettingsInteractor interactor;
 
+    @Inject
     public SettingsPresenter(@NonNull RxSchedulers schedulers,
                              @NonNull SettingsInteractor interactor) {
         this.schedulers = schedulers;
