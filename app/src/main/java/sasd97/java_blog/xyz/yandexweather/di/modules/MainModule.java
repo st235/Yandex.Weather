@@ -1,10 +1,10 @@
 package sasd97.java_blog.xyz.yandexweather.di.modules;
 
 import com.evernote.android.job.JobManager;
+import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import dagger.Module;
 import dagger.Provides;
@@ -18,11 +18,6 @@ import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractorImpl
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
-import sasd97.java_blog.xyz.yandexweather.presentation.settings.SelectWeatherUpdateIntervalPresenter;
-import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
-import sasd97.java_blog.xyz.yandexweather.presentation.settings.SettingsPresenter;
-import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherPresenter;
-import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersAbs;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -39,17 +34,10 @@ public class MainModule {
 
     @Provides
     @MainScope
-    public WeatherInteractor provideWeatherInteractor(AppRepository repository,
+    public WeatherInteractor provideWeatherInteractor(Gson gson,
+                                                      AppRepository repository,
                                                       Map<String, List<Converter<Integer, Float>>> converters) {
-        return new WeatherInteractorImpl(repository, converters);
-    }
-
-    @Provides
-    @MainScope
-    public WeatherPresenter provideWeatherPresenter(RxSchedulersAbs schedulers,
-                                                    Set<WeatherType> weatherTypes,
-                                                    WeatherInteractor interactor) {
-        return new WeatherPresenter(schedulers, weatherTypes, interactor);
+        return new WeatherInteractorImpl(gson, repository, converters);
     }
 
     @Provides
@@ -61,20 +49,7 @@ public class MainModule {
 
     @Provides
     @MainScope
-    public SettingsPresenter provideSettingsPresenter(RxSchedulersAbs schedulers,
-                                                      SettingsInteractor interactor) {
-        return new SettingsPresenter(schedulers, interactor);
-    }
-
-    @Provides
-    @MainScope
     public SelectWeatherUpdateIntervalInteractor provideSelectIntervalInteractor(AppRepository repository) {
         return new SelectWeatherUpdateIntervalInteractorImpl(repository);
-    }
-
-    @Provides
-    @MainScope
-    public SelectWeatherUpdateIntervalPresenter provideSelectIntervalPresenter(SelectWeatherUpdateIntervalInteractor interactor) {
-        return new SelectWeatherUpdateIntervalPresenter(interactor);
     }
 }

@@ -1,28 +1,41 @@
 package sasd97.java_blog.xyz.yandexweather.utils;
 
+import io.reactivex.ObservableTransformer;
 import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.SingleTransformer;
 
 /**
  * Created by alexander on 07/07/2017.
  */
 
-public class RxSchedulers extends RxSchedulersAbs {
+public abstract class RxSchedulers {
 
-    @Override
-    public Scheduler getMainThreadScheduler() {
-        return AndroidSchedulers.mainThread();
+    abstract public Scheduler getMainThreadScheduler();
+    abstract public Scheduler getIoScheduler();
+    abstract public Scheduler getComputationScheduler();
+
+    public <T> ObservableTransformer<T, T> getIoToMainTransformer()  {
+        return objectObservable -> objectObservable
+                .subscribeOn(getIoScheduler())
+                .observeOn(getMainThreadScheduler());
     }
 
-    @Override
-    public Scheduler getIOScheduler() {
-        return Schedulers.io();
+    public <T> SingleTransformer<T, T> getIoToMainTransformerSingle()  {
+        return objectObservable -> objectObservable
+                .subscribeOn(getIoScheduler())
+                .observeOn(getMainThreadScheduler());
     }
 
-    @Override
-    public Scheduler getComputationScheduler() {
-        return Schedulers.computation();
+    public <T> ObservableTransformer<T, T> getComputationToMainTransformer()  {
+        return objectObservable -> objectObservable
+                .subscribeOn(getComputationScheduler())
+                .observeOn(getMainThreadScheduler());
+    }
+
+    public <T> SingleTransformer<T, T> getComputationToMainTransformerSingle()  {
+        return objectObservable -> objectObservable
+                .subscribeOn(getComputationScheduler())
+                .observeOn(getMainThreadScheduler());
     }
 
 }

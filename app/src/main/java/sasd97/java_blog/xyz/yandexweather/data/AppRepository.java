@@ -22,8 +22,7 @@ public interface AppRepository {
     Observable<WeatherModel> getWeather(@NonNull String cityId);
 
     //cache
-    String getCacheWeather(@NonNull String cityId);
-
+    String getCachedWeather(@NonNull String cityId);
     void saveWeatherToCache(@NonNull String cityId, @NonNull String json);
 
     //prefs

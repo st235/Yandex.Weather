@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.evernote.android.job.JobManager;
+import com.google.gson.Gson;
 
 import javax.inject.Singleton;
 
@@ -31,8 +32,8 @@ public class JobModule {
     @Provides
     @Singleton
     @NonNull
-    public WeatherJobCreator provideWeatherJobCreator(AppRepository repository) {
-        return new WeatherJobCreator(repository);
+    public WeatherJobCreator provideWeatherJobCreator(Gson gson, AppRepository repository) {
+        return new WeatherJobCreator(gson, repository);
     }
 }
 

@@ -13,7 +13,7 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
  * Created by alexander on 12/07/2017.
  */
 
-public class AppRepositoryImpl implements AppRepository {
+public final class AppRepositoryImpl implements AppRepository {
 
     private WeatherApi weatherApi;
     private Storage<String> cacheStorage;
@@ -49,7 +49,7 @@ public class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public String getCacheWeather(@NonNull String cityId) {
+    public String getCachedWeather(@NonNull String cityId) {
         return this.cacheStorage.getString(cityId, null);
     }
 

@@ -2,6 +2,9 @@ package sasd97.java_blog.xyz.yandexweather.di.modules;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -34,6 +37,14 @@ public class DataModule {
     @Singleton
     public WeatherApi provideApi(Retrofit retrofit) {
         return retrofit.create(WeatherApi.class);
+    }
+
+    @Provides
+    @Singleton
+    public Gson provideGson() {
+        GsonBuilder builder = new GsonBuilder();
+        builder.excludeFieldsWithoutExposeAnnotation();
+        return builder.create();
     }
 
     @Provides

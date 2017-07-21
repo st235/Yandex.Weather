@@ -25,14 +25,16 @@ public class WeatherInteractorImpl implements WeatherInteractor {
 
     private static final String TAG = WeatherInteractorImpl.class.getCanonicalName();
 
-    private Gson gson = new Gson();
+    private Gson gson;
     private AppRepository repository;
     private List<Converter<Integer, Float>> speedConverters;
     private List<Converter<Integer, Float>> pressuresConverters;
     private List<Converter<Integer, Float>> temperatureConverters;
 
-    public WeatherInteractorImpl(@NonNull AppRepository repository,
+    public WeatherInteractorImpl(@NonNull Gson gson,
+                                 @NonNull AppRepository repository,
                                  @NonNull Map<String, List<Converter<Integer, Float>>> converters) {
+        this.gson = gson;
         this.repository = repository;
         this.speedConverters = converters.get(SPEED_CONVERTERS_KEY);
         this.pressuresConverters = converters.get(PRESSURE_CONVERTERS_KEY);
@@ -47,7 +49,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
 
     @Override
     public Observable<WeatherModel> getWeather(@NonNull String cityId) {
-        String cacheWeather = repository.getCacheWeather(cityId);
+        String cacheWeather = repository.getCachedWeather(cityId);
         if (cacheWeather == null) return updateWeather(cityId);
 
         Log.i(TAG, "Cache provided.");
