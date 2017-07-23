@@ -1,6 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.data;
 
 import android.support.annotation.NonNull;
+import android.util.Pair;
 
 import java.util.Date;
 
@@ -18,11 +19,14 @@ public final class AppRepositoryImpl implements AppRepository {
     private WeatherApi weatherApi;
     private Storage<String> cacheStorage;
     private Storage<String> prefsStorage;
+    private Pair<String, String> apiKeys;
 
     public AppRepositoryImpl(@NonNull WeatherApi weatherApi,
+                             @NonNull Pair<String, String> apiKeys,
                              @NonNull Storage<String> cacheStorage,
                              @NonNull Storage<String> prefsStorage) {
         this.weatherApi = weatherApi;
+        this.apiKeys = apiKeys;
         this.cacheStorage = cacheStorage;
         this.prefsStorage = prefsStorage;
     }
@@ -30,7 +34,7 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public Observable<WeatherModel> getWeather(@NonNull String cityId) {
         return weatherApi
-                .getWeather(cityId, WeatherApi.WEATHER_API_KEY)
+                .getWeather(cityId, apiKeys.first)
                 .map(w -> new WeatherModel.Builder()
                         .city(w.getName())
                         .weatherId(w.getWeather().get(0).getId())

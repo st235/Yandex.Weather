@@ -25,7 +25,7 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public Retrofit provideRetrofit() {
+    public Retrofit provideRetrofit(Context context) {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())

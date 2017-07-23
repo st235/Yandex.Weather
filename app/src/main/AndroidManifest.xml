@@ -32,5 +32,12 @@
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
         </activity>
+
+        <meta-data
+            android:name="WEATHER_API_KEY"
+            android:value="38c3816a0d5664a2d18c447348f50f09"/>
+        <meta-data
+            android:name="PLACES_API_KEY"
+            android:value="AIzaSyBdVl-cTICSwYKrZ95SuvNw7dbMuDt1KG0"/>
     </application>
 </manifest>

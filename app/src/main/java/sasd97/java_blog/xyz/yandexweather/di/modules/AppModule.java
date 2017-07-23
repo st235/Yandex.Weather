@@ -1,7 +1,9 @@
 package sasd97.java_blog.xyz.yandexweather.di.modules;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.util.Pair;
 
 import javax.inject.Singleton;
 
@@ -12,8 +14,8 @@ import sasd97.java_blog.xyz.yandexweather.data.AppRepositoryImpl;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 import sasd97.java_blog.xyz.yandexweather.data.storages.CacheStorage;
 import sasd97.java_blog.xyz.yandexweather.data.storages.PrefsStorage;
-import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersImpl;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
+import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersImpl;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -43,9 +45,28 @@ public class AppModule {
 
     @Provides
     @Singleton
+    public Pair<String, String> provideApiKeys() {
+        String placesApiKey = null;
+        String weatherApiKey = null;
+        try {
+            weatherApiKey = context.getPackageManager()
+                    .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
+                    .metaData.getString("WEATHER_API_KEY");
+            placesApiKey = context.getPackageManager()
+                    .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
+                    .metaData.getString("PLACES_API_KEY");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return new Pair<>(weatherApiKey, placesApiKey);
+    }
+
+    @Provides
+    @Singleton
     public AppRepository provideRepository(WeatherApi api,
+                                           Pair<String, String> apiKeys,
                                            PrefsStorage prefsStorage,
                                            CacheStorage cacheStorage) {
-        return new AppRepositoryImpl(api, cacheStorage, prefsStorage);
+        return new AppRepositoryImpl(api, apiKeys, cacheStorage, prefsStorage);
     }
 }
