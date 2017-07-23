@@ -6,6 +6,8 @@ import android.util.Pair;
 import java.util.Date;
 
 import io.reactivex.Observable;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
+import sasd97.java_blog.xyz.yandexweather.data.net.PlacesApi;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 import sasd97.java_blog.xyz.yandexweather.data.storages.Storage;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
@@ -17,15 +19,18 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 public final class AppRepositoryImpl implements AppRepository {
 
     private WeatherApi weatherApi;
+    private PlacesApi placesApi;
     private Storage<String> cacheStorage;
     private Storage<String> prefsStorage;
     private Pair<String, String> apiKeys;
 
     public AppRepositoryImpl(@NonNull WeatherApi weatherApi,
+                             @NonNull PlacesApi placesApi,
                              @NonNull Pair<String, String> apiKeys,
                              @NonNull Storage<String> cacheStorage,
                              @NonNull Storage<String> prefsStorage) {
         this.weatherApi = weatherApi;
+        this.placesApi = placesApi;
         this.apiKeys = apiKeys;
         this.cacheStorage = cacheStorage;
         this.prefsStorage = prefsStorage;
@@ -50,6 +55,11 @@ public final class AppRepositoryImpl implements AppRepository {
                         .sunSetTime(w.getSunsetAndSunrise().getSunsetTime() * 1000)
                         .updateTime(new Date().getTime())
                         .build());
+    }
+
+    @Override
+    public Observable<Places> getPlaces(@NonNull String s) {
+        return placesApi.getPlaces(s, apiKeys.second);
     }
 
     @Override

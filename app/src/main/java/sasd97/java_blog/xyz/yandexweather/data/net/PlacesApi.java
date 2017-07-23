@@ -3,7 +3,7 @@ package sasd97.java_blog.xyz.yandexweather.data.net;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import sasd97.java_blog.xyz.yandexweather.data.models.ResponseWeather;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
 
 /**
  * Created by alexander on 12/07/2017.
@@ -11,6 +11,6 @@ import sasd97.java_blog.xyz.yandexweather.data.models.ResponseWeather;
 
 public interface PlacesApi {
 
-    @GET("weather")
-    Observable<ResponseWeather> getWeather(@Query("id") String cityId, @Query("appid") String apiKey);
+    @GET("autocomplete/json")
+    Observable<Places> getPlaces(@Query("input") String input, @Query("key") String apiKey);
 }

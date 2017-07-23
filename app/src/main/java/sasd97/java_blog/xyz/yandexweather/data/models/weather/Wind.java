@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.data.models;
+package sasd97.java_blog.xyz.yandexweather.data.models.weather;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

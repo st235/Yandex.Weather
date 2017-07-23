@@ -3,6 +3,7 @@ package sasd97.java_blog.xyz.yandexweather.data;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
 /**
@@ -20,6 +21,7 @@ public interface AppRepository {
 
     //net
     Observable<WeatherModel> getWeather(@NonNull String cityId);
+    Observable<Places> getPlaces(@NonNull String s);
 
     //cache
     String getCachedWeather(@NonNull String cityId);

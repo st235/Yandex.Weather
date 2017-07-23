@@ -3,7 +3,7 @@ package sasd97.java_blog.xyz.yandexweather.data.net;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import sasd97.java_blog.xyz.yandexweather.data.models.ResponseWeather;
+import sasd97.java_blog.xyz.yandexweather.data.models.weather.ResponseWeather;
 
 /**
  * Created by alexander on 12/07/2017.
