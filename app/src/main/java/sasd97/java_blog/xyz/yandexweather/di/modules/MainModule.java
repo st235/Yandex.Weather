@@ -18,7 +18,6 @@ import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractorImpl
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
-import sasd97.java_blog.xyz.yandexweather.presentation.search.SearchPresenter;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -31,12 +30,6 @@ public class MainModule {
     @MainScope
     public MainPresenter provideMainPresenter() {
         return new MainPresenter();
-    }
-
-    @Provides
-    @MainScope
-    public SearchPresenter provideSearchPresenter() {
-        return new SearchPresenter();
     }
 
     @Provides
