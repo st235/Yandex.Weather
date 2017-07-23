@@ -9,6 +9,12 @@
     <string name="main_activity_navigation_about">About</string>
     <!-- Endregion -->
 
+    <!-- Actionbar region -->
+    <string name="main_activity_action_search">Search</string>
+    <string name="main_activity_action_search_hint">New York</string>
+    <string name="main_activity_action_search_settings_description">City list</string>
+    <!-- Endregion -->
+
     <!-- Weather titles -->
     <string name="all_weather_sunny_title">Sunny</string>
     <string name="all_weather_clear_night_title">Clear sky</string>

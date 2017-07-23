@@ -146,14 +146,14 @@ public class SettingsFragment extends MvpAppCompatFragment
     }
 
     private void deselectGroup(List<Button> group) {
-        for (Button button: group) {
+        for (Button button : group) {
             button.setTextColor(ordinaryTextColor);
             button.getBackground().clearColorFilter();
         }
     }
 
     private void enableButton(int buttonId, List<Button> group) {
-        for (Button button: group) {
+        for (Button button : group) {
             if (button.getId() != buttonId) continue;
             button.setTextColor(highlightTextColor);
             button.getBackground().setColorFilter(highlightBackgroundColor, PorterDuff.Mode.MULTIPLY);
