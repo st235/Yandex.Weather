@@ -18,12 +18,15 @@ import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 import sasd97.java_blog.xyz.yandexweather.data.storages.CacheStorage;
 import sasd97.java_blog.xyz.yandexweather.data.storages.PrefsStorage;
 
+import static sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi.BASE_URL;
+
 /**
  * Created by alexander on 13/07/2017.
  */
 
 @Module
 public class DataModule {
+
 
     @Provides
     @Named("weatherRetrofit")
@@ -32,7 +35,7 @@ public class DataModule {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("http://api.openweathermap.org/data/2.5/")
+                .baseUrl(WeatherApi.BASE_URL)
                 .build();
     }
 
@@ -43,7 +46,7 @@ public class DataModule {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://maps.googleapis.com/maps/api/place/")
+                .baseUrl(PlacesApi.BASE_URL)
                 .build();
     }
 

@@ -10,6 +10,7 @@ import sasd97.java_blog.xyz.yandexweather.data.models.weather.ResponseWeather;
  */
 
 public interface WeatherApi {
+    public static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
 
     @GET("weather")
     Observable<ResponseWeather> getWeather(@Query("id") String cityId, @Query("appid") String apiKey);

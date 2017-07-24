@@ -10,6 +10,7 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
  */
 
 public interface PlacesApi {
+    public static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/";
 
     @GET("autocomplete/json")
     Observable<Places> getPlaces(@Query("input") String input, @Query("key") String apiKey);
