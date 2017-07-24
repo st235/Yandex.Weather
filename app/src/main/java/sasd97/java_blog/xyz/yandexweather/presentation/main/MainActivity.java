@@ -4,13 +4,17 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.database.MatrixCursor;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -26,16 +30,18 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
 import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
 import sasd97.java_blog.xyz.yandexweather.navigation.Router;
 import sasd97.java_blog.xyz.yandexweather.navigation.fragments.FragmentCommand;
 
 public class MainActivity extends MvpAppCompatActivity
-        implements MainView,
-        NavigationView.OnNavigationItemSelectedListener {
+        implements MainView, NavigationView.OnNavigationItemSelectedListener,
+        SearchView.OnSuggestionListener, SearchView.OnQueryTextListener {
 
     private Unbinder unbinder;
     private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
+    private SimpleCursorAdapter cursorAdapter;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -71,6 +77,15 @@ public class MainActivity extends MvpAppCompatActivity
         mainPresenter.setRouter(fragmentRouter);
 
         if (savedInstanceState == null) onInit();
+
+        final String[] from = new String[]{"cityName"};
+        final int[] to = new int[]{android.R.id.text1};
+        cursorAdapter = new SimpleCursorAdapter(this,
+                android.R.layout.simple_list_item_1,
+                null,
+                from,
+                to,
+                CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
     }
 
     private void onInit() {
@@ -118,6 +133,10 @@ public class MainActivity extends MvpAppCompatActivity
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         ComponentName componentName = new ComponentName(this, MainActivity.class);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
+        searchView.setIconifiedByDefault(true);
+        searchView.setSuggestionsAdapter(cursorAdapter);
+        searchView.setOnSuggestionListener(this);
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -130,7 +149,38 @@ public class MainActivity extends MvpAppCompatActivity
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            mainPresenter.search(query);
         }
+    }
+
+    @Override
+    public void showSuggestions(Places places) {
+        final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "cityName"});
+        for (int i = 0; i < places.getPredictions().length; i++) {
+                c.addRow(new Object[]{i, places.getPredictions()[i].getDescription()});
+        }
+        cursorAdapter.changeCursor(c);
+        cursorAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onSuggestionClick(int position) {
+        toolbar.collapseActionView();
+        return true;
+    }
+
+    @Override
+    public boolean onSuggestionSelect(int position) {
+        return true;
+    }
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        toolbar.collapseActionView();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        mainPresenter.search(s);
+        return false;
     }
 }

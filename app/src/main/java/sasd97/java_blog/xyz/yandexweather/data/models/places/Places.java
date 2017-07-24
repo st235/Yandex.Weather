@@ -5,6 +5,7 @@ package sasd97.java_blog.xyz.yandexweather.data.models.places;
  */
 
 public class Places {
+    private static final String STATUS_OK = "OK";
     private Predictions[] predictions;
     private String status;
 
@@ -12,7 +13,7 @@ public class Places {
         return predictions;
     }
 
-    public String getStatus() {
-        return status;
+    public boolean isSuccess() {
+        return status.equals(STATUS_OK);
     }
 }

@@ -11,6 +11,7 @@ import java.util.Stack;
 import javax.inject.Inject;
 
 import sasd97.java_blog.xyz.yandexweather.R;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
 import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractor;
 import sasd97.java_blog.xyz.yandexweather.navigation.Router;
 import sasd97.java_blog.xyz.yandexweather.navigation.fragments.AddToBackStack;
@@ -95,10 +96,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public void search(String query) {
         interactor.getPlaces(query)
                 .compose(schedulers.getIoToMainTransformer())
-                .subscribe(places -> {
-
-                }, throwable -> {
-
-                });
+                .filter(Places::isSuccess)
+                .subscribe(getViewState()::showSuggestions,
+                        throwable -> {  });
     }
 }
