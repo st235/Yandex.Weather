@@ -9,8 +9,8 @@ public class Places {
     private Predictions[] predictions;
     private String status;
 
-    public Predictions[] getPredictions() {
-        return predictions;
+    public String getPlaceIdAt(int i) {
+        return predictions[i].placeId;
     }
 
     public boolean isSuccess() {

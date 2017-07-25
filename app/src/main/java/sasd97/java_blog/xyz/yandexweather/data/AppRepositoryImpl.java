@@ -5,7 +5,9 @@ import android.util.Pair;
 
 import java.util.Date;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.internal.operators.completable.CompletableFromAction;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetails;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
 import sasd97.java_blog.xyz.yandexweather.data.net.PlacesApi;
@@ -91,8 +93,8 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public void saveCity(@NonNull String cityId) {
-        prefsStorage.put(CITY_PREFS_KEY, cityId);
+    public Completable saveCoords(@NonNull Pair<Double, Double> coords) {
+        return new CompletableFromAction(() -> prefsStorage.put(CITY_PREFS_KEY, coords));
     }
 
     @Override

@@ -1,7 +1,9 @@
 package sasd97.java_blog.xyz.yandexweather.data;
 
 import android.support.annotation.NonNull;
+import android.util.Pair;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetails;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
@@ -33,7 +35,7 @@ public interface AppRepository {
     boolean isBackgroundServiceEnabled();
     boolean switchBackgroundServiceState();
 
-    void saveCity(@NonNull String cityId);
+    Completable saveCoords(@NonNull Pair<Double, Double> coords);
     String getCity();
 
     void saveWeatherUpdateInterval(int minutes);

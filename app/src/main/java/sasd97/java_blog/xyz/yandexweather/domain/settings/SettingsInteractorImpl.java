@@ -1,9 +1,11 @@
 package sasd97.java_blog.xyz.yandexweather.domain.settings;
 
 import android.support.annotation.NonNull;
+import android.util.Pair;
 
 import com.evernote.android.job.JobManager;
 
+import io.reactivex.Completable;
 import sasd97.java_blog.xyz.yandexweather.background.UpdateWeatherJob;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 
@@ -73,5 +75,10 @@ public class SettingsInteractorImpl implements SettingsInteractor {
     @Override
     public int getSpeedUnits() {
         return repository.getSpeedUnits();
+    }
+
+    @Override
+    public Completable saveCoords(Pair<Double, Double> pair) {
+        return repository.saveCoords(pair);
     }
 }

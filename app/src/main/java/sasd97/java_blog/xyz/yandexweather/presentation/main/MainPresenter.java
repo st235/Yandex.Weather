@@ -113,6 +113,9 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     void saveCity(int position) {
-//        settingsInteractor.saveCity()
+        placesInteractor.getPlaceDetails(places.getPlaceIdAt(position))
+                .compose(schedulers.getIoToMainTransformer())
+                .map(placeDetails -> settingsInteractor.saveCoords(placeDetails.getCoords()))
+                .subscribe();
     }
 }

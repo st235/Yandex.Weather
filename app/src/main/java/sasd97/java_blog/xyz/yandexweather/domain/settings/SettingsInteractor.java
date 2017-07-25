@@ -1,5 +1,9 @@
 package sasd97.java_blog.xyz.yandexweather.domain.settings;
 
+import android.util.Pair;
+
+import io.reactivex.Completable;
+
 /**
  * Created by alexander on 15/07/2017.
  */
@@ -19,4 +23,6 @@ public interface SettingsInteractor {
 
     void saveSpeedUnits(int units);
     int getSpeedUnits();
+
+    Completable saveCoords(Pair<Double, Double> pair);
 }

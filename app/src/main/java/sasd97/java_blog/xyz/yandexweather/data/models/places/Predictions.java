@@ -6,19 +6,15 @@ import com.google.gson.annotations.SerializedName;
  * Created by Maksim Sukhotski on 7/24/2017.
  */
 
-class Predictions {
+public class Predictions {
     @SerializedName("place_id")
-    private String placeId;
+    String placeId;
     private String id;
     private String description;
     private String reference;
 
     public String getId() {
         return id;
-    }
-
-    public String getPlaceId() {
-        return placeId;
     }
 
     public String getDescription() {

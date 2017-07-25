@@ -10,7 +10,7 @@ public class PlaceDetails {
     private Result result;
     private String status;
 
-    public Pair<Double, Double> getLocation() {
+    public Pair<Double, Double> getCoords() {
         return new Pair<>(result.geometry.location.lat, result.geometry.location.lng);
     }
 }
