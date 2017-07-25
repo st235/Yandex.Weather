@@ -20,10 +20,14 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,10 +38,11 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
 import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
 import sasd97.java_blog.xyz.yandexweather.navigation.Router;
 import sasd97.java_blog.xyz.yandexweather.navigation.fragments.FragmentCommand;
+import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
 
 public class MainActivity extends MvpAppCompatActivity
         implements MainView, NavigationView.OnNavigationItemSelectedListener,
-        SearchView.OnSuggestionListener, SearchView.OnQueryTextListener {
+        SearchView.OnSuggestionListener, View.OnFocusChangeListener {
 
     private Unbinder unbinder;
     private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
@@ -72,6 +77,12 @@ public class MainActivity extends MvpAppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        drawer.addDrawerListener(new DrawerStateListener() {
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                if (toolbar.hasExpandedActionView()) toolbar.collapseActionView();
+            }
+        });
 
         navigationView.setNavigationItemSelectedListener(this);
         mainPresenter.setRouter(fragmentRouter);
@@ -80,12 +91,8 @@ public class MainActivity extends MvpAppCompatActivity
 
         final String[] from = new String[]{"cityName"};
         final int[] to = new int[]{android.R.id.text1};
-        cursorAdapter = new SimpleCursorAdapter(this,
-                android.R.layout.simple_list_item_1,
-                null,
-                from,
-                to,
-                CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        cursorAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1,
+                null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
     }
 
     private void onInit() {
@@ -128,15 +135,18 @@ public class MainActivity extends MvpAppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        ComponentName componentName = new ComponentName(this, MainActivity.class);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
-        searchView.setIconifiedByDefault(true);
+        searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        searchView.setSearchableInfo(((SearchManager) getSystemService(Context.SEARCH_SERVICE))
+                .getSearchableInfo(new ComponentName(this, MainActivity.class)));
         searchView.setSuggestionsAdapter(cursorAdapter);
+        searchView.setOnSearchClickListener(v -> showSuggestions(null));
         searchView.setOnSuggestionListener(this);
-        searchView.setOnQueryTextListener(this);
+        searchView.setOnQueryTextFocusChangeListener(this);
+        RxSearchView.queryTextChanges(searchView)
+                .debounce(400, TimeUnit.MILLISECONDS)
+                .map(CharSequence::toString)
+                .filter(s -> !s.isEmpty())
+                .subscribe(query -> mainPresenter.search(query));
         return true;
     }
 
@@ -148,18 +158,24 @@ public class MainActivity extends MvpAppCompatActivity
 
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            toolbar.collapseActionView();
             String query = intent.getStringExtra(SearchManager.QUERY);
         }
     }
 
     @Override
     public void showSuggestions(Places places) {
-        final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "cityName"});
-        for (int i = 0; i < places.getPredictions().length; i++) {
-                c.addRow(new Object[]{i, places.getPredictions()[i].getDescription()});
+        final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "city"});
+        if (places != null) for (int i = 0; i < places.getPredictions().length; i++) {
+            c.addRow(new Object[]{i, places.getPredictions()[i].getDescription()});
         }
         cursorAdapter.changeCursor(c);
         cursorAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (!hasFocus) toolbar.collapseActionView();
     }
 
     @Override
@@ -171,16 +187,5 @@ public class MainActivity extends MvpAppCompatActivity
     @Override
     public boolean onSuggestionSelect(int position) {
         return true;
-    }
-    @Override
-    public boolean onQueryTextSubmit(String s) {
-        toolbar.collapseActionView();
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String s) {
-        mainPresenter.search(s);
-        return false;
     }
 }

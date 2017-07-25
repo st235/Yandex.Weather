@@ -24,6 +24,7 @@ ext.versions = [
         supportLibs                  : '25.3.1',
         constraint                   : '1.0.2',
         butterKnife                  : '8.6.0',
+        rxbinding                    : '2.0.0',
 
         androidJob                   : '1.1.11',
         googlePlayServices           : '11.0.2',
@@ -59,7 +60,7 @@ ext.libraries = [
 
         androidJob              : "com.evernote:android-job:$versions.androidJob",
         googlePlayServicesGcm   : "com.google.android.gms:play-services-gcm:$versions.googlePlayServices",
-
+        rxbinding               : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:$versions.rxbinding",
         supportAnnotations      : "com.android.support:support-annotations:$versions.supportLibs",
         supportAppCompat        : "com.android.support:appcompat-v7:$versions.supportLibs",
         supportDesign           : "com.android.support:design:$versions.supportLibs",

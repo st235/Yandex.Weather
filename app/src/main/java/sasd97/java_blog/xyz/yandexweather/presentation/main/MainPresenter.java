@@ -97,6 +97,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
         interactor.getPlaces(query)
                 .compose(schedulers.getIoToMainTransformer())
                 .filter(Places::isSuccess)
+//                .doOnComplete()
                 .subscribe(getViewState()::showSuggestions,
                         throwable -> {  });
     }

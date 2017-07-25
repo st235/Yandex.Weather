@@ -88,4 +88,7 @@ dependencies {
     //android job
     compile libraries.androidJob
     compile libraries.googlePlayServicesGcm
+
+    //ui
+    compile libraries.rxbinding
 }
