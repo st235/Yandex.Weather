@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
+import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 
 /**
@@ -150,7 +151,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @Override
     public void onResume() {
         super.onResume();
-
+        ((MainActivity) getActivity()).changeSearchIconVisibility(this);
         ((AppCompatActivity) getActivity())
                 .getSupportActionBar()
                 .setTitle(R.string.main_activity_navigation_weather);
