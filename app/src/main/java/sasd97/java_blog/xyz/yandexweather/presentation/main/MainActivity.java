@@ -19,6 +19,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
@@ -93,7 +95,7 @@ public class MainActivity extends MvpAppCompatActivity
 
         final String[] from = new String[]{"city"};
         final int[] to = new int[]{android.R.id.text1};
-        cursorAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1,
+        cursorAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, // TODO: 7/25/2017 change to day/night adapter
                 null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
     }
 
@@ -147,10 +149,23 @@ public class MainActivity extends MvpAppCompatActivity
         searchView.setOnSuggestionListener(this);
         searchView.setOnQueryTextFocusChangeListener(this);
         RxSearchView.queryTextChanges(searchView)
-                .debounce(400, TimeUnit.MILLISECONDS)
+                .doOnNext(charSequence -> {
+                    if (TextUtils.isEmpty(charSequence)) showSuggestions(null);
+                })
+                // to prevent making requests too fast (as user may type fast),
+                // throttleLast will emit last item during 100ms from the time
+                // first item is emitted
+                .throttleLast(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                // debounce will emit item only 200ms after last item is emitted
+                // (after user types in last character)
+                .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .filter(charSequence -> {
+                    if (TextUtils.isEmpty(charSequence)) showSuggestions(null);
+                    return !TextUtils.isEmpty(charSequence);
+                })
                 .map(CharSequence::toString)
-                .filter(s -> !s.isEmpty())
-                .subscribe(query -> mainPresenter.search(query));
+                .flatMap(s -> mainPresenter.search(s))
+                .subscribe();
         return true;
     }
 

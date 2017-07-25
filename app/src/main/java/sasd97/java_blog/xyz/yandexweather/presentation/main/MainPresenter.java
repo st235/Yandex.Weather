@@ -10,6 +10,7 @@ import java.util.Stack;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
 import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractor;
@@ -93,12 +94,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().closeDrawer();
     }
 
-    public void search(String query) {
-        interactor.getPlaces(query)
+    public Observable<Places> search(String query) {
+        return interactor.getPlaces(query)
                 .compose(schedulers.getIoToMainTransformer())
                 .filter(Places::isSuccess)
-//                .doOnComplete()
-                .subscribe(getViewState()::showSuggestions,
-                        throwable -> {  });
+                .doOnNext(getViewState()::showSuggestions);
     }
 }
