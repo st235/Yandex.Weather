@@ -8,6 +8,7 @@ public interface SettingsInteractor {
     boolean isBackgroundServiceEnabled();
     boolean switchBackgroundServiceState();
 
+
     int getUpdateInterval();
 
     void saveTemperatureUnits(int units);

@@ -37,7 +37,6 @@ import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
-import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
 import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
 import sasd97.java_blog.xyz.yandexweather.navigation.Router;
 import sasd97.java_blog.xyz.yandexweather.navigation.fragments.FragmentCommand;
@@ -47,6 +46,8 @@ import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
 public class MainActivity extends MvpAppCompatActivity
         implements MainView, NavigationView.OnNavigationItemSelectedListener,
         SearchView.OnSuggestionListener, View.OnFocusChangeListener {
+
+    public static final String CITY = "city";
 
     private Unbinder unbinder;
     private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
@@ -93,7 +94,7 @@ public class MainActivity extends MvpAppCompatActivity
 
         if (savedInstanceState == null) onInit();
 
-        final String[] from = new String[]{"city"};
+        final String[] from = new String[]{CITY};
         final int[] to = new int[]{android.R.id.text1};
         cursorAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, // TODO: 7/25/2017 change to day/night adapter
                 null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
@@ -148,6 +149,11 @@ public class MainActivity extends MvpAppCompatActivity
         searchView.setOnSearchClickListener(v -> showSuggestions(null));
         searchView.setOnSuggestionListener(this);
         searchView.setOnQueryTextFocusChangeListener(this);
+        observeSearchInput(searchView);
+        return true;
+    }
+
+    private void observeSearchInput(SearchView searchView) {
         RxSearchView.queryTextChanges(searchView)
                 .doOnNext(charSequence -> {
                     if (TextUtils.isEmpty(charSequence)) showSuggestions(null);
@@ -166,7 +172,6 @@ public class MainActivity extends MvpAppCompatActivity
                 .map(CharSequence::toString)
                 .flatMap(s -> mainPresenter.search(s))
                 .subscribe();
-        return true;
     }
 
     @Override
@@ -183,10 +188,10 @@ public class MainActivity extends MvpAppCompatActivity
     }
 
     @Override
-    public void showSuggestions(Places places) {
-        final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "city"});
-        if (places != null) for (int i = 0; i < places.getPredictions().length; i++) {
-            c.addRow(new Object[]{i, places.getPredictions()[i].getDescription()});
+    public void showSuggestions(String[] strings) {
+        final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, CITY});
+        if (strings != null) for (int i = 0; i < strings.length; i++) {
+            c.addRow(new Object[]{i, strings[i]});
         }
         cursorAdapter.changeCursor(c);
         cursorAdapter.notifyDataSetChanged();
@@ -200,6 +205,7 @@ public class MainActivity extends MvpAppCompatActivity
     @Override
     public boolean onSuggestionClick(int position) {
         toolbar.collapseActionView();
+        mainPresenter.saveCity(position);
         return true;
     }
 

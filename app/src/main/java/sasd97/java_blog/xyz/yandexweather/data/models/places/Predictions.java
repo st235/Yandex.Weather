@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Maksim Sukhotski on 7/24/2017.
  */
 
-public class Predictions {
+class Predictions {
     @SerializedName("place_id")
     private String placeId;
     private String id;

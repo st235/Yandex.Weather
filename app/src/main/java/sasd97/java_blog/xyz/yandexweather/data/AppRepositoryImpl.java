@@ -6,6 +6,7 @@ import android.util.Pair;
 import java.util.Date;
 
 import io.reactivex.Observable;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetails;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
 import sasd97.java_blog.xyz.yandexweather.data.net.PlacesApi;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
@@ -60,6 +61,11 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public Observable<Places> getPlaces(@NonNull String s) {
         return placesApi.getPlaces(s, apiKeys.second);
+    }
+
+    @Override
+    public Observable<PlaceDetails> getPlaceDetails(@NonNull String s) {
+        return placesApi.getPlaceDetails(s, apiKeys.second);
     }
 
     @Override
