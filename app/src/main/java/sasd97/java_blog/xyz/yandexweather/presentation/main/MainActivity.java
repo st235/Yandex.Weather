@@ -96,7 +96,7 @@ public class MainActivity extends MvpAppCompatActivity
 
         final String[] from = new String[]{CITY};
         final int[] to = new int[]{android.R.id.text1};
-        cursorAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1, // TODO: 7/25/2017 change to day/night adapter
+        cursorAdapter = new SimpleCursorAdapter(this, R.layout.item_search_suggest,
                 null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
     }
 
@@ -184,6 +184,7 @@ public class MainActivity extends MvpAppCompatActivity
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             toolbar.collapseActionView();
             String query = intent.getStringExtra(SearchManager.QUERY);
+            // TODO: 7/26/2017 Handle unpredictable queries :)
         }
     }
 
