@@ -34,11 +34,11 @@ public class UpdateWeatherJob extends Job {
         Log.i(TAG, "Update had been started");
 
         repository
-                .getWeather(repository.getCity())
+                .getWeather(repository.getPlace())
                 .doOnError(Throwable::printStackTrace)
                 .subscribe(weather -> {
                     Log.i(TAG, weather.toString());
-                    repository.saveWeatherToCache(repository.getCity(), gson.toJson(weather));
+                    repository.saveWeatherToCache(repository.getPlace(), gson.toJson(weather));
                 });
 
         return Result.SUCCESS;

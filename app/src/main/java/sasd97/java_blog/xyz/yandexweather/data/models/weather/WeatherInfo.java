@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.data.models;
+package sasd97.java_blog.xyz.yandexweather.data.models.weather;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,11 +11,11 @@ public class WeatherInfo {
 
     @SerializedName("pressure")
     @Expose
-    private int pressure;
+    private float pressure;
 
     @SerializedName("humidity")
     @Expose
-    private int humidity;
+    private float humidity;
 
     @SerializedName("temp_min")
     @Expose
@@ -29,11 +29,11 @@ public class WeatherInfo {
         return temp;
     }
 
-    public int getPressure() {
+    public float getPressure() {
         return pressure;
     }
 
-    public int getHumidity() {
+    public float getHumidity() {
         return humidity;
     }
 

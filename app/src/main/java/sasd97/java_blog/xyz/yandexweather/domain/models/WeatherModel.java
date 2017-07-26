@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
+
 /**
  * Created by alexander on 14/07/2017.
  */
@@ -17,10 +19,10 @@ public class WeatherModel {
     private String city;
 
     @Expose
-    private int humidity;
+    private float humidity;
 
     @Expose
-    private int pressure;
+    private float pressure;
 
     @Expose
     private float temperature;
@@ -73,11 +75,17 @@ public class WeatherModel {
         return city;
     }
 
-    public int getHumidity() {
+    public WeatherModel setCorrectCity(Place place) {
+        String correct = place.getName().split(",")[0];
+        this.city = correct.isEmpty() ? city : correct;
+        return this;
+    }
+
+    public float getHumidity() {
         return humidity;
     }
 
-    public int getPressure() {
+    public float getPressure() {
         return pressure;
     }
 
@@ -136,8 +144,8 @@ public class WeatherModel {
     public static class Builder {
         private int weatherId;
         private String city;
-        private int humidity;
-        private int pressure;
+        private float humidity;
+        private float pressure;
         private float temperature;
         private float minTemperature;
         private float maxTemperature;
@@ -177,12 +185,12 @@ public class WeatherModel {
             return this;
         }
 
-        public Builder humidity(int humidity) {
+        public Builder humidity(float humidity) {
             this.humidity = humidity;
             return this;
         }
 
-        public Builder pressure(int pressure) {
+        public Builder pressure(float pressure) {
             this.pressure = pressure;
             return this;
         }

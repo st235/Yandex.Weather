@@ -3,16 +3,17 @@ package sasd97.java_blog.xyz.yandexweather.data.net;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import sasd97.java_blog.xyz.yandexweather.data.models.ResponseWeather;
+import sasd97.java_blog.xyz.yandexweather.data.models.weather.ResponseWeather;
 
 /**
  * Created by alexander on 12/07/2017.
  */
 
 public interface WeatherApi {
-
-    String WEATHER_API_KEY = "38c3816a0d5664a2d18c447348f50f09";
+    public static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
 
     @GET("weather")
-    Observable<ResponseWeather> getWeather(@Query("id") String cityId, @Query("appid") String apiKey);
+    Observable<ResponseWeather> getWeather(@Query("lat") Double lat,
+                                           @Query("lon") Double lon,
+                                           @Query("appid") String apiKey);
 }

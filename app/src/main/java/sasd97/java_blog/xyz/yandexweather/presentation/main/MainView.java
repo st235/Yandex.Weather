@@ -9,4 +9,5 @@ import com.arellomobile.mvp.MvpView;
 public interface MainView extends MvpView {
     void closeDrawer();
     void selectNavigationItem(int id);
+    void showSuggestions(String[] strings);
 }

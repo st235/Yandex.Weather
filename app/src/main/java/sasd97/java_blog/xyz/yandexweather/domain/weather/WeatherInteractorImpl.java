@@ -10,6 +10,7 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.Converter;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
@@ -43,14 +44,14 @@ public class WeatherInteractorImpl implements WeatherInteractor {
 
     @NonNull
     @Override
-    public String getCityId() {
-        return repository.getCity();
+    public Place getPlace() {
+        return repository.getPlace();
     }
 
     @Override
-    public Observable<WeatherModel> getWeather(@NonNull String cityId) {
-        String cacheWeather = repository.getCachedWeather(cityId);
-        if (cacheWeather == null) return updateWeather(cityId);
+    public Observable<WeatherModel> getWeather(@NonNull Place place) {
+        String cacheWeather = repository.getCachedWeather(place);
+        if (cacheWeather == null) return updateWeather(place);
 
         Log.i(TAG, "Cache provided.");
 
@@ -61,10 +62,10 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     }
 
     @Override
-    public Observable<WeatherModel> updateWeather(@NonNull String cityId) {
+    public Observable<WeatherModel> updateWeather(@NonNull Place place) {
         Observable<WeatherModel> observable = repository
-                .getWeather(cityId)
-                .doOnNext(w -> repository.saveWeatherToCache(cityId, gson.toJson(w)));
+                .getWeather(place)
+                .doOnNext(w -> repository.saveWeatherToCache(place, gson.toJson(w)));
         return convertModel(observable);
     }
 

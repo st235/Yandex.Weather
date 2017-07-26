@@ -9,6 +9,12 @@
     <string name="main_activity_navigation_about">О приложении</string>
     <!-- Endregion -->
 
+    <!-- Actionbar region -->
+    <string name="main_activity_action_search">Поиск</string>
+    <string name="main_activity_action_search_hint">Москва</string>
+    <string name="main_activity_action_search_settings_description">Список городов</string>
+    <!-- Endregion -->
+
     <!-- Weather titles -->
     <string name="all_weather_sunny_title">Солнце</string>
     <string name="all_weather_clear_night_title">Ясная ночь</string>
@@ -34,8 +40,8 @@
     <!-- Weather fragment -->
     <string name="weather_fragment_current_temperature">&#xf055; %1$.0f %2$s</string>
     <string name="weather_fragment_current_temperature_extreme">%1$.0f %3$s\n%2$.0f %3$s</string>
-    <string name="weather_fragment_wind_speed">&#xf082; %1$.2f %2$s\n&#xf079; %3$d %4$s</string>
-    <string name="weather_fragment_humidity">&#xf04e; %1$d %%</string>
+    <string name="weather_fragment_wind_speed">&#xf082; %1$.2f %2$s\n&#xf079; %3$.0f %4$s</string>
+    <string name="weather_fragment_humidity">&#xf04e; %1$.0f %%</string>
     <!-- Endregion -->
 
     <!-- Settings fragment -->

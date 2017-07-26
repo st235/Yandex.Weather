@@ -11,13 +11,14 @@ import dagger.Provides;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.Converter;
+import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractor;
+import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SelectWeatherUpdateIntervalInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SelectWeatherUpdateIntervalInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl;
-import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -28,16 +29,16 @@ public class MainModule {
 
     @Provides
     @MainScope
-    public MainPresenter provideMainPresenter() {
-        return new MainPresenter();
-    }
-
-    @Provides
-    @MainScope
     public WeatherInteractor provideWeatherInteractor(Gson gson,
                                                       AppRepository repository,
                                                       Map<String, List<Converter<Integer, Float>>> converters) {
         return new WeatherInteractorImpl(gson, repository, converters);
+    }
+
+    @Provides
+    @MainScope
+    public PlacesInteractor providePlacesInteractor(AppRepository repository) {
+        return new PlacesInteractorImpl(repository);
     }
 
     @Provides

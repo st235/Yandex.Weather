@@ -2,7 +2,11 @@ package sasd97.java_blog.xyz.yandexweather.data;
 
 import android.support.annotation.NonNull;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
 /**
@@ -11,7 +15,7 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
 public interface AppRepository {
     //constants
-    String CITY_PREFS_KEY = "app.prefs.city";
+    String PLACE_PREFS_KEY = "app.prefs.place";
     String UNITS_TEMPERATURE_PREFS_KEY = "app.prefs.temperature.units";
     String UNITS_PRESSURE_PREFS_KEY = "app.prefs.pressure.units";
     String UNITS_SPEED_PREFS_KEY = "app.prefs.speed.units";
@@ -19,18 +23,20 @@ public interface AppRepository {
     String BACKGROUND_SERVICE_PREFS_KEY = "app.prefs.bg.service.state";
 
     //net
-    Observable<WeatherModel> getWeather(@NonNull String cityId);
+    Observable<WeatherModel> getWeather(@NonNull Place place);
+    Observable<PlacesResponse> getPlaces(@NonNull String s);
+    Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId);
 
     //cache
-    String getCachedWeather(@NonNull String cityId);
-    void saveWeatherToCache(@NonNull String cityId, @NonNull String json);
+    String getCachedWeather(@NonNull Place place);
+    void saveWeatherToCache(@NonNull Place place, @NonNull String json);
 
     //prefs
     boolean isBackgroundServiceEnabled();
     boolean switchBackgroundServiceState();
 
-    void saveCity(@NonNull String cityId);
-    String getCity();
+    Completable savePlace(@NonNull Place place);
+    Place getPlace();
 
     void saveWeatherUpdateInterval(int minutes);
     int getWeatherUpdateInterval();
