@@ -40,17 +40,16 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     @Override
     public void attachView(WeatherView view) {
         super.attachView(view);
-
         interactor.getWeather(interactor.getPlace())
                 .compose(schedulers.getIoToMainTransformer())
-                .map(weatherModel -> weatherModel.setCorrectCity(interactor.getPlace().getName()))
+                .map(weatherModel -> weatherModel.setCorrectCity(interactor.getPlace()))
                 .subscribe(this::chooseWeather);
     }
 
     public void fetchWeather() {
         interactor.updateWeather(interactor.getPlace())
                 .compose(schedulers.getIoToMainTransformer())
-                .map(weatherModel -> weatherModel.setCorrectCity(interactor.getPlace().getName()))
+                .map(weatherModel -> weatherModel.setCorrectCity(interactor.getPlace()))
                 .subscribe(this::chooseWeather);
     }
 

@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
+
 /**
  * Created by alexander on 14/07/2017.
  */
@@ -73,8 +75,9 @@ public class WeatherModel {
         return city;
     }
 
-    public WeatherModel setCorrectCity(String city) {
-        this.city = city.split(",")[0];
+    public WeatherModel setCorrectCity(Place place) {
+        String correct = place.getName().split(",")[0];
+        this.city = correct.isEmpty() ? city : correct;
         return this;
     }
 
