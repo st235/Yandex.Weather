@@ -2,13 +2,21 @@ package sasd97.java_blog.xyz.yandexweather.data.models.places;
 
 import android.util.Pair;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Maksim Sukhotski on 7/25/2017.
  */
 
 public class Place {
-    String name;
-    Pair<Double, Double> coords;
+    @SerializedName("name")
+    @Expose
+    private String name;
+
+    @SerializedName("coords")
+    @Expose
+    private Pair<Double, Double> coords;
 
     public Place(String name, Pair<Double, Double> coords) {
         this.name = name;

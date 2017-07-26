@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import io.reactivex.functions.Consumer;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
@@ -50,7 +51,12 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
         interactor.updateWeather(interactor.getPlace())
                 .compose(schedulers.getIoToMainTransformer())
                 .map(weatherModel -> weatherModel.setCorrectCity(interactor.getPlace()))
-                .subscribe(this::chooseWeather);
+                .subscribe(this::chooseWeather, getPrintStackTrace());
+    }
+
+    @NonNull
+    private Consumer<Throwable> getPrintStackTrace() {
+        return Throwable::printStackTrace;
     }
 
     public boolean isCelsius() {

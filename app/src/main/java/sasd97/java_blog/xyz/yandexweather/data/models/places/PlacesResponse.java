@@ -1,12 +1,21 @@
 package sasd97.java_blog.xyz.yandexweather.data.models.places;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Maksim Sukhotski on 7/24/2017.
  */
 
 public class PlacesResponse {
     private static final String STATUS_OK = "OK";
+
+    @SerializedName("predictions")
+    @Expose
     private Predictions[] predictions;
+
+    @SerializedName("status")
+    @Expose
     private String status;
 
     public String getPlaceIdAt(int i) {

@@ -53,6 +53,7 @@ public class MainActivity extends MvpAppCompatActivity
     private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
     private SimpleCursorAdapter cursorAdapter;
     private MenuItem miSearch;
+    private SearchView searchView;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -141,7 +142,7 @@ public class MainActivity extends MvpAppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
         miSearch = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(miSearch);
+        searchView = (SearchView) MenuItemCompat.getActionView(miSearch);
 
         searchView.setSearchableInfo(((SearchManager) getSystemService(Context.SEARCH_SERVICE))
                 .getSearchableInfo(new ComponentName(this, MainActivity.class)));
@@ -182,9 +183,8 @@ public class MainActivity extends MvpAppCompatActivity
 
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            toolbar.collapseActionView();
             String query = intent.getStringExtra(SearchManager.QUERY);
-            // TODO: 7/26/2017 Handle unpredictable queries :)
+            searchView.setQuery(query, false);
         }
     }
 
