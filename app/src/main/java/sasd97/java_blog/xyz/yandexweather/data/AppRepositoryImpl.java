@@ -8,8 +8,9 @@ import java.util.Date;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.internal.operators.completable.CompletableFromAction;
-import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetails;
-import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 import sasd97.java_blog.xyz.yandexweather.data.net.PlacesApi;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 import sasd97.java_blog.xyz.yandexweather.data.storages.Storage;
@@ -40,9 +41,9 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Observable<WeatherModel> getWeather(@NonNull String cityId) {
+    public Observable<WeatherModel> getWeather(@NonNull Place place) {
         return weatherApi
-                .getWeather(cityId, apiKeys.first)
+                .getWeather(place.getCoords().first, place.getCoords().second, apiKeys.first)
                 .map(w -> new WeatherModel.Builder()
                         .city(w.getName())
                         .weatherId(w.getWeather().get(0).getId())
@@ -61,23 +62,27 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Observable<Places> getPlaces(@NonNull String s) {
+    public Observable<PlacesResponse> getPlaces(@NonNull String s) {
         return placesApi.getPlaces(s, apiKeys.second);
     }
 
     @Override
-    public Observable<PlaceDetails> getPlaceDetails(@NonNull String s) {
+    public Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String s) {
         return placesApi.getPlaceDetails(s, apiKeys.second);
     }
 
     @Override
-    public String getCachedWeather(@NonNull String cityId) {
-        return this.cacheStorage.getString(cityId, null);
+    public String getCachedWeather(@NonNull Place place) {
+        return this.cacheStorage.getString(toFileName(place), null);
     }
 
     @Override
-    public void saveWeatherToCache(@NonNull String cityId, @NonNull String json) {
-        cacheStorage.put(cityId, json);
+    public void saveWeatherToCache(@NonNull Place place, @NonNull String json) {
+        cacheStorage.put(toFileName(place), json);
+    }
+
+    private String toFileName(@NonNull Place place) {
+        return place.getName().replaceAll(" ", "_").replaceAll(",", "").toLowerCase();
     }
 
     @Override
@@ -93,13 +98,19 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Completable saveCoords(@NonNull Pair<Double, Double> coords) {
-        return new CompletableFromAction(() -> prefsStorage.put(CITY_PREFS_KEY, coords));
+    public Completable savePlace(@NonNull Place place) {
+        return new CompletableFromAction(() -> prefsStorage.put(PLACE_PREFS_KEY, place));
     }
 
     @Override
-    public String getCity() {
-        return prefsStorage.getString(CITY_PREFS_KEY, "524901");
+    public Place getPlace() {
+        String s = prefsStorage.getString(PLACE_PREFS_KEY, "");
+        String[] objects = s.split(" ");
+        if (objects.length < 3)  // "some_city_coord1_coord2".split("_").length >= 3
+            return new Place("", new Pair<>(0.0, 0.0));
+        String c1 = objects[objects.length - 2];
+        String c2 = objects[objects.length - 1];
+        return new Place(s.split(c1)[0], new Pair<>(Double.valueOf(c1), Double.valueOf(c2)));
     }
 
     @Override

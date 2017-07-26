@@ -13,5 +13,7 @@ public interface WeatherApi {
     public static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
 
     @GET("weather")
-    Observable<ResponseWeather> getWeather(@Query("id") String cityId, @Query("appid") String apiKey);
+    Observable<ResponseWeather> getWeather(@Query("lat") Double lat,
+                                           @Query("lon") Double lon,
+                                           @Query("appid") String apiKey);
 }

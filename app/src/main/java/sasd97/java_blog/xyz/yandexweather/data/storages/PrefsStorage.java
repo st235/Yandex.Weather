@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
+
 /**
  * Created by Alexander Dadukin on 21.04.2016.
  */
@@ -34,6 +36,8 @@ public final class PrefsStorage implements Storage<String> {
             editor.putLong(key, (Long) value);
         } else if (value instanceof String) {
             editor.putString(key, (String) value);
+        } else if (value instanceof Place) {
+            editor.putString(key, ((Place) value).toString());
         } else {
             throw new IllegalArgumentException("Argument of provided type cannot be stored in prefs. (Type not supported)");
         }

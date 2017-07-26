@@ -1,13 +1,13 @@
 package sasd97.java_blog.xyz.yandexweather.domain.settings;
 
 import android.support.annotation.NonNull;
-import android.util.Pair;
 
 import com.evernote.android.job.JobManager;
 
 import io.reactivex.Completable;
 import sasd97.java_blog.xyz.yandexweather.background.UpdateWeatherJob;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 
 /**
  * Created by alexander on 15/07/2017.
@@ -78,7 +78,7 @@ public class SettingsInteractorImpl implements SettingsInteractor {
     }
 
     @Override
-    public Completable saveCoords(Pair<Double, Double> pair) {
-        return repository.saveCoords(pair);
+    public Completable savePlace(@NonNull Place place) {
+        return repository.savePlace(place);
     }
 }

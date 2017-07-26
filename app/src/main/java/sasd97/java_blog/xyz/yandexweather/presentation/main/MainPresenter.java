@@ -12,7 +12,8 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import sasd97.java_blog.xyz.yandexweather.R;
-import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractor;
 import sasd97.java_blog.xyz.yandexweather.navigation.Router;
@@ -36,7 +37,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     private final RxSchedulers schedulers;
     private Router<FragmentCommand> fragmentRouter;
     private Stack<Integer> menuItemsStack = new Stack<>();
-    private Places places;
+    private PlacesResponse placesResponse;
 
     @Inject
     public MainPresenter(@NonNull RxSchedulers schedulers,
@@ -102,20 +103,23 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public Observable<String[]> search(String query) {
         return placesInteractor.getPlaces(query)
                 .compose(schedulers.getIoToMainTransformer())
-                .filter(Places::isSuccess)
-                .doOnNext(this::setPlaces)
-                .map(Places::getPredictionStrings)
+                .filter(PlacesResponse::isSuccess)
+                .doOnNext(this::setPlacesResponse)
+                .map(PlacesResponse::getPredictionStrings)
                 .doOnNext(getViewState()::showSuggestions);
     }
 
-    private void setPlaces(Places places) {
-        this.places = places;
+    private void setPlacesResponse(PlacesResponse placesResponse) {
+        this.placesResponse = placesResponse;
     }
 
     void saveCity(int position) {
-        placesInteractor.getPlaceDetails(places.getPlaceIdAt(position))
+        placesInteractor.getPlaceDetails(placesResponse.getPlaceIdAt(position))
                 .compose(schedulers.getIoToMainTransformer())
-                .map(placeDetails -> settingsInteractor.saveCoords(placeDetails.getCoords()))
+                .flatMapCompletable(placeDetails -> settingsInteractor.savePlace(
+                        new Place(placesResponse.getPlaceNameAt(position),
+                                placeDetails.getCoords())))
+                .doOnComplete(this::openWeatherFragment)
                 .subscribe();
     }
 }

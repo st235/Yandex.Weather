@@ -10,15 +10,11 @@ public class Predictions {
     @SerializedName("place_id")
     String placeId;
     private String id;
-    private String description;
+    String description;
     private String reference;
 
     public String getId() {
         return id;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public String getReference() {

@@ -11,11 +11,11 @@ public class WeatherInfo {
 
     @SerializedName("pressure")
     @Expose
-    private int pressure;
+    private float pressure;
 
     @SerializedName("humidity")
     @Expose
-    private int humidity;
+    private float humidity;
 
     @SerializedName("temp_min")
     @Expose
@@ -29,11 +29,11 @@ public class WeatherInfo {
         return temp;
     }
 
-    public int getPressure() {
+    public float getPressure() {
         return pressure;
     }
 
-    public int getHumidity() {
+    public float getHumidity() {
         return humidity;
     }
 

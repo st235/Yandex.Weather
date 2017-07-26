@@ -6,7 +6,7 @@ import android.util.Pair;
  * Created by Maksim Sukhotski on 7/25/2017.
  */
 
-public class PlaceDetails {
+public class PlaceDetailsResponse {
     private Result result;
     private String status;
 

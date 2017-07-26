@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
-import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetails;
-import sasd97.java_blog.xyz.yandexweather.data.models.places.Places;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 
 /**
  * Created by alexander on 12/07/2017.
@@ -21,12 +21,12 @@ public class PlacesInteractorImpl implements PlacesInteractor {
     }
 
     @Override
-    public Observable<Places> getPlaces(@NonNull String s) {
+    public Observable<PlacesResponse> getPlaces(@NonNull String s) {
         return repository.getPlaces(s);
     }
 
     @Override
-    public Observable<PlaceDetails> getPlaceDetails(@NonNull String s) {
+    public Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String s) {
         return repository.getPlaceDetails(s);
     }
 }
