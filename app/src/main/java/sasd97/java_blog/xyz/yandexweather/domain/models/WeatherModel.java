@@ -73,6 +73,11 @@ public class WeatherModel {
         return city;
     }
 
+    public WeatherModel setCorrectCity(String city) {
+        this.city = city.split(",")[0];
+        return this;
+    }
+
     public float getHumidity() {
         return humidity;
     }
