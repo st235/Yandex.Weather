@@ -1,7 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.data;
 
 import android.support.annotation.NonNull;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import java.util.Date;
 

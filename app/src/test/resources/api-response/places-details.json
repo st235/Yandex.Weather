@@ -1,0 +1,145 @@
+{
+  "html_attributions": [],
+  "result": {
+    "address_components": [
+      {
+        "long_name": "Москва",
+        "short_name": "Москва",
+        "types": [
+          "locality",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Москва",
+        "short_name": "Москва",
+        "types": [
+          "administrative_area_level_2",
+          "political"
+        ]
+      },
+      {
+        "long_name": "Россия",
+        "short_name": "RU",
+        "types": [
+          "country",
+          "political"
+        ]
+      }
+    ],
+    "adr_address": "<span class=\"locality\">Москва</span>, <span class=\"country-name\">Россия</span>",
+    "formatted_address": "Москва, Россия",
+    "geometry": {
+      "location": {
+        "lat": 55.755826,
+        "lng": 37.6173
+      },
+      "viewport": {
+        "northeast": {
+          "lat": 56.009657,
+          "lng": 37.9456611
+        },
+        "southwest": {
+          "lat": 55.48992699999999,
+          "lng": 37.3193289
+        }
+      }
+    },
+    "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png",
+    "id": "1a0f08fcbc047354782f00ab52e66fb56d1aadf7",
+    "name": "Москва",
+    "photos": [
+      {
+        "height": 3869,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/103291604560917117840/photos\">鍾懷亞</a>"
+        ],
+        "photo_reference": "CmRaAAAAe7OP9novL6RXTPxdJvWvUVmTLWVq5LuL627CR4jItIHZsFgaaaou-yAyRFPXvyD0FFa7sMaKxfLxTIDzR23VCSAMsY83bBygkMaqyzr0rhUdss8oE8pWyMCp7ifJbZmoEhDkzGrY09OvUGEezKZovRIyGhSniLgLCjbAv7a1ya0QHnZRzgc1Gg",
+        "width": 5803
+      },
+      {
+        "height": 2160,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/104489255406387162989/photos\">Сергей Шмаков</a>"
+        ],
+        "photo_reference": "CmRaAAAA6sGjBLfGs6BGGzl9xI8buK2n1y2QP7QR866S_F0kl_8VlJkvnxJeW_TVOZ6whdyTMNyUiH1SX50xZDWdfQLa9eYabjrUO6l7JN1Yv-tFNBYWhRWRe-FBrqzeXsAG-KkQEhDO2F5u3CuWosdw3grhRz7aGhRMfYNh3XV4LrQaPP4GOAjEEeCvtA",
+        "width": 3840
+      },
+      {
+        "height": 1333,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/107956383758290156645/photos\">Флотилия &quot;Рэдиссон Ройал, Москва&quot;</a>"
+        ],
+        "photo_reference": "CmRaAAAAjoyhuSWplAIm_IpFUORYvh3eLl7E31VQNonF8o668RIIkKiEHdOBfMAUJxcenqhFCGRGS68ZVE_wk7wqwOh13cmYYEI8G0vjSXGOk4Trh2kXBQSjELYNvr3dQ033zJFxEhDkokoqb0wC-ybtkfyCh0IfGhQCNYg9WjRJBxNc1E0-qAzAdxrM8w",
+        "width": 2000
+      },
+      {
+        "height": 2160,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/114911699120710775872/photos\">PeriscopeLiveCorr</a>"
+        ],
+        "photo_reference": "CmRaAAAA1GJMpKIF9-VvAORmmo-MA9qX_OZeqEC9A6M_b1y55hAUUs-sS-abwLCnt37UxEKe-dQK2bL2BXVqYaxF5Kig6dKTFUgfMzx3CAJnTigFvLftM-xbnnPFO24x05z0AqZcEhDkIQyvWNEAkeQpcg33RzjFGhQ6v-Ei_djNjXpiku6Db_8ZwgPdkg",
+        "width": 3840
+      },
+      {
+        "height": 2988,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/105260961063985950130/photos\">Ekaterina Rodkina</a>"
+        ],
+        "photo_reference": "CmRaAAAAApn7HXjjpezk7dJsJQoey5DLbSMaacyZRV1gkdnAuPUCDCslJDlzAsRI0OfktYu7jFqrD5rtxqSObtiAFM9x2HYlghfz4qHaEMt9KnwE-qRjCD_NVJn5S42J7QT8iR3nEhDTMLwXCCPPDOp2bnG6XiimGhQeJt3t_yB8f5h0c_Of-0bZ0GH0pw",
+        "width": 5312
+      },
+      {
+        "height": 1836,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/117387643646577133592/photos\">Алла Цветкова</a>"
+        ],
+        "photo_reference": "CmRaAAAA-ban06Oe-Ea2zVdE70mkq-4oK4ErVYK0M2U1r-CnZ4kmKl6V0vuGEXQRZJFTodHylFmwGJyak60sDsvQn0-H-4aPGCRHVuLciSxtHkVlHyj5Exix1wN7fi4TI3NZX5PmEhA1UphYUJAekXhKDqHyPPUWGhTvqqRNXFFlCcy45XxYEzL-WpASnw",
+        "width": 3264
+      },
+      {
+        "height": 1536,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/109441349542816639937/photos\">Mack The Knife</a>"
+        ],
+        "photo_reference": "CmRaAAAAKEiVE-q5wHJW6bAfU-g9-33vLizh3vvf8Vlsp-EnksMpFE92X7vpuSdZ-vYakO8RqvStJXy1Ko28ljhv9zLEE7H_-o2mKMscQ3VUi5m1arv05kDCEgKHUAXLV17zmqZyEhAlS4yc_GJN22IkWOi5rxfyGhSGQzmfQO6pklwGtzFMSHNUdeuqaA",
+        "width": 2048
+      },
+      {
+        "height": 1333,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/107956383758290156645/photos\">Флотилия &quot;Рэдиссон Ройал, Москва&quot;</a>"
+        ],
+        "photo_reference": "CmRaAAAALRD-_Y95W2jk96Ku1fBr9PIAbNY5qZPwq-21Nv_bVoIBMe6ypoadug15jS5BubUZ002vC82UH959y8UIfq5xIo6YE3Dm8b9rIEsXmcQF3aVIey5BhymudEZ4JzV-pXKKEhA0B7YEbcPuZelR5oAjmSCPGhSVdc6DDjTl7GeEcOk_tgZL1VpCvw",
+        "width": 2000
+      },
+      {
+        "height": 2824,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/110294063673222390548/photos\">pavel smirnov</a>"
+        ],
+        "photo_reference": "CmRaAAAAJgzZHYNG7MWjos2xbgDzSp64w8FnXZ1DrjGdrMjxO1P9nBkuGAupWipMSOvxGdz5EekeUyAZqOAx2fJCjGJVUCJYllCO1DleffpwBu_PFi8nL9WvX5iVFk9WMLte75ggEhDhkvdJGXD5L5e-HCiz5RVjGhQlJ60MZNHnat584hT34S_OFOOS0A",
+        "width": 4048
+      },
+      {
+        "height": 1536,
+        "html_attributions": [
+          "<a href=\"https://maps.google.com/maps/contrib/105110665095640414537/photos\">Michael M. St.</a>"
+        ],
+        "photo_reference": "CmRaAAAAwQODlLwEjYM_vS2W3fDkyLTMHv1Zxe-OxVkhH0r3ms2kOTHjVJ024bBGn5GUIieiXaoqrYoFwQG1ormGhECP8Hj1ovgRftN7pC7TkCPk_a9cgut4hfxQdQwg_E1XIj82EhBddEWsgJ9IgUMZ127hXobmGhR_mvcX1qnsk_DTK9iIL8tVxbw41w",
+        "width": 2048
+      }
+    ],
+    "place_id": "ChIJybDUc_xKtUYRTM9XV8zWRD0",
+    "reference": "CmRbAAAA8CO79G3oYFPlKLlyoLcJIShkfjSr5TVFyQH2VqnxQ0aXsUR8anpXZL19oeTEG7xZYndpmU2snzrwq7ESsYLAnrUUblpPAx_wIdzHBjRAGQ8g6lcb7R2nY97087dTkvzMEhAkLcBFuTud1NbFJB6dHAZlGhS5Zx0Mh5VAohbbmgDzi0qUEWFb3A",
+    "scope": "GOOGLE",
+    "types": [
+      "locality",
+      "political"
+    ],
+    "url": "https://maps.google.com/?q=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0,+%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F&ftid=0x46b54afc73d4b0c9:0x3d44d6cc5757cf4c",
+    "utc_offset": 180,
+    "vicinity": "Москва"
+  },
+  "status": "OK"
+}

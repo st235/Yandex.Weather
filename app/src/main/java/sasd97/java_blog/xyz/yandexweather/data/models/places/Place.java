@@ -1,6 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.data.models.places;
 
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

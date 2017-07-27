@@ -1,0 +1,43 @@
+{
+  "coord": {
+    "lon": 37.62,
+    "lat": 55.76
+  },
+  "weather": [
+    {
+      "id": 200,
+      "main": "Thunderstorm",
+      "description": "гроза с мелким дождём",
+      "icon": "11n"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 293.13,
+    "pressure": 1006,
+    "humidity": 60,
+    "temp_min": 292.15,
+    "temp_max": 295.15
+  },
+  "visibility": 10000,
+  "wind": {
+    "speed": 3,
+    "deg": 170,
+    "gust": 9
+  },
+  "clouds": {
+    "all": 0
+  },
+  "dt": 1501117200,
+  "sys": {
+    "type": 1,
+    "id": 7323,
+    "message": 0.0017,
+    "country": "RU",
+    "sunrise": 1501118745,
+    "sunset": 1501177507
+  },
+  "id": 524925,
+  "name": "Moskovskaya Oblast’",
+  "cod": 200
+}

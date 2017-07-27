@@ -3,7 +3,7 @@ package sasd97.java_blog.xyz.yandexweather.di.modules;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import javax.inject.Singleton;
 
