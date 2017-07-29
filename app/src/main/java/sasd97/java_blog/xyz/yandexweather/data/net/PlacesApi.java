@@ -17,5 +17,5 @@ public interface PlacesApi {
     Observable<PlacesResponse> getPlaces(@Query("input") String input, @Query("key") String apiKey);
 
     @GET("details/json")
-    Observable<PlaceDetailsResponse> getPlaceDetails(@Query("placeid") String input, @Query("key") String apiKey);
+    Observable<PlaceDetailsResponse> getPlaceDetails(@Query("placeid") String placeId, @Query("key") String apiKey);
 }

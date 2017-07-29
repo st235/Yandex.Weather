@@ -48,13 +48,13 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public class PlacesApiTest {
-    private PlacesApi service;
+    private PlacesApi placesApi;
     private MockWebServer mockWebServer;
 
     @Before
     public void createService() throws IOException {
         mockWebServer = new MockWebServer();
-        service = new Retrofit.Builder()
+        placesApi = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(mockWebServer.url("/"))
@@ -72,7 +72,7 @@ public class PlacesApiTest {
         enqueueResponse("places-autocomplete.json");
         String query = "Мос";
         String apiKey = "apiKey";
-        service.getPlaces(query, apiKey).subscribe(placesResponse -> {
+        placesApi.getPlaces(query, apiKey).subscribe(placesResponse -> {
             assertThat(placesResponse, notNullValue());
             assertTrue(placesResponse.isSuccess());
             assertThat(placesResponse.getPlaceNameAt(0), is("Москва, Россия"));
@@ -90,7 +90,7 @@ public class PlacesApiTest {
         enqueueResponse("places-details.json");
         String placeId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
         String apiKey = "apiKey";
-        service.getPlaceDetails(placeId, apiKey).subscribe(detailsResponse -> {
+        placesApi.getPlaceDetails(placeId, apiKey).subscribe(detailsResponse -> {
             assertThat(detailsResponse, notNullValue());
             assertThat(detailsResponse.getCoords(), is(new Pair<>(55.755826, 37.6173)));
         });

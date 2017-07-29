@@ -55,6 +55,23 @@ public class ResponseWeather {
     @Expose
     private int cod;
 
+    public ResponseWeather(int id, Coordinates coordinates, List<Weather> weather, String base,
+                           WeatherInfo main, int visibility, Wind wind, Clouds clouds,
+                           int updateTime, SunsetAndSunrise sunsetAndSunrise, String name, int cod) {
+        this.id = id;
+        this.coordinates = coordinates;
+        this.weather = weather;
+        this.base = base;
+        this.main = main;
+        this.visibility = visibility;
+        this.wind = wind;
+        this.clouds = clouds;
+        this.updateTime = updateTime;
+        this.sunsetAndSunrise = sunsetAndSunrise;
+        this.name = name;
+        this.cod = cod;
+    }
+
     public Coordinates getCoordinates() {
         return coordinates;
     }

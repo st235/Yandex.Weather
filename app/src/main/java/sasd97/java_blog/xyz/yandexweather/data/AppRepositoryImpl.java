@@ -81,10 +81,6 @@ public final class AppRepositoryImpl implements AppRepository {
         cacheStorage.put(toFileName(place), json);
     }
 
-    private String toFileName(@NonNull Place place) {
-        return place.getName().replaceAll(" ", "_").replaceAll(",", "").toLowerCase();
-    }
-
     @Override
     public boolean isBackgroundServiceEnabled() {
         return prefsStorage.getBoolean(BACKGROUND_SERVICE_PREFS_KEY, true);
@@ -110,7 +106,8 @@ public final class AppRepositoryImpl implements AppRepository {
             return new Place("", new Pair<>(0.0, 0.0));
         String c1 = objects[objects.length - 2];
         String c2 = objects[objects.length - 1];
-        return new Place(s.split(c1)[0], new Pair<>(Double.valueOf(c1), Double.valueOf(c2)));
+        return new Place(s.split(c1)[0].split(",")[0].split(" ")[0],
+                new Pair<>(Double.valueOf(c1), Double.valueOf(c2)));
     }
 
     @Override
@@ -151,5 +148,9 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public int getSpeedUnits() {
         return prefsStorage.getInteger(UNITS_SPEED_PREFS_KEY, 0);
+    }
+
+    public static String toFileName(@NonNull Place place) {
+        return place.getName().replaceAll(" ", "_").replaceAll(",", "").toLowerCase();
     }
 }

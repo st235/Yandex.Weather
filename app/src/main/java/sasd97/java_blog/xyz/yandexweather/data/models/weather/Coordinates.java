@@ -21,6 +21,11 @@ public class Coordinates {
         return latitude;
     }
 
+    public Coordinates(double longitude, double latitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Coordinates{");
