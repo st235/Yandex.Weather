@@ -24,6 +24,7 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -135,10 +136,11 @@ public class WeatherInteractorTest {
     @Test
     public void getTemperatureUnits() {
         int units = ConvertersConfig.TEMPERATURE_CELSIUS;
+
         when(repo.getSpeedUnits()).thenReturn(units);
 
-        int interactorResponse = weatherInteractor.getTemperatureUnits();
+        int unitsFromInteractor = weatherInteractor.getTemperatureUnits();
         verify(repo, times(1)).getTemperatureUnits();
-        assertTrue(units == interactorResponse);
+        assertEquals(units, unitsFromInteractor);
     }
 }
