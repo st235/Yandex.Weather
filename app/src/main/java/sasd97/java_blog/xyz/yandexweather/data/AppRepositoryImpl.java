@@ -67,8 +67,8 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String s) {
-        return placesApi.getPlaceDetails(s, apiKeys.second);
+    public Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId) {
+        return placesApi.getPlaceDetails(placeId, apiKeys.second);
     }
 
     @Override
