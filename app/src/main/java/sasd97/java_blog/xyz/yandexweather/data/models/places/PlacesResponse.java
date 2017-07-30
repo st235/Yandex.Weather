@@ -18,6 +18,14 @@ public class PlacesResponse {
     @Expose
     private String status;
 
+    public PlacesResponse() {
+    }
+
+    public PlacesResponse(Predictions[] predictions, String status) {
+        this.predictions = predictions;
+        this.status = status;
+    }
+
     public String getPlaceIdAt(int i) {
         return predictions[i].placeId;
     }

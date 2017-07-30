@@ -74,10 +74,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     private boolean isSameFragmentAtTheTop(@IdRes int id) {
-        return id == menuItemsStack.peek();
+        return menuItemsStack.size() > 0 && id == menuItemsStack.peek();
     }
 
-    private void replaceFragment(@IdRes int id) {
+    public void replaceFragment(@IdRes int id) {
         Replace replace;
         menuItemsStack.add(id);
 

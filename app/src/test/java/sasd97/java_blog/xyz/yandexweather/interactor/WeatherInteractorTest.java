@@ -28,6 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -110,7 +111,7 @@ public class WeatherInteractorTest {
         when(repo.getPlace()).thenReturn(place);
 
         weatherInteractor.getPlace();
-        verify(repo, times(1)).getPlace();
+        verify(repo, only()).getPlace(); //// TODO: 7/30/2017 apply to all where need
     }
 
     @Test
