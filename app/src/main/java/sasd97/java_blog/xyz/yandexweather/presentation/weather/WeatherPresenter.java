@@ -51,11 +51,14 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
         interactor.updateWeather(interactor.getPlace())
                 .compose(schedulers.getIoToMainTransformer())
                 .map(weatherModel -> weatherModel.setCorrectCity(interactor.getPlace()))
-                .subscribe(this::chooseWeather, getPrintStackTrace());
+                .subscribe(this::chooseWeather, throwable -> {
+
+                });
     }
 
     @NonNull
     private Consumer<Throwable> getPrintStackTrace() {
+
         return Throwable::printStackTrace;
     }
 
