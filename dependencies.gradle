@@ -31,6 +31,8 @@ ext.versions = [
 
         espresso                     : '2.2.2',
         junit                        : '4.12',
+        mockwebserver                : '3.8.0',
+        mockito                      : '2.7.3',
 ]
 
 ext.gradlePlugins = [
@@ -71,4 +73,6 @@ ext.libraries = [
         // Test dependencies
         junit                   : "junit:junit:$versions.junit",
         espressoCore            : "com.android.support.test.espresso:espresso-core:$versions.espresso",
+        mockwebserver           : "com.squareup.okhttp3:mockwebserver:$versions.mockwebserver",
+        mockito                 : "org.mockito:mockito-android:$versions.mockito",
 ]

@@ -1,0 +1,16 @@
+{
+  "coord": {
+    "lon": 37.62,
+    "lat": 55.76
+  },
+  "weather": [
+    {
+      "id": 200,
+      "main": "Thunderstorm",
+      "description": "гроза с мелким дождём",
+      "icon": "11n"
+    }
+  ],
+  "base": "stations",
+  "name": "Moskovskaya Oblast’"
+}

@@ -1,7 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.domain.weather;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -53,7 +52,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
         String cacheWeather = repository.getCachedWeather(place);
         if (cacheWeather == null) return updateWeather(place);
 
-        Log.i(TAG, "Cache provided.");
+//        Log.i(TAG, "Cache provided.");
 
         Observable<WeatherModel> observable = Observable.just(cacheWeather)
                 .map(cache -> gson.fromJson(cache, WeatherModel.class));

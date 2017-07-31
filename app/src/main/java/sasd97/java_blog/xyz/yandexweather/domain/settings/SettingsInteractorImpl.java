@@ -35,7 +35,7 @@ public class SettingsInteractorImpl implements SettingsInteractor {
 
         if (state) {
             UpdateWeatherJob.scheduleJob(repository.getWeatherUpdateInterval());
-        } else {
+        } else if (jobManager != null){
             jobManager.cancelAllForTag(UpdateWeatherJob.TAG);
         }
 

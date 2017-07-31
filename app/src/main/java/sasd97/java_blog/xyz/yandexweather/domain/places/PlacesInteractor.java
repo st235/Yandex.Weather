@@ -12,5 +12,5 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 
 public interface PlacesInteractor {
     Observable<PlacesResponse> getPlaces(@NonNull String s);
-    Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String s);
+    Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId);
 }

@@ -26,7 +26,7 @@ public class PlacesInteractorImpl implements PlacesInteractor {
     }
 
     @Override
-    public Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String s) {
-        return repository.getPlaceDetails(s);
+    public Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId) {
+        return repository.getPlaceDetails(placeId);
     }
 }

@@ -1,7 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.data;
 
 import android.support.annotation.NonNull;
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import java.util.Date;
 
@@ -67,8 +67,8 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String s) {
-        return placesApi.getPlaceDetails(s, apiKeys.second);
+    public Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId) {
+        return placesApi.getPlaceDetails(placeId, apiKeys.second);
     }
 
     @Override
@@ -79,10 +79,6 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public void saveWeatherToCache(@NonNull Place place, @NonNull String json) {
         cacheStorage.put(toFileName(place), json);
-    }
-
-    private String toFileName(@NonNull Place place) {
-        return place.getName().replaceAll(" ", "_").replaceAll(",", "").toLowerCase();
     }
 
     @Override
@@ -110,7 +106,8 @@ public final class AppRepositoryImpl implements AppRepository {
             return new Place("", new Pair<>(0.0, 0.0));
         String c1 = objects[objects.length - 2];
         String c2 = objects[objects.length - 1];
-        return new Place(s.split(c1)[0], new Pair<>(Double.valueOf(c1), Double.valueOf(c2)));
+        return new Place(s.split(c1)[0].split(",")[0].split(" ")[0],
+                new Pair<>(Double.valueOf(c1), Double.valueOf(c2)));
     }
 
     @Override
@@ -151,5 +148,9 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public int getSpeedUnits() {
         return prefsStorage.getInteger(UNITS_SPEED_PREFS_KEY, 0);
+    }
+
+    public static String toFileName(@NonNull Place place) {
+        return place.getName().replaceAll(" ", "_").replaceAll(",", "").toLowerCase();
     }
 }

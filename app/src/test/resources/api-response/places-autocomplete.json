@@ -1,0 +1,200 @@
+{
+  "predictions": [
+    {
+      "description": "Москва, Россия",
+      "id": "1a0f08fcbc047354782f00ab52e66fb56d1aadf7",
+      "matched_substrings": [
+        {
+          "length": 6,
+          "offset": 0
+        }
+      ],
+      "place_id": "ChIJybDUc_xKtUYRTM9XV8zWRD0",
+      "reference": "CkQyAAAARcxYeNgVzjFW7n75MWcwJT95vqdIjMfB9dSZDIAhV4DI6goZQbI9y6Gied1HU5UEROy7li7nNdWH0AbjAdENnRIQnI6obh6VqPxY0dXGPTBKHxoUWSEZbPoCdO9m3M9H2fUr9xIu3Jc",
+      "structured_formatting": {
+        "main_text": "Москва",
+        "main_text_matched_substrings": [
+          {
+            "length": 6,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "Россия"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "Москва"
+        },
+        {
+          "offset": 8,
+          "value": "Россия"
+        }
+      ],
+      "types": [
+        "locality",
+        "political",
+        "geocode"
+      ]
+    },
+    {
+      "description": "Московская область, Россия",
+      "id": "0773ec0468be57252d69ffc3157057295c5af2a2",
+      "matched_substrings": [
+        {
+          "length": 3,
+          "offset": 0
+        }
+      ],
+      "place_id": "ChIJ2cXDsDGySkERQvLeO8CzDJE",
+      "reference": "ClRJAAAA-eNKIZ6OEu6PizVoa7sBsfdMzkVZosWZZRFGkaFVSJZ-tkzpIB9glZzdhAIUhcC_dCDaDYAxuj4AZ_0ZtT7s5sgTU92ZN_-k80n2ABLYn8gSECm3M5ACK4azt7yMF8E3QaUaFAHozbnYtTUnWFagrRy-FVBzkmW5",
+      "structured_formatting": {
+        "main_text": "Московская область",
+        "main_text_matched_substrings": [
+          {
+            "length": 3,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "Россия"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "Московская область"
+        },
+        {
+          "offset": 20,
+          "value": "Россия"
+        }
+      ],
+      "types": [
+        "administrative_area_level_1",
+        "political",
+        "geocode"
+      ]
+    },
+    {
+      "description": "Москва, Польша",
+      "id": "e313a843c24f2a5643bdb828172875ea3e73556c",
+      "matched_substrings": [
+        {
+          "length": 6,
+          "offset": 0
+        }
+      ],
+      "place_id": "ChIJEXOLWN7NG0cRSDtN82dF1Ww",
+      "reference": "CkQyAAAAKZ9kAvEwWfcEHEuZYzv2oIt_-Btit8lJ1SFsnYz-T9pLO2cVZRLP-W06kkTCNrJCZ36G2NLvxn9X-onGQSq5mRIQieS9c55VgZqAwcl7JIhHwBoUxVz62TDufH0RgxEM4zZPp9lZSb8",
+      "structured_formatting": {
+        "main_text": "Москва",
+        "main_text_matched_substrings": [
+          {
+            "length": 6,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "Польша"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "Москва"
+        },
+        {
+          "offset": 8,
+          "value": "Польша"
+        }
+      ],
+      "types": [
+        "locality",
+        "political",
+        "geocode"
+      ]
+    },
+    {
+      "description": "Московский проспект, Санкт-Петербург, Россия",
+      "id": "b0095a29daa092c4764bc12effefa766653fd15a",
+      "matched_substrings": [
+        {
+          "length": 3,
+          "offset": 0
+        }
+      ],
+      "place_id": "ElLQnNC-0YHQutC-0LLRgdC60LjQuSDQv9GA0L7RgdC_0LXQutGCLCDQodCw0L3QutGCLdCf0LXRgtC10YDQsdGD0YDQsywg0KDQvtGB0YHQuNGP",
+      "reference": "CmRWAAAA2yn-kpOKUl7hjLX613bOD0sEZLmy3hSpUrmLb5AqZRu2ePaK4gpx4da-ZybizOS_LzbkSKpcjq7ShzAL_PWT5purXQ5Ok_itu68K07B03Arf8BuKSy18ZN6uPN5cMKl0EhDJR1XV6lZoiC31kyG8lD4fGhS34zcvDVSXgNUP-PvNgwe6c7zOlQ",
+      "structured_formatting": {
+        "main_text": "Московский проспект",
+        "main_text_matched_substrings": [
+          {
+            "length": 3,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "Санкт-Петербург, Россия"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "Московский проспект"
+        },
+        {
+          "offset": 21,
+          "value": "Санкт-Петербург"
+        },
+        {
+          "offset": 38,
+          "value": "Россия"
+        }
+      ],
+      "types": [
+        "route",
+        "geocode"
+      ]
+    },
+    {
+      "description": "Московское шоссе, Самара, Самарская область, Россия",
+      "id": "fca5d2ab3920a0531805b80c0d5cee5d569643e8",
+      "matched_substrings": [
+        {
+          "length": 3,
+          "offset": 0
+        }
+      ],
+      "place_id": "El7QnNC-0YHQutC-0LLRgdC60L7QtSDRiNC-0YHRgdC1LCDQodCw0LzQsNGA0LAsINCh0LDQvNCw0YDRgdC60LDRjyDQvtCx0LvQsNGB0YLRjCwg0KDQvtGB0YHQuNGP",
+      "reference": "CnRiAAAAc9okh_gGfuVbFADHWcswSAMUKgX_4dUBIiadmJ-iXvqvkjdS1cnIALNoegBWAEVdJmH1iWpY5ux9eIo1K2a7_2fkl1TGFKkKGifnIs5PvCKRasw9bhmMZChwelZS0WQFSCIXNrysEAXWznVs-7uTmBIQzBSEJhRpx3JnoX86KGHVcRoUGDPTVhkGhODYFdIQ2lp4wBv4Cws",
+      "structured_formatting": {
+        "main_text": "Московское шоссе",
+        "main_text_matched_substrings": [
+          {
+            "length": 3,
+            "offset": 0
+          }
+        ],
+        "secondary_text": "Самара, Самарская область, Россия"
+      },
+      "terms": [
+        {
+          "offset": 0,
+          "value": "Московское шоссе"
+        },
+        {
+          "offset": 18,
+          "value": "Самара"
+        },
+        {
+          "offset": 26,
+          "value": "Самарская область"
+        },
+        {
+          "offset": 45,
+          "value": "Россия"
+        }
+      ],
+      "types": [
+        "route",
+        "geocode"
+      ]
+    }
+  ],
+  "status": "OK"
+}

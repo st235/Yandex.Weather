@@ -11,7 +11,7 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
  * Created by Alexander Dadukin on 21.04.2016.
  */
 
-public final class PrefsStorage implements Storage<String> {
+public class PrefsStorage implements Storage<String> {
 
     private static String TAG = "SHARED_PREFS";
     private static String APP_PREFERENCES = "WEATHER_PREFS";
