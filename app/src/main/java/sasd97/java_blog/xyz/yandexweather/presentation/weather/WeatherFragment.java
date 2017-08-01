@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +44,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_delimiter) View weatherDelimiter;
     @BindView(R.id.fragment_weather_humidity) TextView weatherHumidity;
     @BindView(R.id.fragment_weather_wind_speed) TextView weatherWindSpeed;
+    @BindView(R.id.fragment_weather_pressure) TextView weatherPressure;
     @BindView(R.id.fragment_weather_temperature) TextView weatherTemperature;
     @BindView(R.id.fragment_weather_last_refresh) TextView weatherLastRefresh;
     @BindView(R.id.fragment_weather_vertical_delimiter) View weatherVerticalDelimiter;
@@ -102,15 +102,17 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                 weather.getTemperature(), obtainTemperatureTitle()));
         weatherTemperatureExtreme.setText(getString(R.string.weather_fragment_current_temperature_extreme,
                 weather.getMaxTemperature(), weather.getMinTemperature(), obtainTemperatureTitle()));
-        weatherWindSpeed.setText(getString(R.string.weather_fragment_wind_speed,
-                weather.getWindSpeed(), obtainSpeedTitle(),
+        weatherPressure.setText(getString(R.string.weather_fragment_pressure,
                 weather.getPressure(), obtainPressureTitle()));
+        weatherWindSpeed.setText(getString(R.string.weather_fragment_wind_speed,
+                weather.getWindSpeed(), obtainSpeedTitle()));
         weatherHumidity.setText(getString(R.string.weather_fragment_humidity,
                 weather.getHumidity()));
         weatherLastRefresh.setText(obtainRefreshTime(weather.getUpdateTime()));
         weatherIcon.setText(weatherIconId);
         weatherType.setText(weatherTypeId);
         weatherCity.setText(weather.getCity());
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(weather.getCity());
     }
 
     private void updateWeatherTheme(@ColorRes int cardColorId,
@@ -125,6 +127,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         weatherType.setTextColor(textColor);
         weatherHumidity.setTextColor(textColor);
         weatherWindSpeed.setTextColor(textColor);
+        weatherPressure.setTextColor(textColor);
         weatherTemperature.setTextColor(textColor);
         weatherLastRefresh.setTextColor(textColor);
         weatherDelimiter.setBackgroundColor(textColor);
@@ -152,8 +155,5 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity()).changeSearchIconVisibility(this);
-        ((AppCompatActivity) getActivity())
-                .getSupportActionBar()
-                .setTitle(R.string.main_activity_navigation_weather);
     }
 }
