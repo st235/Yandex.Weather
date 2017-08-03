@@ -44,7 +44,7 @@ public class MainPresenterTest {
         SettingsInteractor settingsInteractor = mock(SettingsInteractor.class);
 
         presenter = new MainPresenter(rxSchedulers, placesInteractor, settingsInteractor);
-        presenter.setRouter(new AppFragmentRouter(R.id.fragment_container, fragmentActivity));
+        presenter.setRouter(new AppFragmentRouter(R.id.fragment_container_weather, fragmentActivity));
         presenter.openWeatherFragment();
         settingsFragmentId = R.id.main_activity_navigation_settings;
         weatherFragmentId = R.id.main_activity_navigation_weather;

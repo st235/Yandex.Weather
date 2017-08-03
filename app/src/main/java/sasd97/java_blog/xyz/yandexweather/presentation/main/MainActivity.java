@@ -31,6 +31,7 @@ import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 
 import java.util.concurrent.TimeUnit;
 
+import butterknife.BindBool;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -38,8 +39,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
-import sasd97.java_blog.xyz.yandexweather.navigation.Router;
-import sasd97.java_blog.xyz.yandexweather.navigation.fragments.FragmentCommand;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
 import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
 
@@ -50,14 +49,14 @@ public class MainActivity extends MvpAppCompatActivity
     public static final String CITY = "city";
 
     private Unbinder unbinder;
-    private Router<FragmentCommand> fragmentRouter = new AppFragmentRouter(R.id.fragment_container, this);
     private SimpleCursorAdapter cursorAdapter;
     private MenuItem miSearch;
     private SearchView searchView;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
-    @BindView(R.id.nav_view) NavigationView navigationView;
+    @BindBool(R.bool.isTablet) boolean isTablet;
+    NavigationView navigationView;
 
     @InjectPresenter MainPresenter mainPresenter;
 
@@ -71,16 +70,34 @@ public class MainActivity extends MvpAppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
+
+        setTheme(R.style.AppTheme_NoActionBar);
         setContentView(R.layout.activity_main);
 
         unbinder = ButterKnife.bind(this);
         WeatherApp.get(this).getMainComponent().inject(this);
 
-        setSupportActionBar(toolbar);
+        if (isTablet) {
+            // do something
+        } else {
+            initDrawer();
+        }
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        initActionBar();
+        initFragments(savedInstanceState);
+        initSearchSuggestsAdapter();
+
+    }
+
+    private void initActionBar() {
+        setSupportActionBar(toolbar);
+    }
+
+    private void initDrawer() {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         drawer.addDrawerListener(new DrawerStateListener() {
@@ -89,20 +106,19 @@ public class MainActivity extends MvpAppCompatActivity
                 if (toolbar.hasExpandedActionView()) toolbar.collapseActionView();
             }
         });
-
         navigationView.setNavigationItemSelectedListener(this);
-        mainPresenter.setRouter(fragmentRouter);
+    }
 
-        if (savedInstanceState == null) onInit();
-
+    private void initSearchSuggestsAdapter() {
         final String[] from = new String[]{CITY};
         final int[] to = new int[]{android.R.id.text1};
         cursorAdapter = new SimpleCursorAdapter(this, R.layout.item_search_suggest,
                 null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
     }
 
-    private void onInit() {
-        mainPresenter.openWeatherFragment();
+    private void initFragments(Bundle savedInstanceState) {
+        mainPresenter.setRouter(new AppFragmentRouter(R.id.fragment_container_weather, this));
+        if (savedInstanceState == null) mainPresenter.openWeatherFragment();
     }
 
     @Override
@@ -159,12 +175,12 @@ public class MainActivity extends MvpAppCompatActivity
                 .doOnNext(charSequence -> {
                     if (TextUtils.isEmpty(charSequence)) showSuggestions(null);
                 })
-                // to prevent making requests too fast (as user may type fast),
-                // throttleLast will emit last item during 100ms from the time
-                // first item is emitted
+                /*to prevent making requests too fast (as user may type fast),
+                throttleLast will emit last item during 100ms from the time
+                first item is emitted*/
                 .throttleLast(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                // debounce will emit item only 200ms after last item is emitted
-                // (after user types in last character)
+                /*debounce will emit item only 200ms after last item is emitted
+                (after user types in last character)*/
                 .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .filter(charSequence -> {
                     if (TextUtils.isEmpty(charSequence)) showSuggestions(null);

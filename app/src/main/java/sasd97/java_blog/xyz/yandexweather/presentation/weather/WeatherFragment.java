@@ -38,7 +38,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     private SimpleDateFormat fmt = new SimpleDateFormat("E, MMM dd, HH:mm", Locale.getDefault());
 
     @BindView(R.id.fragment_weather_icon) TextView weatherIcon;
-    @BindView(R.id.fragment_weather_city) TextView weatherCity;
     @BindView(R.id.fragment_weather_type) TextView weatherType;
     @BindView(R.id.fragment_weather_card) CardView weatherCard;
     @BindView(R.id.fragment_weather_delimiter) View weatherDelimiter;
@@ -111,7 +110,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         weatherLastRefresh.setText(obtainRefreshTime(weather.getUpdateTime()));
         weatherIcon.setText(weatherIconId);
         weatherType.setText(weatherTypeId);
-        weatherCity.setText(weather.getCity());
         ((MainActivity)getActivity()).getSupportActionBar().setTitle(weather.getCity());
     }
 
@@ -122,7 +120,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
         weatherCard.setCardBackgroundColor(cardColor);
 
-        weatherCity.setTextColor(textColor);
         weatherIcon.setTextColor(textColor);
         weatherType.setTextColor(textColor);
         weatherHumidity.setTextColor(textColor);
