@@ -5,11 +5,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.MatrixCursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +26,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -32,7 +35,6 @@ import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindBool;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -41,11 +43,14 @@ import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
+import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
 import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
+import sasd97.java_blog.xyz.yandexweather.utils.OnHorizontalRecyclerScroll;
 
 public class MainActivity extends MvpAppCompatActivity
         implements MainView, NavigationView.OnNavigationItemSelectedListener,
-        SearchView.OnSuggestionListener, View.OnFocusChangeListener {
+        SearchView.OnSuggestionListener, View.OnFocusChangeListener,
+        OnHorizontalRecyclerScroll {
 
     private static final String CITY = "city";
 
@@ -55,12 +60,12 @@ public class MainActivity extends MvpAppCompatActivity
     private SearchView searchView;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.navigation_layout) @Nullable RelativeLayout navigationLayout;
     @BindView(R.id.nav_view) @Nullable NavigationView navigationView;
     @BindView(R.id.drawer_layout) @Nullable DrawerLayout drawer;
 
-    @BindBool(R.bool.isTablet) boolean isTablet;
-
     @InjectPresenter MainPresenter mainPresenter;
+    private float navElevation;
 
     @ProvidePresenter
     public MainPresenter providePresenter() {
@@ -80,7 +85,7 @@ public class MainActivity extends MvpAppCompatActivity
         unbinder = ButterKnife.bind(this);
         WeatherApp.get(this).getMainComponent().inject(this);
 
-        initDrawer();
+        initNavigation(savedInstanceState);
         initActionBar();
         initFragments(savedInstanceState);
         initSearchSuggestsAdapter();
@@ -91,19 +96,26 @@ public class MainActivity extends MvpAppCompatActivity
         setSupportActionBar(toolbar);
     }
 
-    private void initDrawer() {
-        if (drawer == null || navigationView == null) return;
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        drawer.addDrawerListener(new DrawerStateListener() {
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                if (toolbar.hasExpandedActionView()) toolbar.collapseActionView();
-            }
-        });
-        navigationView.setNavigationItemSelectedListener(this);
+    private void initNavigation(Bundle savedInstanceState) {
+        if (drawer == null || navigationView == null) {
+            /*Tablet*/
+            mainPresenter.setNavigationRouter(new AppFragmentRouter(R.id.fragment_container_navigation, this));
+            if (savedInstanceState == null) mainPresenter.openNavigationFragment();
+            navElevation = AndroidMath.dp2px(16, getResources());
+        } else {
+            /*Mobile*/
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                    R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+            drawer.addDrawerListener(new DrawerStateListener() {
+                @Override
+                public void onDrawerStateChanged(int newState) {
+                    if (toolbar.hasExpandedActionView()) toolbar.collapseActionView();
+                }
+            });
+            navigationView.setNavigationItemSelectedListener(this);
+        }
     }
 
     private void initSearchSuggestsAdapter() {
@@ -114,7 +126,7 @@ public class MainActivity extends MvpAppCompatActivity
     }
 
     private void initFragments(Bundle savedInstanceState) {
-        mainPresenter.setRouter(new AppFragmentRouter(R.id.fragment_container_weather, this));
+        mainPresenter.setWeatherRouter(new AppFragmentRouter(R.id.fragment_container_weather, this));
         if (savedInstanceState == null) mainPresenter.openWeatherFragment();
     }
 
@@ -126,7 +138,7 @@ public class MainActivity extends MvpAppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        mainPresenter.navigateTo(item.getItemId());
+        mainPresenter.weatherNavigateTo(item.getItemId());
         return true;
     }
 
@@ -244,5 +256,16 @@ public class MainActivity extends MvpAppCompatActivity
         if (miSearch == null) return;
         if (fragment instanceof WeatherFragment) miSearch.setVisible(true);
         else miSearch.setVisible(false);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onElevationChangeRequired(boolean needUp) {
+        assert navigationLayout != null;
+        if (needUp) {
+            navigationLayout.animate().translationZ(navElevation);
+        } else {
+            navigationLayout.animate().translationZ(0);
+        }
     }
 }

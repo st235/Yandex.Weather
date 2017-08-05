@@ -14,7 +14,24 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/nav_tablet"/>
+        <RelativeLayout
+            android:id="@+id/navigation_layout"
+            android:layout_width="@dimen/drawer_width"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="320dp"
+                android:layout_height="64dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <FrameLayout
+                android:id="@+id/fragment_container_navigation"
+                android:layout_width="@dimen/drawer_width"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/toolbar"/>
+        </RelativeLayout>
 
         <FrameLayout
             android:id="@+id/fragment_container_weather"

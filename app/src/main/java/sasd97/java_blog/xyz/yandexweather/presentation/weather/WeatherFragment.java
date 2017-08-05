@@ -1,5 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.BindBool;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sasd97.java_blog.xyz.yandexweather.R;
@@ -31,12 +34,14 @@ import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
+import sasd97.java_blog.xyz.yandexweather.utils.OnHorizontalRecyclerScroll;
 
 /**
  * Created by alexander on 09/07/2017.
  */
 
-public class WeatherFragment extends MvpAppCompatFragment implements WeatherView, AppBarLayout.OnOffsetChangedListener {
+public class WeatherFragment extends MvpAppCompatFragment implements WeatherView,
+        AppBarLayout.OnOffsetChangedListener {
 
     private SimpleDateFormat fmt = new SimpleDateFormat("E, MMM dd, HH:mm", Locale.getDefault());
 
@@ -52,11 +57,14 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_swipe_to_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.fragment_weather_temperature_extreme) TextView weatherTemperatureExtreme;
     @BindView(R.id.fragment_weather_recycler_forecast) RecyclerView forecastRecycler;
-    @BindView(R.id.fragment_weather_appbarlayout) AppBarLayout appBarLayout;
-
-    private ForecastRecyclerAdapter forecastRecyclerAdapter;
+    @BindView(R.id.fragment_weather_appbarlayout) @Nullable AppBarLayout appBarLayout;
+    @BindBool(R.bool.isTabletHorizontal) boolean isTabletHorizontal;
 
     @InjectPresenter WeatherPresenter presenter;
+
+    private ForecastRecyclerAdapter forecastRecyclerAdapter;
+    private RecyclerView.OnScrollListener onScrollListener;
+    private LinearLayoutManager layoutManager;
 
     @ProvidePresenter
     public WeatherPresenter providePresenter() {
@@ -87,11 +95,42 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
         swipeRefreshLayout.setOnRefreshListener(presenter::fetchWeather);
 
-        int orientation = getResources().getConfiguration().orientation == 1 ? RecyclerView.VERTICAL : RecyclerView.HORIZONTAL;
-        forecastRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), orientation, false));
+        int orientation = (isTabletHorizontal) ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL;
+        layoutManager = new LinearLayoutManager(getActivity(), orientation, false);
+        forecastRecycler.setLayoutManager(layoutManager);
         forecastRecyclerAdapter = new ForecastRecyclerAdapter();
         forecastRecycler.setAdapter(forecastRecyclerAdapter);
         forecastRecycler.setHasFixedSize(true);
+
+        if (isTabletHorizontal) onTabletHorizontalMode();
+    }
+
+    /*For better UX add elevation to nav container when scrolling recycler with horizontal LM*/
+    private void onTabletHorizontalMode() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            onScrollListener = new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(final RecyclerView recyclerView, final int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                        ((OnHorizontalRecyclerScroll) getActivity()).onElevationChangeRequired(true);
+                    }
+                }
+
+                @Override
+                public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (recyclerView.getChildAt(0).getLeft() == 0 &&
+                            layoutManager.findFirstVisibleItemPosition() == 0) {
+                        Log.d("***", String.valueOf(dx));
+                        ((OnHorizontalRecyclerScroll) getActivity()).onElevationChangeRequired(false);
+                    } else {
+                        ((OnHorizontalRecyclerScroll) getActivity()).onElevationChangeRequired(true);
+                    }
+                }
+            };
+            forecastRecycler.addOnScrollListener(onScrollListener);
+        }
     }
 
     @Override
@@ -162,23 +201,21 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @Override
     public void onResume() {
         super.onResume();
-        appBarLayout.addOnOffsetChangedListener(this);
+        if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
         ((MainActivity) getActivity()).changeSearchIconVisibility(this);
     }
 
     /*Hardcode for correct work of swipeRefreshLayout in conjunction with appBarLayout*/
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        if (verticalOffset == 0) {
-            swipeRefreshLayout.setEnabled(true);
-        } else {
-            swipeRefreshLayout.setEnabled(false);
-        }
+        swipeRefreshLayout.setEnabled(verticalOffset == 0);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        appBarLayout.removeOnOffsetChangedListener(this);
+        if (appBarLayout != null) appBarLayout.removeOnOffsetChangedListener(this);
+        if (onScrollListener != null) forecastRecycler.removeOnScrollListener(onScrollListener);
     }
+
 }

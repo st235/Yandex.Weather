@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:id="@+id/fragment_weather_swipe_to_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/fragment_weather_card"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginLeft="8dp"
+            card_view:cardCornerRadius="@dimen/card_corner_radius"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toLeftOf="@+id/fragment_weather_recycler_forecast"
+            android:layout_toStartOf="@+id/fragment_weather_recycler_forecast">
+
+            <include layout="@layout/content_weather"/>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_weather_recycler_forecast"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>
