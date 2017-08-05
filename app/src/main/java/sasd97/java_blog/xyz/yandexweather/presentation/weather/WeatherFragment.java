@@ -5,9 +5,12 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,14 +36,13 @@ import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
  * Created by alexander on 09/07/2017.
  */
 
-public class WeatherFragment extends MvpAppCompatFragment implements WeatherView {
+public class WeatherFragment extends MvpAppCompatFragment implements WeatherView, AppBarLayout.OnOffsetChangedListener {
 
     private SimpleDateFormat fmt = new SimpleDateFormat("E, MMM dd, HH:mm", Locale.getDefault());
 
     @BindView(R.id.fragment_weather_icon) TextView weatherIcon;
     @BindView(R.id.fragment_weather_type) TextView weatherType;
     @BindView(R.id.fragment_weather_card) CardView weatherCard;
-    @BindView(R.id.fragment_weather_delimiter) View weatherDelimiter;
     @BindView(R.id.fragment_weather_humidity) TextView weatherHumidity;
     @BindView(R.id.fragment_weather_wind_speed) TextView weatherWindSpeed;
     @BindView(R.id.fragment_weather_pressure) TextView weatherPressure;
@@ -49,6 +51,10 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_vertical_delimiter) View weatherVerticalDelimiter;
     @BindView(R.id.fragment_weather_swipe_to_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.fragment_weather_temperature_extreme) TextView weatherTemperatureExtreme;
+    @BindView(R.id.fragment_weather_recycler_forecast) RecyclerView forecastRecycler;
+    @BindView(R.id.fragment_weather_appbarlayout) AppBarLayout appBarLayout;
+
+    private ForecastRecyclerAdapter forecastRecyclerAdapter;
 
     @InjectPresenter WeatherPresenter presenter;
 
@@ -80,6 +86,12 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                 R.color.colorPrimaryDark, R.color.colorPrimary);
 
         swipeRefreshLayout.setOnRefreshListener(presenter::fetchWeather);
+
+        int orientation = getResources().getConfiguration().orientation == 1 ? RecyclerView.VERTICAL : RecyclerView.HORIZONTAL;
+        forecastRecycler.setLayoutManager(new LinearLayoutManager(getActivity(), orientation, false));
+        forecastRecyclerAdapter = new ForecastRecyclerAdapter();
+        forecastRecycler.setAdapter(forecastRecyclerAdapter);
+        forecastRecycler.setHasFixedSize(true);
     }
 
     @Override
@@ -110,7 +122,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         weatherLastRefresh.setText(obtainRefreshTime(weather.getUpdateTime()));
         weatherIcon.setText(weatherIconId);
         weatherType.setText(weatherTypeId);
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle(weather.getCity());
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(weather.getCity());
     }
 
     private void updateWeatherTheme(@ColorRes int cardColorId,
@@ -127,7 +139,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         weatherPressure.setTextColor(textColor);
         weatherTemperature.setTextColor(textColor);
         weatherLastRefresh.setTextColor(textColor);
-        weatherDelimiter.setBackgroundColor(textColor);
         weatherTemperatureExtreme.setTextColor(textColor);
         weatherVerticalDelimiter.setBackgroundColor(textColor);
     }
@@ -151,6 +162,23 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @Override
     public void onResume() {
         super.onResume();
+        appBarLayout.addOnOffsetChangedListener(this);
         ((MainActivity) getActivity()).changeSearchIconVisibility(this);
+    }
+
+    /*Hardcode for correct work of swipeRefreshLayout in conjunction with appBarLayout*/
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        if (verticalOffset == 0) {
+            swipeRefreshLayout.setEnabled(true);
+        } else {
+            swipeRefreshLayout.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        appBarLayout.removeOnOffsetChangedListener(this);
     }
 }

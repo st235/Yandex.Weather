@@ -57,6 +57,9 @@
     <string name="settings_fragment_available_intervals_ok">Применить</string>
     <string name="settings_fragment_available_intervals_switcher">Разрешить работу в фоне</string>
 
+    <!--Navigation fragment-->
+    <string name="navigation_fragment_about">About</string>
+
     <string-array name="settings_fragment_available_interval_titles">
         <item>15 минут</item>
         <item>30 минут</item>

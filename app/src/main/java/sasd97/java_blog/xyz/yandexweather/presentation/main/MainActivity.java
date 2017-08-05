@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -46,7 +47,7 @@ public class MainActivity extends MvpAppCompatActivity
         implements MainView, NavigationView.OnNavigationItemSelectedListener,
         SearchView.OnSuggestionListener, View.OnFocusChangeListener {
 
-    public static final String CITY = "city";
+    private static final String CITY = "city";
 
     private Unbinder unbinder;
     private SimpleCursorAdapter cursorAdapter;
@@ -54,9 +55,10 @@ public class MainActivity extends MvpAppCompatActivity
     private SearchView searchView;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.nav_view) @Nullable NavigationView navigationView;
+    @BindView(R.id.drawer_layout) @Nullable DrawerLayout drawer;
+
     @BindBool(R.bool.isTablet) boolean isTablet;
-    NavigationView navigationView;
 
     @InjectPresenter MainPresenter mainPresenter;
 
@@ -78,12 +80,7 @@ public class MainActivity extends MvpAppCompatActivity
         unbinder = ButterKnife.bind(this);
         WeatherApp.get(this).getMainComponent().inject(this);
 
-        if (isTablet) {
-            // do something
-        } else {
-            initDrawer();
-        }
-
+        initDrawer();
         initActionBar();
         initFragments(savedInstanceState);
         initSearchSuggestsAdapter();
@@ -95,7 +92,7 @@ public class MainActivity extends MvpAppCompatActivity
     }
 
     private void initDrawer() {
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (drawer == null || navigationView == null) return;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -123,6 +120,7 @@ public class MainActivity extends MvpAppCompatActivity
 
     @Override
     public void selectNavigationItem(@IdRes int id) {
+        if (navigationView == null) return;
         navigationView.setCheckedItem(id);
     }
 
@@ -133,7 +131,17 @@ public class MainActivity extends MvpAppCompatActivity
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home && drawer != null) {
+            drawer.openDrawer(GravityCompat.START);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void closeDrawer() {
+        if (drawer == null) return;
         drawer.closeDrawer(GravityCompat.START);
     }
 
@@ -145,7 +153,7 @@ public class MainActivity extends MvpAppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             closeDrawer();
             return;
         }
@@ -175,12 +183,7 @@ public class MainActivity extends MvpAppCompatActivity
                 .doOnNext(charSequence -> {
                     if (TextUtils.isEmpty(charSequence)) showSuggestions(null);
                 })
-                /*to prevent making requests too fast (as user may type fast),
-                throttleLast will emit last item during 100ms from the time
-                first item is emitted*/
                 .throttleLast(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                /*debounce will emit item only 200ms after last item is emitted
-                (after user types in last character)*/
                 .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .filter(charSequence -> {
                     if (TextUtils.isEmpty(charSequence)) showSuggestions(null);
