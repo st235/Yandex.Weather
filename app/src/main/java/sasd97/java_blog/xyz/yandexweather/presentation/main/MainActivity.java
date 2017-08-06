@@ -1,5 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.main;
 
+import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -8,11 +9,7 @@ import android.database.MatrixCursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.BaseColumns;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -43,14 +40,12 @@ import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
-import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
 import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
-import sasd97.java_blog.xyz.yandexweather.utils.OnHorizontalRecyclerScroll;
+import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
 
-public class MainActivity extends MvpAppCompatActivity
-        implements MainView, NavigationView.OnNavigationItemSelectedListener,
+public class MainActivity extends MvpAppCompatActivity implements MainView,
         SearchView.OnSuggestionListener, View.OnFocusChangeListener,
-        OnHorizontalRecyclerScroll {
+        ElevationScrollListener {
 
     private static final String CITY = "city";
 
@@ -61,11 +56,9 @@ public class MainActivity extends MvpAppCompatActivity
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.navigation_layout) @Nullable RelativeLayout navigationLayout;
-    @BindView(R.id.nav_view) @Nullable NavigationView navigationView;
     @BindView(R.id.drawer_layout) @Nullable DrawerLayout drawer;
 
     @InjectPresenter MainPresenter mainPresenter;
-    private float navElevation;
 
     @ProvidePresenter
     public MainPresenter providePresenter() {
@@ -97,13 +90,10 @@ public class MainActivity extends MvpAppCompatActivity
     }
 
     private void initNavigation(Bundle savedInstanceState) {
-        if (drawer == null || navigationView == null) {
-            /*Tablet*/
-            mainPresenter.setNavigationRouter(new AppFragmentRouter(R.id.fragment_container_navigation, this));
-            if (savedInstanceState == null) mainPresenter.openNavigationFragment();
-            navElevation = AndroidMath.dp2px(16, getResources());
-        } else {
-            /*Mobile*/
+        mainPresenter.setNavigationRouter(new AppFragmentRouter(R.id.fragment_container_navigation, this));
+        if (savedInstanceState == null) mainPresenter.openNavigationFragment();
+
+        if (drawer != null) {
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                     R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
@@ -114,7 +104,6 @@ public class MainActivity extends MvpAppCompatActivity
                     if (toolbar.hasExpandedActionView()) toolbar.collapseActionView();
                 }
             });
-            navigationView.setNavigationItemSelectedListener(this);
         }
     }
 
@@ -130,22 +119,17 @@ public class MainActivity extends MvpAppCompatActivity
         if (savedInstanceState == null) mainPresenter.openWeatherFragment();
     }
 
-    @Override
-    public void selectNavigationItem(@IdRes int id) {
-        if (navigationView == null) return;
-        navigationView.setCheckedItem(id);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        mainPresenter.weatherNavigateTo(item.getItemId());
-        return true;
-    }
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//        mainPresenter.weatherNavigateTo(item.getItemId());
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home && drawer != null) {
-            drawer.openDrawer(GravityCompat.START);
+            if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START);
+            else drawer.openDrawer(GravityCompat.START);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -155,6 +139,11 @@ public class MainActivity extends MvpAppCompatActivity
     public void closeDrawer() {
         if (drawer == null) return;
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+    @Override
+    public void selectNavigationItem(int id) {
+
     }
 
     @Override
@@ -179,7 +168,7 @@ public class MainActivity extends MvpAppCompatActivity
         getMenuInflater().inflate(R.menu.search_menu, menu);
         miSearch = menu.findItem(R.id.action_search);
         searchView = (SearchView) MenuItemCompat.getActionView(miSearch);
-
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSearchableInfo(((SearchManager) getSystemService(Context.SEARCH_SERVICE))
                 .getSearchableInfo(new ComponentName(this, MainActivity.class)));
         searchView.setSuggestionsAdapter(cursorAdapter);
@@ -238,6 +227,8 @@ public class MainActivity extends MvpAppCompatActivity
     public boolean onSuggestionClick(int position) {
         toolbar.collapseActionView();
         mainPresenter.saveCity(position);
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START))
+            drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -258,14 +249,16 @@ public class MainActivity extends MvpAppCompatActivity
         else miSearch.setVisible(false);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onElevationChangeRequired(boolean needUp) {
+    public void onNavigationLayoutElevation(int elevation) {
         assert navigationLayout != null;
-        if (needUp) {
-            navigationLayout.animate().translationZ(navElevation);
-        } else {
-            navigationLayout.animate().translationZ(0);
-        }
+        navigationLayout.animate().translationZ(elevation);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onToolbarElevation(int elevation) {
+        toolbar.animate().translationZ(elevation);
     }
 }

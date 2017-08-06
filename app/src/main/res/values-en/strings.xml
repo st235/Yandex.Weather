@@ -11,7 +11,7 @@
 
     <!-- Actionbar region -->
     <string name="main_activity_action_search">Search</string>
-    <string name="main_activity_action_search_hint">New York</string>
+    <string name="main_activity_action_search_hint">Specify place</string>
     <string name="main_activity_action_search_settings_description">City list</string>
     <!-- Endregion -->
 
@@ -57,7 +57,7 @@
     <string name="settings_fragment_available_intervals_cancel">Cancel</string>
     <string name="settings_fragment_available_intervals_ok">OK</string>
     <string name="settings_fragment_available_intervals_switcher">Enable background updates</string>
-    <string name="navigation_fragment_about">About</string>
+    <string name="navigation_fragment_settings">Settings</string>
 
     <string-array name="settings_fragment_available_interval_titles">
         <item>15 minutes</item>

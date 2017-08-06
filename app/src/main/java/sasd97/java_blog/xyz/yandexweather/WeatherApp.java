@@ -26,7 +26,7 @@ import sasd97.java_blog.xyz.yandexweather.di.modules.NavigationModule;
 public class WeatherApp extends Application {
 
     static {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 
     private AppComponent appComponent;

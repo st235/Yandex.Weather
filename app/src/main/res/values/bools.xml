@@ -1,3 +1,4 @@
 <resources>
     <bool name="isTabletHorizontal">false</bool>
+    <bool name="isTablet">false</bool>
 </resources>

@@ -5,8 +5,9 @@
     <color name="colorAccent">#2D3A4B</color>
     <color name="colorTextPrimary">#424242</color>
     <color name="colorTextSecondary">#FAFAF7</color>
-    <color name="colorWhite">#FFFFFF</color>
-    
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlackAlpha">#22000000</color>
+
     <color name="colorGreyMd200">#EEEEEE</color>
     <color name="colorGreyMd600">#757575</color>
     <color name="colorGreyMd800">#424242</color>

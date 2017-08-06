@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.presentation.weather;
+package sasd97.java_blog.xyz.yandexweather.presentation.navigation;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,34 +11,35 @@ import android.widget.TextView;
 import java.util.List;
 
 import sasd97.java_blog.xyz.yandexweather.R;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 
 /**
  * Created by Maksim Sukhotski on 4/22/2017.
  */
 
-public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecyclerAdapter.RecyclerViewHolder> {
-    private List<Forecast> forecasts;
+public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAdapter.RecyclerViewHolder> {
+    private List<Place> forecasts;
 //
 //    public PlacesRecyclerAdapter(List<Forecast> forecasts) {
 //        this.forecasts = forecasts;
 //    }
 
 
-    public ForecastRecyclerAdapter() {
+    public PlacesRecyclerAdapter() {
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new RecyclerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_forecast, null));
+        return new RecyclerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_place, null));
     }
 
     @Override
-    public void onBindViewHolder(ForecastRecyclerAdapter.RecyclerViewHolder holder, int position) {
+    public void onBindViewHolder(PlacesRecyclerAdapter.RecyclerViewHolder holder, int position) {
     }
 
     @Override
     public int getItemCount() {
-        return 12;
+        return 10;
     }
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {

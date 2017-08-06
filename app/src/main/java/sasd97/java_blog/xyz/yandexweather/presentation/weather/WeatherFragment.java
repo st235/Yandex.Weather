@@ -12,7 +12,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,8 @@ import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
-import sasd97.java_blog.xyz.yandexweather.utils.OnHorizontalRecyclerScroll;
+import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
+import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -108,28 +108,27 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     /*For better UX add elevation to nav container when scrolling recycler with horizontal LM*/
     private void onTabletHorizontalMode() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int elevation = AndroidMath.dp2px(16, getResources());
+            int elevationBase = AndroidMath.dp2px(2, getResources());
+
             onScrollListener = new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(final RecyclerView recyclerView, final int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
                     if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                        ((OnHorizontalRecyclerScroll) getActivity()).onElevationChangeRequired(true);
+                        ((ElevationScrollListener) getActivity()).onNavigationLayoutElevation(elevation);
+                    } else if (layoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                        ((ElevationScrollListener) getActivity()).onNavigationLayoutElevation(elevationBase);
                     }
                 }
 
                 @Override
                 public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    if (recyclerView.getChildAt(0).getLeft() == 0 &&
-                            layoutManager.findFirstVisibleItemPosition() == 0) {
-                        Log.d("***", String.valueOf(dx));
-                        ((OnHorizontalRecyclerScroll) getActivity()).onElevationChangeRequired(false);
-                    } else {
-                        ((OnHorizontalRecyclerScroll) getActivity()).onElevationChangeRequired(true);
-                    }
                 }
             };
             forecastRecycler.addOnScrollListener(onScrollListener);
+            ((ElevationScrollListener) getActivity()).onNavigationLayoutElevation(elevationBase);
         }
     }
 

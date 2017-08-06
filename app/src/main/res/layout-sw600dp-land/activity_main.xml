@@ -9,14 +9,16 @@
 
     <RelativeLayout
         android:id="@+id/navigation_layout"
-        android:background="@color/colorWhite"
         android:layout_width="@dimen/drawer_width"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="320dp"
             android:layout_height="64dp"
+            android:elevation="0dp"
+            android:background="@color/colorWhite"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
