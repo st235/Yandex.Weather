@@ -58,7 +58,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_temperature_extreme) TextView weatherTemperatureExtreme;
     @BindView(R.id.fragment_weather_recycler_forecast) RecyclerView forecastRecycler;
     @BindView(R.id.fragment_weather_appbarlayout) @Nullable AppBarLayout appBarLayout;
-    @BindBool(R.bool.isTabletHorizontal) boolean isTabletHorizontal;
+    @BindBool(R.bool.is_tablet_horizontal) boolean isTabletHorizontal;
 
     @InjectPresenter WeatherPresenter presenter;
 

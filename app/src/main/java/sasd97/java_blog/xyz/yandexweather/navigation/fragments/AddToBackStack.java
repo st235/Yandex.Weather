@@ -27,4 +27,9 @@ public class AddToBackStack implements FragmentCommand {
     public FragmentTransaction apply(FragmentTransaction transaction) {
         return transaction.addToBackStack(tag);
     }
+
+    @Override
+    public FragmentTransaction apply(FragmentTransaction transaction, String tag) {
+        return null;
+    }
 }

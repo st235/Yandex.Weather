@@ -9,7 +9,7 @@
     tools:context="sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity">
 
     <android.support.v4.widget.SlidingPaneLayout
-        android:id="@+id/sliding_pane_layout"
+        android:id="@+id/sliding_panel_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -25,6 +25,7 @@
                 android:layout_height="64dp"
                 android:background="@color/colorWhite"
                 android:elevation="0dp"
+                android:paddingRight="12dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
@@ -39,8 +40,8 @@
             android:id="@+id/fragment_container_weather"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="64dp"
-            android:layout_marginStart="64dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginStart="80dp"
             android:background="@color/colorWhite"
             android:elevation="4dp"/>
 

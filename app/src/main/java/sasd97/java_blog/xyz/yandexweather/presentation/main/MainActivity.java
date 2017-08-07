@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.MatrixCursor;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.BaseColumns;
@@ -16,6 +17,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -39,7 +41,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
+import sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
+import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
 import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
 
@@ -57,8 +61,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.navigation_layout) @Nullable RelativeLayout navigationLayout;
     @BindView(R.id.drawer_layout) @Nullable DrawerLayout drawer;
+    @BindView(R.id.sliding_panel_layout) @Nullable SlidingPaneLayout slidingPaneLayout;
 
-    @InjectPresenter MainPresenter mainPresenter;
+    public @InjectPresenter MainPresenter mainPresenter;
+    private boolean isSearchOpenedFromClosedPanel;
+    MenuItemCompat.OnActionExpandListener actionExpandListener;
 
     @ProvidePresenter
     public MainPresenter providePresenter() {
@@ -78,22 +85,65 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         unbinder = ButterKnife.bind(this);
         WeatherApp.get(this).getMainComponent().inject(this);
 
+        setSupportActionBar(toolbar);
+
         initNavigation(savedInstanceState);
-        initActionBar();
         initFragments(savedInstanceState);
         initSearchSuggestsAdapter();
-
+        if (slidingPaneLayout != null) {
+            initSlidingPanelListener();
+            toolbar.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()));
+        }
     }
 
-    private void initActionBar() {
-        setSupportActionBar(toolbar);
+    private void initSlidingPanelListener() {
+        assert slidingPaneLayout != null;
+        slidingPaneLayout.setPanelSlideListener(new SlidingPaneLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                //// TODO: 8/7/2017 move numbers to resources
+                ((NavigationFragment) getSupportFragmentManager()
+                        .findFragmentByTag(MainPresenter.TAG)).makeNavigationView(slideOffset);
+                toolbar.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()) * (1 - slideOffset));
+            }
+
+            @Override
+            public void onPanelOpened(View panel) {
+            }
+
+            @Override
+            public void onPanelClosed(View panel) {
+                if (toolbar.hasExpandedActionView()) toolbar.collapseActionView();
+            }
+        });
+        actionExpandListener = new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                if (isSearchOpenedFromClosedPanel) {
+                    slidingPaneLayout.closePane();
+                    isSearchOpenedFromClosedPanel = false;
+                }
+                return true;
+            }
+        };
     }
 
     private void initNavigation(Bundle savedInstanceState) {
         mainPresenter.setNavigationRouter(new AppFragmentRouter(R.id.fragment_container_navigation, this));
         if (savedInstanceState == null) mainPresenter.openNavigationFragment();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (drawer != null) {
+            assert getSupportActionBar() != null;
+            if (drawer.isDrawerOpen(GravityCompat.START)) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                     R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
@@ -105,6 +155,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
                 }
             });
         }
+
     }
 
     private void initSearchSuggestsAdapter() {
@@ -121,7 +172,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
 
 //    @Override
 //    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        mainPresenter.weatherNavigateTo(item.getItemId());
+//        mainPresenter.navigateWeatherTo(item.getItemId());
 //        return true;
 //    }
 
@@ -131,6 +182,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
             if (drawer.isDrawerOpen(GravityCompat.START)) drawer.closeDrawer(GravityCompat.START);
             else drawer.openDrawer(GravityCompat.START);
             return true;
+        } else if (item.getTitle().equals("Search") && slidingPaneLayout != null &&
+                !slidingPaneLayout.isOpen()) {
+            slidingPaneLayout.openPane();
+            isSearchOpenedFromClosedPanel = true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -139,11 +194,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     public void closeDrawer() {
         if (drawer == null) return;
         drawer.closeDrawer(GravityCompat.START);
-    }
-
-    @Override
-    public void selectNavigationItem(int id) {
-
     }
 
     @Override
@@ -167,7 +217,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
         miSearch = menu.findItem(R.id.action_search);
+        if (slidingPaneLayout != null)
+            MenuItemCompat.setOnActionExpandListener(miSearch, actionExpandListener);
         searchView = (SearchView) MenuItemCompat.getActionView(miSearch);
+        searchView.findViewById(android.support.v7.appcompat.R.id.search_plate)
+                .setBackgroundColor(Color.TRANSPARENT);
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setSearchableInfo(((SearchManager) getSystemService(Context.SEARCH_SERVICE))
                 .getSearchableInfo(new ComponentName(this, MainActivity.class)));

@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="nav_recycler_places_padding_bottom">56dp</dimen>
+</resources>

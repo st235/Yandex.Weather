@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="nav_recycler_places_padding_bottom">0dp</dimen>
+    <dimen name="nav_settings_text_size">18sp</dimen>
+</resources>

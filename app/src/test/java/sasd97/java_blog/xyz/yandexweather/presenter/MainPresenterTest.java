@@ -54,7 +54,7 @@ public class MainPresenterTest {
     @Test
     public void navigateTo() {
         int settingsId = R.id.main_activity_navigation_settings;
-        presenter.weatherNavigateTo(settingsId);
+        presenter.navigateWeatherTo(settingsId);
         verify(view, only()).closeDrawer();
     }
 
@@ -81,7 +81,7 @@ public class MainPresenterTest {
 
     @Test
     public void onBackClickedWith2ElementStack() {
-        presenter.weatherNavigateTo(settingsFragmentId);
+        presenter.navigateWeatherTo(settingsFragmentId);
         presenter.onBackClicked();
         verify(view, times(1)).closeDrawer();
     }

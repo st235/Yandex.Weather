@@ -1,7 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.navigation.fragments;
 
 import android.support.annotation.IdRes;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 /**
@@ -38,5 +37,19 @@ public abstract class FragmentCommandDecorator implements FragmentCommand {
         return t;
     }
 
+    @Override
+    public FragmentTransaction apply(FragmentTransaction transaction, String tag) {
+        FragmentTransaction t = onApply(transaction, tag);
+
+        if (wrappedCommand != null) {
+            wrappedCommand.setContainer(containerId);
+            return wrappedCommand.apply(t);
+        }
+
+        return t;
+    }
+
     protected abstract FragmentTransaction onApply(FragmentTransaction transaction);
+
+    protected abstract FragmentTransaction onApply(FragmentTransaction transaction, String tag);
 }

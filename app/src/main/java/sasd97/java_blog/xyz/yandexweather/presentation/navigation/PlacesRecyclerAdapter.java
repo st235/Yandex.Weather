@@ -39,7 +39,7 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
 
     @Override
     public int getItemCount() {
-        return 10;
+        return 20;
     }
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {

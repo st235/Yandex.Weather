@@ -33,6 +33,7 @@ import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView> {
 
+    public static final String TAG = "navigation";
     private final PlacesInteractor placesInteractor;
     private final SettingsInteractor settingsInteractor;
     private final RxSchedulers schedulers;
@@ -64,21 +65,19 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     public void openNavigationFragment() {
-        navigationFragmentRouter.pushForward(new Replace(NavigationFragment.newInstance()));
+        navigationFragmentRouter.pushForward(new Replace(NavigationFragment.newInstance()), TAG);
     }
 
     public void onBackClicked() {
         menuItemsStack.pop();
         if (menuItemsStack.isEmpty()) return;
-        int id = menuItemsStack.peek();
-        getViewState().selectNavigationItem(id);
     }
 
     /**
      * Sorry, but Alexander`s FragmentMananager wrapper is very complicated.
      * So navigation will not be plain.
      */
-    public void weatherNavigateTo(@IdRes int id) {
+    public void navigateWeatherTo(@IdRes int id) {
         if (isSameFragmentAtTheTop(id)) {
             getViewState().closeDrawer();
             return;

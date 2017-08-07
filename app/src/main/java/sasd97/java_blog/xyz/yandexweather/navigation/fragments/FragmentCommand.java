@@ -12,4 +12,5 @@ import sasd97.java_blog.xyz.yandexweather.navigation.Command;
 public interface FragmentCommand extends Command {
     void setContainer(@IdRes int containerId);
     FragmentTransaction apply(FragmentTransaction transaction);
+    FragmentTransaction apply(FragmentTransaction transaction, String tag);
 }
