@@ -1,5 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.utils;
 
+import io.reactivex.CompletableTransformer;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.Scheduler;
 import io.reactivex.SingleTransformer;
@@ -16,6 +17,12 @@ public abstract class RxSchedulers {
 
     public <T> ObservableTransformer<T, T> getIoToMainTransformer()  {
         return objectObservable -> objectObservable
+                .subscribeOn(getIoScheduler())
+                .observeOn(getMainThreadScheduler());
+    }
+
+    public <T> CompletableTransformer getIoToMainTransformerCompletable()  {
+        return transformerCompletable -> transformerCompletable
                 .subscribeOn(getIoScheduler())
                 .observeOn(getMainThreadScheduler());
     }

@@ -26,8 +26,8 @@ import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
     private RxSchedulers schedulers;
-    private WeatherInteractor weatherInteractor;
     private PlacesInteractor placesInteractor;
+    private WeatherInteractor weatherInteractor;
     private Set<WeatherType> weatherTypes;
 
     @Inject

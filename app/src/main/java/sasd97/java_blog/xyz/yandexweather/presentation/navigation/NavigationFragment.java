@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.util.List;
 
@@ -23,17 +24,23 @@ import butterknife.BindBool;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sasd97.java_blog.xyz.yandexweather.R;
+import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
+import sasd97.java_blog.xyz.yandexweather.utils.NewPlaceClickListener;
+import sasd97.java_blog.xyz.yandexweather.utils.PlaceAddedListener;
 
 /**
  * Created by alexander on 09/07/2017.
  */
 
-public class NavigationFragment extends MvpAppCompatFragment implements NavigationView {
+public class NavigationFragment extends MvpAppCompatFragment implements NavigationView,
+        PlaceAddedListener {
+
+    public static final String TAG_NAVIGATION = "navigation";
 
     @BindView(R.id.fragment_navigation_recycler_cities) RecyclerView placesRecycler;
     @BindView(R.id.fragment_navigation_nav_view) RelativeLayout navigationView;
@@ -50,13 +57,13 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
 
     @InjectPresenter NavigationPresenter presenter;
 
-//    @ProvidePresenter
-//    public WeatherPresenter providePresenter() {
-//        return WeatherApp
-//                .get(getContext())
-//                .getMainComponent()
-//                .getWeatherPresenter();
-//    }
+    @ProvidePresenter
+    public NavigationPresenter providePresenter() {
+        return WeatherApp
+                .get(getContext())
+                .getMainComponent()
+                .getNavigationPresenter();
+    }
 
     public static NavigationFragment newInstance() {
         return new NavigationFragment();
@@ -159,6 +166,14 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     @Override
     public void showPlaces(List<Place> places) {
         placesRecyclerAdapter = new PlacesRecyclerAdapter(places);
+        placesRecyclerAdapter.setOnAddPlaceClickListener(() ->
+                ((NewPlaceClickListener) getActivity()).onAddPlaceClicked());
         placesRecycler.setAdapter(placesRecyclerAdapter);
+    }
+
+    @Override
+    public void onPlaceAdded(Place place) {
+        placesRecyclerAdapter.getPlaces().add(0, place);
+        placesRecyclerAdapter.notifyItemInserted(0);
     }
 }

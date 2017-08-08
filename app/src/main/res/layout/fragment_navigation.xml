@@ -80,6 +80,7 @@
         android:layout_marginStart="0dp"
         android:clipToPadding="@bool/is_tablet_horizontal"
         android:overScrollMode="never"
+        android:scrollbars="vertical"
         android:paddingBottom="@dimen/nav_recycler_places_padding_bottom"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintHorizontal_bias="0.0"

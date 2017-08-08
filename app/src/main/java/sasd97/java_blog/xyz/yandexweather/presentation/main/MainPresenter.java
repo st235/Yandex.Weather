@@ -26,6 +26,8 @@ import sasd97.java_blog.xyz.yandexweather.presentation.settings.SettingsFragment
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 
+import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment.TAG_NAVIGATION;
+
 /**
  * Created by alexander on 09/07/2017.
  */
@@ -33,7 +35,6 @@ import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView> {
 
-    public static final String TAG = "navigation";
     private final PlacesInteractor placesInteractor;
     private final SettingsInteractor settingsInteractor;
     private final RxSchedulers schedulers;
@@ -65,7 +66,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     public void openNavigationFragment() {
-        navigationFragmentRouter.pushForward(new Replace(NavigationFragment.newInstance()), TAG);
+        navigationFragmentRouter.pushForward(new Replace(NavigationFragment.newInstance()), TAG_NAVIGATION);
     }
 
     public void onBackClicked() {
@@ -73,10 +74,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
         if (menuItemsStack.isEmpty()) return;
     }
 
-    /**
-     * Sorry, but Alexander`s FragmentMananager wrapper is very complicated.
-     * So navigation will not be plain.
-     */
+    /*Alexander`s FragmentMananager wrapper is very complicated. So navigation will not be plain.*/
     public void navigateWeatherTo(@IdRes int id) {
         if (isSameFragmentAtTheTop(id)) {
             getViewState().closeDrawer();
@@ -126,13 +124,20 @@ public class MainPresenter extends MvpPresenter<MainView> {
         this.placesResponse = placesResponse;
     }
 
-    void saveCity(int position) {
+    void saveCity(int position, boolean addToFavorites) {
         placesInteractor.getPlaceDetails(placesResponse.getPlaceIdAt(position))
                 .compose(schedulers.getIoToMainTransformer())
-                .flatMapCompletable(placeDetails -> settingsInteractor.savePlace(
-                        new Place(placesResponse.getPlaceIdAt(position),
-                                placesResponse.getPlaceNameAt(position),
-                                placeDetails.getCoords())))
+                .map(placeDetailsResponse -> new Place(
+                        placesResponse.getPlaceIdAt(position),
+                        placesResponse.getPlaceNameAt(position),
+                        placeDetailsResponse.getCoords()))
+                .doOnNext(place -> {
+                    if (addToFavorites) getViewState().showNewFavoritePlace(place);
+                })
+                .flatMapCompletable(place -> addToFavorites ? placesInteractor.savePlaceToFavorites(place)
+                        .compose(schedulers.getIoToMainTransformerCompletable())
+                        .concatWith(settingsInteractor.savePlace(place)) :
+                        settingsInteractor.savePlace(place))
                 .doOnComplete(this::openWeatherFragment)
                 .subscribe();
     }

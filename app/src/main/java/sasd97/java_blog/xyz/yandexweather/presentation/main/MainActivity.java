@@ -40,16 +40,21 @@ import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
 import sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
 import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
+import sasd97.java_blog.xyz.yandexweather.utils.NewPlaceClickListener;
+import sasd97.java_blog.xyz.yandexweather.utils.PlaceAddedListener;
+
+import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment.TAG_NAVIGATION;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView,
         SearchView.OnSuggestionListener, View.OnFocusChangeListener,
-        ElevationScrollListener {
+        ElevationScrollListener, NewPlaceClickListener {
 
     private static final String CITY = "city";
 
@@ -57,6 +62,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     private SimpleCursorAdapter cursorAdapter;
     private MenuItem miSearch;
     private SearchView searchView;
+    private boolean addToFavorites;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.navigation_layout) @Nullable RelativeLayout navigationLayout;
@@ -103,7 +109,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
             public void onPanelSlide(View panel, float slideOffset) {
                 //// TODO: 8/7/2017 move numbers to resources
                 ((NavigationFragment) getSupportFragmentManager()
-                        .findFragmentByTag(MainPresenter.TAG)).makeNavigationView(slideOffset);
+                        .findFragmentByTag(TAG_NAVIGATION)).makeNavigationView(slideOffset);
                 toolbar.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()) * (1 - slideOffset));
             }
 
@@ -143,7 +149,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         super.onResume();
         if (drawer != null) {
             assert getSupportActionBar() != null;
-            if (drawer.isDrawerOpen(GravityCompat.START)) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if (drawer.isDrawerOpen(GravityCompat.START))
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                     R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
@@ -170,12 +177,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         if (savedInstanceState == null) mainPresenter.openWeatherFragment();
     }
 
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        mainPresenter.navigateWeatherTo(item.getItemId());
-//        return true;
-//    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home && drawer != null) {
@@ -188,6 +189,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
             isSearchOpenedFromClosedPanel = true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showNewFavoritePlace(Place place) {
+        ((PlaceAddedListener) getSupportFragmentManager().findFragmentByTag(TAG_NAVIGATION))
+                .onPlaceAdded(place);
     }
 
     @Override
@@ -274,15 +281,18 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if (!hasFocus) toolbar.collapseActionView();
+        if (!hasFocus) {
+            toolbar.collapseActionView();
+        }
     }
 
     @Override
     public boolean onSuggestionClick(int position) {
         toolbar.collapseActionView();
-        mainPresenter.saveCity(position);
-        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START))
+        mainPresenter.saveCity(position, addToFavorites);
+        if (!addToFavorites && drawer != null && drawer.isDrawerOpen(GravityCompat.START))
             drawer.closeDrawer(GravityCompat.START);
+        addToFavorites = false;
         return true;
     }
 
@@ -314,5 +324,17 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     @Override
     public void onToolbarElevation(int elevation) {
         toolbar.animate().translationZ(elevation);
+    }
+
+    @Override
+    public void onAddPlaceClicked() {
+        if (searchView.isIconified()) {
+            addToFavorites = true;
+            MenuItemCompat.expandActionView(miSearch);
+            if (slidingPaneLayout != null) {
+                isSearchOpenedFromClosedPanel = true;
+                slidingPaneLayout.openPane();
+            }
+        }
     }
 }

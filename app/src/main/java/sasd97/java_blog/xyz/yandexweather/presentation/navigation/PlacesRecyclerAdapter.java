@@ -20,6 +20,16 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 
 public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAdapter.RecyclerViewHolder> {
     private List<Place> places;
+    private OnAddPlaceClickListener onAddPlaceClickListener;
+
+    public PlacesRecyclerAdapter setOnAddPlaceClickListener(OnAddPlaceClickListener addPlaceClickListener) {
+        this.onAddPlaceClickListener = addPlaceClickListener;
+        return this;
+    }
+
+    public interface OnAddPlaceClickListener {
+        void onAddPlaceClick();
+    }
 
     public PlacesRecyclerAdapter(List<Place> places) {
         this.places = places;
@@ -35,16 +45,22 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
         if (position == getItemCount() - 1) {
             holder.tvPlaceName.setText(R.string.add_place);
             holder.ivColor.setImageResource(R.drawable.ic_action_add);
+            holder.itemView.setOnClickListener(view -> onAddPlaceClickListener.onAddPlaceClick());
         } else {
-            holder.tvFirstLetter.setText(places.get(position).getName().charAt(0));
+            holder.tvFirstLetter.setText(String.valueOf(places.get(position).getName().charAt(0)));
+            holder.ivColor.setImageResource(R.drawable.circle);
             holder.tvPlaceName.setText(places.get(position).getName());
-            holder.ivColor.setImageResource(R.color.colorAccent);
+//            holder.ivColor.setImageResource(R.color.colorAccent);
         }
     }
 
     @Override
     public int getItemCount() {
         return places.size() + 1; // + 1 for static "add" button
+    }
+
+    public List<Place> getPlaces() {
+        return places;
     }
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {

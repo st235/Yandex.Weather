@@ -2,7 +2,11 @@ package sasd97.java_blog.xyz.yandexweather.domain.places;
 
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
+import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
@@ -19,5 +23,6 @@ public interface PlacesInteractor {
     @NonNull
     Place getPlace();
 
-
+    Completable savePlaceToFavorites(Place place);
+    Single<List<Place>> getPlacesFromFavorites();
 }

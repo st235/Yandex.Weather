@@ -85,13 +85,13 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Single<List<Place>> getPlaces() {
+    public Single<List<Place>> getPlacesFromFavorites() {
         return placesDao.getPlaces();
     }
 
     @Override
     public Completable insertPlace(Place place) {
-        return new CompletableFromAction(() -> placesDao.insertPlace(place));
+        return Completable.fromAction(() -> placesDao.insertPlace(place));
     }
 
     @Override
