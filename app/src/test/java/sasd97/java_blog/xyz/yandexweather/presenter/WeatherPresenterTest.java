@@ -13,6 +13,7 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.modules.WeatherTypesModule;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
+import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherView;
@@ -31,7 +32,8 @@ import static org.mockito.Mockito.when;
 public class WeatherPresenterTest {
     private WeatherView view;
     private WeatherPresenter presenter;
-    private WeatherInteractor interactor;
+    private WeatherInteractor weatherInteractor;
+    private PlacesInteractor placesInteractor;
     private RxSchedulers rxSchedulers;
     private WeatherType weatherType;
 
@@ -39,7 +41,8 @@ public class WeatherPresenterTest {
     public void setup() {
         view = mock(WeatherView.class);
         rxSchedulers = mock(RxSchedulers.class);
-        interactor = mock(WeatherInteractor.class);
+        weatherInteractor = mock(WeatherInteractor.class);
+        placesInteractor = mock(PlacesInteractor.class);
         WeatherTypesModule weatherTypesModule = new WeatherTypesModule();
         Set<WeatherType> types = new HashSet<>();
         types.add(weatherTypesModule.provideClearSky());
@@ -54,12 +57,12 @@ public class WeatherPresenterTest {
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
 
-        when(interactor.getPlace()).thenReturn(place);
+        when(placesInteractor.getPlace()).thenReturn(place);
         WeatherModel weatherModel = new WeatherModel.Builder().build();
-        when(interactor.getWeather(place)).thenReturn(Observable.just(weatherModel));
+        when(weatherInteractor.getWeather(place)).thenReturn(Observable.just(weatherModel));
         when(rxSchedulers.getIoToMainTransformer()).thenReturn(objectObservable -> objectObservable);
 
-        presenter = new WeatherPresenter(rxSchedulers, types, interactor);
+        presenter = new WeatherPresenter(rxSchedulers, types, placesInteractor, weatherInteractor);
         presenter.attachView(view);
     }
 
@@ -70,8 +73,8 @@ public class WeatherPresenterTest {
         Place place = new Place(placeName, coords);
         WeatherModel weatherModel = new WeatherModel.Builder().build();
 
-        when(interactor.getPlace()).thenReturn(place);
-        when(interactor.updateWeather(place)).thenReturn(Observable.just(weatherModel));
+        when(placesInteractor.getPlace()).thenReturn(place);
+        when(weatherInteractor.updateWeather(place)).thenReturn(Observable.just(weatherModel));
         when(rxSchedulers.getIoToMainTransformer()).thenReturn(objectObservable -> objectObservable);
 
         presenter.fetchWeather();
@@ -80,20 +83,20 @@ public class WeatherPresenterTest {
 
     @Test
     public void isMs() {
-        when(interactor.getSpeedUnits()).thenReturn(ConvertersConfig.SPEED_MS);
+        when(weatherInteractor.getSpeedUnits()).thenReturn(ConvertersConfig.SPEED_MS);
         presenter.isMs();
-        verify(interactor, times(1)).getSpeedUnits();
+        verify(weatherInteractor, times(1)).getSpeedUnits();
     }
 
     @Test
     public void isMmHg() {
         presenter.isMmHg();
-        verify(interactor, times(1)).getPressureUnits();
+        verify(weatherInteractor, times(1)).getPressureUnits();
     }
 
     @Test
     public void isCelsius() {
         presenter.isCelsius();
-        verify(interactor, times(1)).getTemperatureUnits();
+        verify(weatherInteractor, times(1)).getTemperatureUnits();
     }
 }

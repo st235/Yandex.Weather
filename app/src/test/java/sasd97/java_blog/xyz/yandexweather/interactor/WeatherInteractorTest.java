@@ -103,18 +103,6 @@ public class WeatherInteractorTest {
     }
 
     @Test
-    public void getPlace() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
-        String placeName = "Moscow";
-        Place place = new Place(placeName, coords);
-
-        when(repo.getPlace()).thenReturn(place);
-
-        weatherInteractor.getPlace();
-        verify(repo, only()).getPlace(); //// TODO: 7/30/2017 apply to all where need
-    }
-
-    @Test
     public void getSpeedUnits() {
         int units = ConvertersConfig.SPEED_KMH;
         when(repo.getSpeedUnits()).thenReturn(units);

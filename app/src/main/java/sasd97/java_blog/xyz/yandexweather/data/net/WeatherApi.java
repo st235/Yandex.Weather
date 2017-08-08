@@ -1,8 +1,10 @@
 package sasd97.java_blog.xyz.yandexweather.data.net;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast;
 import sasd97.java_blog.xyz.yandexweather.data.models.weather.ResponseWeather;
 
 /**
@@ -16,4 +18,9 @@ public interface WeatherApi {
     Observable<ResponseWeather> getWeather(@Query("lat") Double lat,
                                            @Query("lon") Double lon,
                                            @Query("appid") String apiKey);
+
+    @GET("forecast")
+    Single<ResponseForecast> getForecast(@Query("lat") Double lat,
+                                         @Query("lon") Double lon,
+                                         @Query("appid") String apiKey);
 }

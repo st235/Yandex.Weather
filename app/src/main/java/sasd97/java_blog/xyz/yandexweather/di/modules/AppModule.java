@@ -14,6 +14,7 @@ import sasd97.java_blog.xyz.yandexweather.data.AppRepositoryImpl;
 import sasd97.java_blog.xyz.yandexweather.data.net.PlacesApi;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 import sasd97.java_blog.xyz.yandexweather.data.storages.CacheStorage;
+import sasd97.java_blog.xyz.yandexweather.data.storages.PlacesDao;
 import sasd97.java_blog.xyz.yandexweather.data.storages.PrefsStorage;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulersImpl;
@@ -64,11 +65,13 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public AppRepository provideRepository(WeatherApi weatherApi,
+    public AppRepository provideRepository(PlacesDao placesDao,
+                                           WeatherApi weatherApi,
                                            PlacesApi placesApi,
                                            Pair<String, String> apiKeys,
                                            PrefsStorage prefsStorage,
                                            CacheStorage cacheStorage) {
-        return new AppRepositoryImpl(weatherApi, placesApi, apiKeys, cacheStorage, prefsStorage);
+        return new AppRepositoryImpl(
+                placesDao, weatherApi, placesApi, apiKeys, cacheStorage, prefsStorage);
     }
 }

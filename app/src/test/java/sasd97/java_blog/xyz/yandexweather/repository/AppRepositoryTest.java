@@ -28,6 +28,7 @@ import sasd97.java_blog.xyz.yandexweather.data.models.weather.Wind;
 import sasd97.java_blog.xyz.yandexweather.data.net.PlacesApi;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 import sasd97.java_blog.xyz.yandexweather.data.storages.CacheStorage;
+import sasd97.java_blog.xyz.yandexweather.data.storages.PlacesDao;
 import sasd97.java_blog.xyz.yandexweather.data.storages.PrefsStorage;
 import sasd97.java_blog.xyz.yandexweather.data.storages.Storage;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
@@ -56,15 +57,17 @@ public class AppRepositoryTest {
     private Storage<String> prefsStorage;
     private Pair<String, String> apiKeys;
     private AppRepository repo;
+    private PlacesDao placesDao;
 
     @Before
     public void setup() {
         weatherApi = mock(WeatherApi.class);
         placesApi = mock(PlacesApi.class);
+        placesDao = mock(PlacesDao.class);
         cacheStorage = mock(CacheStorage.class);
         prefsStorage = mock(PrefsStorage.class);
         apiKeys = new Pair<>("weatherApiKey", "placesApiKey");
-        repo = new AppRepositoryImpl(weatherApi, placesApi, apiKeys, cacheStorage, prefsStorage);
+        repo = new AppRepositoryImpl(placesDao, weatherApi, placesApi, apiKeys, cacheStorage, prefsStorage);
     }
 
     @Test

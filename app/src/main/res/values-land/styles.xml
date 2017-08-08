@@ -1,0 +1,5 @@
+<resources>
+    <style name="TextBase">
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>

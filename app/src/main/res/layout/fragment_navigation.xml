@@ -25,14 +25,14 @@
             android:layout_height="?android:attr/actionBarSize"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            style="@style/TextBase"
             android:layout_toEndOf="@+id/fragment_navigation_settings_image"
             android:layout_toRightOf="@+id/fragment_navigation_settings_image"
             android:clickable="true"
             android:foreground="?android:attr/selectableItemBackground"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:paddingRight="56dp"
-            android:text="@string/navigation_fragment_settings"
-            android:textSize="@dimen/nav_settings_text_size"/>
+            android:text="@string/navigation_fragment_settings"/>
 
         <ImageView
             android:id="@+id/fragment_navigation_settings_image"
@@ -71,7 +71,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_navigation_recycler_cities"
-        android:layout_width="320dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

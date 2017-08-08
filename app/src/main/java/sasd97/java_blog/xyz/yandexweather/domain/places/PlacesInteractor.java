@@ -3,6 +3,7 @@ package sasd97.java_blog.xyz.yandexweather.domain.places;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 
@@ -12,5 +13,11 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 
 public interface PlacesInteractor {
     Observable<PlacesResponse> getPlaces(@NonNull String s);
+
     Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId);
+
+    @NonNull
+    Place getPlace();
+
+
 }

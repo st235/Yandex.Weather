@@ -130,7 +130,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
         placesInteractor.getPlaceDetails(placesResponse.getPlaceIdAt(position))
                 .compose(schedulers.getIoToMainTransformer())
                 .flatMapCompletable(placeDetails -> settingsInteractor.savePlace(
-                        new Place(placesResponse.getPlaceNameAt(position),
+                        new Place(placesResponse.getPlaceIdAt(position),
+                                placesResponse.getPlaceNameAt(position),
                                 placeDetails.getCoords())))
                 .doOnComplete(this::openWeatherFragment)
                 .subscribe();

@@ -74,12 +74,6 @@ public class MainPresenterTest {
     }
 
     @Test
-    public void onBackClickedWith1ElementInStack() {
-        presenter.onBackClicked();
-        verify(view, never()).selectNavigationItem(weatherFragmentId);
-    }
-
-    @Test
     public void onBackClickedWith2ElementStack() {
         presenter.navigateWeatherTo(settingsFragmentId);
         presenter.onBackClicked();

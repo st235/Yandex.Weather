@@ -1,5 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.di.modules;
 
+import android.arch.persistence.room.Room;
 import android.content.Context;
 
 import com.google.gson.Gson;
@@ -15,10 +16,10 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import sasd97.java_blog.xyz.yandexweather.data.net.PlacesApi;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
+import sasd97.java_blog.xyz.yandexweather.data.storages.AppDatabase;
 import sasd97.java_blog.xyz.yandexweather.data.storages.CacheStorage;
+import sasd97.java_blog.xyz.yandexweather.data.storages.PlacesDao;
 import sasd97.java_blog.xyz.yandexweather.data.storages.PrefsStorage;
-
-import static sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi.BASE_URL;
 
 /**
  * Created by alexander on 13/07/2017.
@@ -80,5 +81,17 @@ public class DataModule {
     @Singleton
     public PrefsStorage providePrefsStorage(Context context) {
         return new PrefsStorage(context);
+    }
+
+    @Singleton
+    @Provides
+    AppDatabase provideDatabase(Context context) {
+        return Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DATABASE_NAME).build();
+    }
+
+    @Singleton
+    @Provides
+    PlacesDao providePlacesDao(AppDatabase database) {
+        return database.placesDao();
     }
 }

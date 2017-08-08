@@ -15,11 +15,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+
+import java.util.List;
 
 import butterknife.BindBool;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sasd97.java_blog.xyz.yandexweather.R;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
@@ -44,6 +48,16 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     private LinearLayoutManager layoutManager;
     private int actionBarHeight;
 
+    @InjectPresenter NavigationPresenter presenter;
+
+//    @ProvidePresenter
+//    public WeatherPresenter providePresenter() {
+//        return WeatherApp
+//                .get(getContext())
+//                .getMainComponent()
+//                .getWeatherPresenter();
+//    }
+
     public static NavigationFragment newInstance() {
         return new NavigationFragment();
     }
@@ -63,8 +77,6 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
         if (!isTabletVertical) initOnNotTabletVertical();
         layoutManager = new LinearLayoutManager(getActivity());
         placesRecycler.setLayoutManager(layoutManager);
-        placesRecyclerAdapter = new PlacesRecyclerAdapter();
-        placesRecycler.setAdapter(placesRecyclerAdapter);
         placesRecycler.setHasFixedSize(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) initOnScrollListener();
         initNavigation();
@@ -98,7 +110,7 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     private void initOnScrollListener() {
         int toolbarElevation = AndroidMath.dp2px(isTablet ? 4 : 0, getResources());
         int toolbarElevationBase = AndroidMath.dp2px(1, getResources());
-        int navViewElevation = AndroidMath.dp2px(14, getResources());
+        int navViewElevation = AndroidMath.dp2px(18, getResources());
         int navViewElevationBase = AndroidMath.dp2px(6, getResources());
         //// TODO: 8/6/2017 move to resources
         onScrollListener = new RecyclerView.OnScrollListener() {
@@ -142,5 +154,11 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void onNavigationViewElevation(int elevation) {
         navigationView.animate().translationZ(elevation);
+    }
+
+    @Override
+    public void showPlaces(List<Place> places) {
+        placesRecyclerAdapter = new PlacesRecyclerAdapter(places);
+        placesRecycler.setAdapter(placesRecyclerAdapter);
     }
 }

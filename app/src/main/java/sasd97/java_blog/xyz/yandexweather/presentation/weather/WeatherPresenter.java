@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
+import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
@@ -25,14 +26,17 @@ import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
     private RxSchedulers schedulers;
-    private WeatherInteractor interactor;
+    private WeatherInteractor weatherInteractor;
+    private PlacesInteractor placesInteractor;
     private Set<WeatherType> weatherTypes;
 
     @Inject
     public WeatherPresenter(@NonNull RxSchedulers schedulers,
                             @NonNull Set<WeatherType> weatherTypes,
-                            @NonNull WeatherInteractor interactor) {
-        this.interactor = interactor;
+                            @NonNull PlacesInteractor placesInteractor,
+                            @NonNull WeatherInteractor weatherInteractor) {
+        this.placesInteractor = placesInteractor;
+        this.weatherInteractor = weatherInteractor;
         this.schedulers = schedulers;
         this.weatherTypes = weatherTypes;
     }
@@ -40,29 +44,36 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     @Override
     public void attachView(WeatherView view) {
         super.attachView(view);
-        interactor.getWeather(interactor.getPlace())
+        weatherInteractor.getWeather(placesInteractor.getPlace())
                 .compose(schedulers.getIoToMainTransformer())
-                .map(weatherModel -> weatherModel.setCorrectCity(interactor.getPlace()))
+                .map(weatherModel -> weatherModel.setCorrectCity(placesInteractor.getPlace()))
                 .subscribe(this::chooseWeather);
+        weatherInteractor.updateForecast(placesInteractor.getPlace())
+                .compose(schedulers.getIoToMainTransformerSingle())
+                .subscribe(responseForecast -> {
+
+                }, throwable -> {
+
+                });
     }
 
     public void fetchWeather() {
-        interactor.updateWeather(interactor.getPlace())
+        weatherInteractor.updateWeather(placesInteractor.getPlace())
                 .compose(schedulers.getIoToMainTransformer())
-                .map(weatherModel -> weatherModel.setCorrectCity(interactor.getPlace()))
+                .map(weatherModel -> weatherModel.setCorrectCity(placesInteractor.getPlace()))
                 .subscribe(this::chooseWeather, Throwable::printStackTrace);
     }
 
     public boolean isCelsius() {
-        return interactor.getTemperatureUnits() == ConvertersConfig.TEMPERATURE_CELSIUS;
+        return weatherInteractor.getTemperatureUnits() == ConvertersConfig.TEMPERATURE_CELSIUS;
     }
 
     public boolean isMs() {
-        return interactor.getSpeedUnits() == ConvertersConfig.SPEED_MS;
+        return weatherInteractor.getSpeedUnits() == ConvertersConfig.SPEED_MS;
     }
 
     public boolean isMmHg() {
-        return interactor.getPressureUnits() == ConvertersConfig.PRESSURE_MMHG;
+        return weatherInteractor.getPressureUnits() == ConvertersConfig.PRESSURE_MMHG;
     }
 
     private void chooseWeather(@NonNull WeatherModel weather) {

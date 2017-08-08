@@ -1,17 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/fragment_weather_card"
-        android:layout_width="150dp"
-        android:layout_height="28dp"
-        android:text="City 1"
-        android:textSize="18dp"
-        android:layout_gravity="center"/>
+        android:id="@+id/item_place_name"
+        android:layout_width="240dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="0dp"
+        style="@style/TextBase"
+        android:gravity="center_vertical"
+        android:text="City 17"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintLeft_toRightOf="@+id/item_place_first_letter"/>
 
+    <ImageView
+        android:id="@+id/item_place_img"
+        android:layout_width="80dp"
+        android:padding="4dp"
+        android:layout_height="0dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/circle"/>
+
+    <TextView
+        android:id="@+id/item_place_first_letter"
+        android:layout_width="80dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 </android.support.constraint.ConstraintLayout>

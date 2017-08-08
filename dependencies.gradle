@@ -29,6 +29,8 @@ ext.versions = [
         androidJob                   : '1.1.11',
         googlePlayServices           : '11.0.2',
 
+        room                         : '1.0.0-alpha5',
+
         espresso                     : '2.2.2',
         junit                        : '4.12',
         mockwebserver                : '3.8.0',
@@ -59,6 +61,10 @@ ext.libraries = [
 
         rxjava                  : "io.reactivex.rxjava2:rxjava:$versions.rxjava",
         rxandroid               : "io.reactivex.rxjava2:rxandroid:$versions.rxandroid",
+
+        room                    : "android.arch.persistence.room:runtime:$versions.room",
+        roomRxJava              : "android.arch.persistence.room:rxjava2:$versions.room",
+        compiler                : "android.arch.persistence.room:compiler:$versions.room",
 
         androidJob              : "com.evernote:android-job:$versions.androidJob",
         googlePlayServicesGcm   : "com.google.android.gms:play-services-gcm:$versions.googlePlayServices",

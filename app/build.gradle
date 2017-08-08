@@ -104,4 +104,9 @@ dependencies {
 
     //ui
     compile libraries.rxbinding
+
+    //db
+    compile libraries.room
+    compile libraries.roomRxJava
+    annotationProcessor libraries.compiler
 }
