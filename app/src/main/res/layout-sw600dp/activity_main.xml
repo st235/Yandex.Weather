@@ -29,6 +29,8 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
+            <include layout="@layout/part_selected_toolbar"/>
+
             <FrameLayout
                 android:id="@+id/fragment_container_navigation"
                 android:layout_width="match_parent"

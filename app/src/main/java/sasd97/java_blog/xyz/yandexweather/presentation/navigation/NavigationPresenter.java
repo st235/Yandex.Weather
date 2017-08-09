@@ -31,10 +31,9 @@ public class NavigationPresenter extends MvpPresenter<NavigationView> {
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        placesInteractor.getPlacesFromFavorites()
+        placesInteractor.getFavoritePlaces()
                 .compose(schedulers.getComputationToMainTransformerSingle())
                 .doOnSuccess(getViewState()::showPlaces)
                 .subscribe();
-
     }
 }

@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
@@ -47,14 +48,14 @@ import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
 import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
-import sasd97.java_blog.xyz.yandexweather.utils.NewPlaceClickListener;
-import sasd97.java_blog.xyz.yandexweather.utils.PlaceAddedListener;
+import sasd97.java_blog.xyz.yandexweather.utils.NavigationFragmentAction;
+import sasd97.java_blog.xyz.yandexweather.utils.PlacesActions;
 
 import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment.TAG_NAVIGATION;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView,
         SearchView.OnSuggestionListener, View.OnFocusChangeListener,
-        ElevationScrollListener, NewPlaceClickListener {
+        ElevationScrollListener, NavigationFragmentAction {
 
     private static final String CITY = "city";
 
@@ -68,10 +69,14 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     @BindView(R.id.navigation_layout) @Nullable RelativeLayout navigationLayout;
     @BindView(R.id.drawer_layout) @Nullable DrawerLayout drawer;
     @BindView(R.id.sliding_panel_layout) @Nullable SlidingPaneLayout slidingPaneLayout;
+    @BindView(R.id.part_selected_toolbar_layout) RelativeLayout toolbarSelected;
+    @BindView(R.id.part_selected_toolbar_delete) ImageView btnDelete;
+    @BindView(R.id.part_selected_toolbar_back) ImageView btnBack;
 
     public @InjectPresenter MainPresenter mainPresenter;
     private boolean isSearchOpenedFromClosedPanel;
     MenuItemCompat.OnActionExpandListener actionExpandListener;
+    private boolean isToolbarSelectedVisible;
 
     @ProvidePresenter
     public MainPresenter providePresenter() {
@@ -96,6 +101,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         initNavigation(savedInstanceState);
         initFragments(savedInstanceState);
         initSearchSuggestsAdapter();
+        btnDelete.setOnClickListener(v -> ((PlacesActions) getSupportFragmentManager()
+                .findFragmentByTag(TAG_NAVIGATION)).removeSelected());
+        btnBack.setOnClickListener(v -> onBackPressed());
+        toolbarSelected.setVisibility(View.GONE);
         if (slidingPaneLayout != null) {
             initSlidingPanelListener();
             toolbar.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()));
@@ -147,6 +156,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     @Override
     protected void onResume() {
         super.onResume();
+        if (isToolbarSelectedVisible) showToolbarSelected(true);
+
         if (drawer != null) {
             assert getSupportActionBar() != null;
             if (drawer.isDrawerOpen(GravityCompat.START))
@@ -156,6 +167,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
             drawer.addDrawerListener(toggle);
             toggle.syncState();
             drawer.addDrawerListener(new DrawerStateListener() {
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+                    if (isToolbarSelectedVisible) cancelPlacesSelection();
+                }
+
                 @Override
                 public void onDrawerStateChanged(int newState) {
                     if (toolbar.hasExpandedActionView()) toolbar.collapseActionView();
@@ -193,7 +210,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
 
     @Override
     public void showNewFavoritePlace(Place place) {
-        ((PlaceAddedListener) getSupportFragmentManager().findFragmentByTag(TAG_NAVIGATION))
+        ((PlacesActions) getSupportFragmentManager().findFragmentByTag(TAG_NAVIGATION))
                 .onPlaceAdded(place);
     }
 
@@ -211,6 +228,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
 
     @Override
     public void onBackPressed() {
+        if (isToolbarSelectedVisible) {
+            cancelPlacesSelection();
+            return;
+        }
         if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             closeDrawer();
             return;
@@ -336,5 +357,51 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
                 slidingPaneLayout.openPane();
             }
         }
+    }
+
+    @Override
+    public void onSelectPlace(int size) {
+        if (size > 0 && toolbarSelected.getVisibility() == View.VISIBLE) return;
+        else showToolbarSelected(size != 0);
+    }
+
+    private void cancelPlacesSelection() {
+        ((PlacesActions) getSupportFragmentManager()
+                .findFragmentByTag(TAG_NAVIGATION)).cancelSelection();
+        showToolbarSelected(false);
+    }
+
+    private void showToolbarSelected(boolean isToolbarSelectedVisible) {
+        this.isToolbarSelectedVisible = isToolbarSelectedVisible;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            toolbar.animate().alpha(isToolbarSelectedVisible ? 0 : 1)
+                    .withStartAction(() -> {
+                        if (!isToolbarSelectedVisible) toolbar.setVisibility(View.VISIBLE);
+                    })
+                    .withEndAction(() -> {
+                        if (isToolbarSelectedVisible) toolbar.setVisibility(View.INVISIBLE);
+                    });
+            toolbarSelected.animate()
+                    .alpha(isToolbarSelectedVisible ? 1 : 0)
+                    .withStartAction(() -> toolbarSelected.setVisibility(
+                            isToolbarSelectedVisible ? View.VISIBLE : View.GONE));
+        } else {
+            toolbarSelected.setVisibility(isToolbarSelectedVisible ? View.VISIBLE : View.GONE);
+            toolbarSelected.setAlpha(isToolbarSelectedVisible ? 1 : 0);
+            toolbar.setVisibility(!isToolbarSelectedVisible ? View.VISIBLE : View.INVISIBLE);
+            toolbar.setAlpha(!isToolbarSelectedVisible ? 1 : 0);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBoolean("MyBoolean", isToolbarSelectedVisible);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        isToolbarSelectedVisible = savedInstanceState.getBoolean("MyBoolean");
     }
 }

@@ -47,7 +47,7 @@ public class PlacesInteractorImpl implements PlacesInteractor {
     }
 
     @Override
-    public Single<List<Place>> getPlacesFromFavorites() {
-        return repository.getPlacesFromFavorites();
+    public Single<List<Place>> getFavoritePlaces() {
+        return repository.getFavoritePlaces();
     }
 }

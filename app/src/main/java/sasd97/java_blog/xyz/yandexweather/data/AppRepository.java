@@ -33,7 +33,7 @@ public interface AppRepository {
     Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId);
 
     //db
-    Single<List<Place>> getPlacesFromFavorites();
+    Single<List<Place>> getFavoritePlaces();
     Completable insertPlace(Place place);
     Completable removePlace(Place place);
 

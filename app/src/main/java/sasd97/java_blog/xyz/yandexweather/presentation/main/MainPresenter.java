@@ -67,6 +67,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     public void openNavigationFragment() {
         navigationFragmentRouter.pushForward(new Replace(NavigationFragment.newInstance()), TAG_NAVIGATION);
+        menuItemsStack.push(R.id.fragment_container_navigation);
     }
 
     public void onBackClicked() {
@@ -74,7 +75,11 @@ public class MainPresenter extends MvpPresenter<MainView> {
         if (menuItemsStack.isEmpty()) return;
     }
 
-    /*Alexander`s FragmentMananager wrapper is very complicated. So navigation will not be plain.*/
+    /**
+     * IMHO Alexander`s FragmentMananager wrapper implementation is very complicated and
+     * over-engineered sometimes. So navigation will not be so plain and predictable as I want.
+     * 💩
+     */
     public void navigateWeatherTo(@IdRes int id) {
         if (isSameFragmentAtTheTop(id)) {
             getViewState().closeDrawer();

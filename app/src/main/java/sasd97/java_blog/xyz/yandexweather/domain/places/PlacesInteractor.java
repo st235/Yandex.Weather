@@ -24,5 +24,5 @@ public interface PlacesInteractor {
     Place getPlace();
 
     Completable savePlaceToFavorites(Place place);
-    Single<List<Place>> getPlacesFromFavorites();
+    Single<List<Place>> getFavoritePlaces();
 }

@@ -85,7 +85,7 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Single<List<Place>> getPlacesFromFavorites() {
+    public Single<List<Place>> getFavoritePlaces() {
         return placesDao.getPlaces();
     }
 

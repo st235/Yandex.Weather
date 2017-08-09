@@ -18,6 +18,7 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindBool;
@@ -30,17 +31,20 @@ import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
-import sasd97.java_blog.xyz.yandexweather.utils.NewPlaceClickListener;
-import sasd97.java_blog.xyz.yandexweather.utils.PlaceAddedListener;
+import sasd97.java_blog.xyz.yandexweather.utils.FlipLayout;
+import sasd97.java_blog.xyz.yandexweather.utils.NavigationFragmentAction;
+import sasd97.java_blog.xyz.yandexweather.utils.PlacesActions;
+import sasd97.java_blog.xyz.yandexweather.utils.SerializableSparseArray;
 
 /**
  * Created by alexander on 09/07/2017.
  */
 
 public class NavigationFragment extends MvpAppCompatFragment implements NavigationView,
-        PlaceAddedListener {
+        PlacesActions {
 
     public static final String TAG_NAVIGATION = "navigation";
+    public static final String SPARSE_ARRAY_KEY = "SparseArray";
 
     @BindView(R.id.fragment_navigation_recycler_cities) RecyclerView placesRecycler;
     @BindView(R.id.fragment_navigation_nav_view) RelativeLayout navigationView;
@@ -165,9 +169,16 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
 
     @Override
     public void showPlaces(List<Place> places) {
-        placesRecyclerAdapter = new PlacesRecyclerAdapter(places);
+        if (placesRecyclerAdapter == null) {
+            placesRecyclerAdapter = new PlacesRecyclerAdapter(places);
+        } else {
+            placesRecyclerAdapter.setPlaces(places);
+            placesRecyclerAdapter.notifyDataSetChanged();
+        }
         placesRecyclerAdapter.setOnAddPlaceClickListener(() ->
-                ((NewPlaceClickListener) getActivity()).onAddPlaceClicked());
+                ((NavigationFragmentAction) getActivity()).onAddPlaceClicked());
+        placesRecyclerAdapter.setOnPlaceSelectListener(size ->
+                ((NavigationFragmentAction) getActivity()).onSelectPlace(size));
         placesRecycler.setAdapter(placesRecyclerAdapter);
     }
 
@@ -175,5 +186,43 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     public void onPlaceAdded(Place place) {
         placesRecyclerAdapter.getPlaces().add(0, place);
         placesRecyclerAdapter.notifyItemInserted(0);
+    }
+
+    @Override
+    public void removeSelected() {
+
+    }
+
+    @Override
+    public void cancelSelection() {
+        placesRecyclerAdapter.cancelSelection();
+        for (int i = layoutManager.findFirstVisibleItemPosition();
+             i < layoutManager.findLastVisibleItemPosition(); i++) {
+            FlipLayout flipLayout = (FlipLayout) layoutManager.findViewByPosition(i)
+                    .findViewById(R.id.item_place_flip_layout);
+            if (flipLayout.isFlipped()) flipLayout.toggleDown();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (null != placesRecyclerAdapter) {
+            outState.putSerializable("SparseArray", placesRecyclerAdapter.getSelectedPlaces());
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    //Restore your selection
+    @SuppressWarnings("unchecked")
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            Serializable hashMap = savedInstanceState.getSerializable(SPARSE_ARRAY_KEY);
+            if (hashMap == null) return;
+            if (placesRecyclerAdapter == null) placesRecyclerAdapter =
+                    new PlacesRecyclerAdapter((SerializableSparseArray<Place>) hashMap);
+            else placesRecyclerAdapter.setSelectedPlaces((SerializableSparseArray<Place>) hashMap);
+        }
     }
 }

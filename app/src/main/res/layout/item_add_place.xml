@@ -13,21 +13,18 @@
         style="@style/TextBase"
         android:layout_width="200dp"
         android:layout_height="56dp"
-        android:layout_toEndOf="@+id/item_place_flip_layout"
-        android:layout_toRightOf="@+id/item_place_flip_layout"
+        android:layout_toEndOf="@+id/item_place_img"
         android:gravity="center_vertical"
-        android:text="City 17"
-        android:textSize="18sp"/>
+        android:text="@string/add_place"
+        android:textSize="18sp"
+        android:layout_toRightOf="@+id/item_place_img"/>
 
-    <sasd97.java_blog.xyz.yandexweather.utils.FlipLayout
-        android:id="@+id/item_place_flip_layout"
+    <ImageView
+        android:id="@+id/item_place_img"
         android:layout_width="80dp"
         android:layout_height="56dp"
-        android:layout_alignParentTop="true"
-        android:visibility="visible">
-
-        <include layout="@layout/part_item_place"/>
-
-        <include layout="@layout/part_item_place_selected"/>
-    </sasd97.java_blog.xyz.yandexweather.utils.FlipLayout>
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/ic_action_add"
+        android:layout_alignParentTop="true"/>
 </RelativeLayout>

@@ -7,13 +7,15 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <include layout="@layout/part_selected_toolbar"/>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:fadingEdgeLength="20dp"
-        android:elevation="5dp"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
+        android:elevation="5dp"
+        android:fadingEdgeLength="20dp"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
@@ -33,7 +35,7 @@
 
         <FrameLayout
             android:id="@+id/fragment_container_navigation"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:clickable="true"
