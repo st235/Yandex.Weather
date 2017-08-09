@@ -5,8 +5,11 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractor;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
@@ -23,7 +26,7 @@ public class NavigationPresenter extends MvpPresenter<NavigationView> {
 
     @Inject
     public NavigationPresenter(@NonNull RxSchedulers schedulers,
-                            @NonNull PlacesInteractor placesInteractor) {
+                               @NonNull PlacesInteractor placesInteractor) {
         this.placesInteractor = placesInteractor;
         this.schedulers = schedulers;
     }
@@ -34,6 +37,12 @@ public class NavigationPresenter extends MvpPresenter<NavigationView> {
         placesInteractor.getFavoritePlaces()
                 .compose(schedulers.getComputationToMainTransformerSingle())
                 .doOnSuccess(getViewState()::showPlaces)
+                .subscribe();
+    }
+
+    public void removeSelectedPlaces(List<Place> places) {
+        placesInteractor.removePlacesFromFavorites(places)
+                .compose(schedulers.getIoToMainTransformerCompletable())
                 .subscribe();
     }
 }

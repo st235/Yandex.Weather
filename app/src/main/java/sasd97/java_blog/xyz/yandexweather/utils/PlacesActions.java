@@ -8,6 +8,6 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 
 public interface PlacesActions {
     void onPlaceAdded(Place place);
-    void removeSelected();
+    void removeSelectedPlaces();
     void cancelSelection();
 }

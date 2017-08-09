@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.Date;
 import java.util.Stack;
 
 import javax.inject.Inject;
@@ -135,7 +136,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 .map(placeDetailsResponse -> new Place(
                         placesResponse.getPlaceIdAt(position),
                         placesResponse.getPlaceNameAt(position),
-                        placeDetailsResponse.getCoords()))
+                        placeDetailsResponse.getCoords(),
+                        (int) (new Date().getTime()/1000)))
                 .doOnNext(place -> {
                     if (addToFavorites) getViewState().showNewFavoritePlace(place);
                 })

@@ -10,10 +10,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
+import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
 import sasd97.java_blog.xyz.yandexweather.utils.FlipLayout;
 import sasd97.java_blog.xyz.yandexweather.utils.SerializableSparseArray;
 
@@ -41,6 +43,16 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
     }
 
     public void cancelSelection() {
+        selectedPlaces.clear();
+    }
+
+    public void removeSelectedPlaces() {
+        for (int i = 0; i < selectedPlaces.size(); i++) {
+            int positionToRemove = selectedPlaces.keyAt(i) - i;
+            notifyItemRemoved(positionToRemove);
+            notifyItemRangeChanged(positionToRemove, places.size());
+            places.remove(positionToRemove);
+        }
         selectedPlaces.clear();
     }
 
@@ -80,7 +92,8 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
             assert holder.flipLayout != null;
             assert holder.tvFirstLetter != null;
             holder.tvFirstLetter.setText(String.valueOf(places.get(position).getName().charAt(0)));
-//            holder.ivColor.setImageResource(R.drawable.circle);
+            int hashCode = places.get(position).hashCode();
+            holder.ivColor.setColorFilter(holder.colors[AndroidMath.intToDigit(hashCode)]);
             holder.tvPlaceName.setText(places.get(position).getName());
             if (selectedPlaces.get(position) != null) holder.flipLayout.setFlipped(true);
             else holder.flipLayout.setFlipped(false);
@@ -118,6 +131,7 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
         @BindView(R.id.item_place_name) TextView tvPlaceName;
         @BindView(R.id.item_place_img) ImageView ivColor;
         @BindView(R.id.item_place_flip_layout) @Nullable FlipLayout flipLayout;
+        @BindArray(R.array.rainbow) int[] colors;
 
         RecyclerViewHolder(View itemView) {
             super(itemView);

@@ -36,4 +36,28 @@
 
     <color name="colorDrizzleCard">#8797A0</color>
     <color name="colorDrizzleText">#FAFAF7</color>
+
+    <color name="bright_pink">#f44336</color>
+    <color name="red">#E91E63</color>
+    <color name="orange">#9C27B0</color>
+    <color name="yellow">#673AB7</color>
+    <color name="chartreuse">#3F51B5</color>
+    <color name="spring_green">#03A9F4</color>
+    <color name="blue">#4CAF50</color>
+    <color name="violet">#8BC34A</color>
+    <color name="magenta">#FF5722</color>
+    <color name="magenta2">#607D8B</color>
+
+    <array name="rainbow">
+        <item>@color/bright_pink</item>
+        <item>@color/red</item>
+        <item>@color/orange</item>
+        <item>@color/yellow</item>
+        <item>@color/chartreuse</item>
+        <item>@color/spring_green</item>
+        <item>@color/blue</item>
+        <item>@color/violet</item>
+        <item>@color/magenta</item>
+        <item>@color/magenta2</item>
+    </array>
 </resources>

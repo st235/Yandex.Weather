@@ -23,6 +23,10 @@ public class Place {
     @Expose
     private String placeId;
 
+    @SerializedName("time")
+    @Expose
+    private int time;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -37,10 +41,15 @@ public class Place {
         this.coords = coords;
     }
 
-    public Place(String placeId, String name, Pair<Double, Double> coords) {
+    public Place(String placeId, String name, Pair<Double, Double> coords, int time) {
         this.placeId = placeId;
         this.name = name;
         this.coords = coords;
+        this.time = time;
+    }
+
+    public int getTime() {
+        return time;
     }
 
     public String getPlaceId() {

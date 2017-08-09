@@ -58,6 +58,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         ElevationScrollListener, NavigationFragmentAction {
 
     private static final String CITY = "city";
+    public static final String TOOLBAR_VISIBILITY_KEY = "MyBoolean";
 
     private Unbinder unbinder;
     private SimpleCursorAdapter cursorAdapter;
@@ -101,13 +102,17 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         initNavigation(savedInstanceState);
         initFragments(savedInstanceState);
         initSearchSuggestsAdapter();
-        btnDelete.setOnClickListener(v -> ((PlacesActions) getSupportFragmentManager()
-                .findFragmentByTag(TAG_NAVIGATION)).removeSelected());
+        btnDelete.setOnClickListener(v -> {
+            ((PlacesActions) getSupportFragmentManager()
+                    .findFragmentByTag(TAG_NAVIGATION)).removeSelectedPlaces();
+            onBackPressed();
+        });
         btnBack.setOnClickListener(v -> onBackPressed());
         toolbarSelected.setVisibility(View.GONE);
         if (slidingPaneLayout != null) {
             initSlidingPanelListener();
             toolbar.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()));
+            toolbarSelected.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()));
         }
     }
 
@@ -120,6 +125,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
                 ((NavigationFragment) getSupportFragmentManager()
                         .findFragmentByTag(TAG_NAVIGATION)).makeNavigationView(slideOffset);
                 toolbar.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()) * (1 - slideOffset));
+                toolbarSelected.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()) * (1 - slideOffset));
             }
 
             @Override
@@ -395,7 +401,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putBoolean("MyBoolean", isToolbarSelectedVisible);
+        savedInstanceState.putBoolean(TOOLBAR_VISIBILITY_KEY, isToolbarSelectedVisible);
         super.onSaveInstanceState(savedInstanceState);
     }
 

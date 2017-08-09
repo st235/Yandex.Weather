@@ -50,4 +50,9 @@ public class PlacesInteractorImpl implements PlacesInteractor {
     public Single<List<Place>> getFavoritePlaces() {
         return repository.getFavoritePlaces();
     }
+
+    @Override
+    public Completable removePlacesFromFavorites(List<Place> places) {
+        return repository.removePlaces(places);
+    }
 }

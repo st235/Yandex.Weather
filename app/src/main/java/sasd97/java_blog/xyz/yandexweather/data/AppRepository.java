@@ -35,7 +35,7 @@ public interface AppRepository {
     //db
     Single<List<Place>> getFavoritePlaces();
     Completable insertPlace(Place place);
-    Completable removePlace(Place place);
+    Completable removePlaces(List<Place> places);
 
     //cache
     String getCachedWeather(@NonNull Place place);

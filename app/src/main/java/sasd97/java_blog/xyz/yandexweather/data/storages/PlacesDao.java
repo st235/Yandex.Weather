@@ -13,12 +13,12 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 
 @Dao
 public interface PlacesDao {
-    @Query("SELECT * FROM Places")
+    @Query("SELECT * FROM Places ORDER BY time DESC")
     Single<List<Place>> getPlaces();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertPlace(Place place);
 
     @Delete
-    void removePlace(Place place);
+    void removePlaces(List<Place> places);
 }

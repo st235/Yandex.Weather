@@ -189,8 +189,9 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     }
 
     @Override
-    public void removeSelected() {
-
+    public void removeSelectedPlaces() {
+        presenter.removeSelectedPlaces(AndroidMath.asList(placesRecyclerAdapter.getSelectedPlaces()));
+        placesRecyclerAdapter.removeSelectedPlaces();
     }
 
     @Override
@@ -207,12 +208,11 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     @Override
     public void onSaveInstanceState(Bundle outState) {
         if (null != placesRecyclerAdapter) {
-            outState.putSerializable("SparseArray", placesRecyclerAdapter.getSelectedPlaces());
+            outState.putSerializable(SPARSE_ARRAY_KEY, placesRecyclerAdapter.getSelectedPlaces());
         }
         super.onSaveInstanceState(outState);
     }
 
-    //Restore your selection
     @SuppressWarnings("unchecked")
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

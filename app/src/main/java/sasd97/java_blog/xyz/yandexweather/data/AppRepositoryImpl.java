@@ -95,8 +95,8 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Completable removePlace(Place place) {
-        return new CompletableFromAction(() -> placesDao.removePlace(place));
+    public Completable removePlaces(List<Place> places) {
+        return new CompletableFromAction(() -> placesDao.removePlaces(places));
     }
 
     @Override
