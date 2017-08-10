@@ -69,8 +69,14 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Single<ResponseForecast> getForecast(@NonNull Place place) {
-        return weatherApi.getForecast(
+    public Single<ResponseForecast> getForecast5(@NonNull Place place) {
+        return weatherApi.getForecast5(
+                place.getCoords().first, place.getCoords().second, apiKeys.first);
+    }
+
+    @Override
+    public Observable<ResponseForecast> getForecast16(@NonNull Place place) {
+        return weatherApi.getForecast16(
                 place.getCoords().first, place.getCoords().second, apiKeys.first);
     }
 

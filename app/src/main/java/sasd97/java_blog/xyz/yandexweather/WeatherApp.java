@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDelegate;
 
 import com.evernote.android.job.JobManager;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import javax.inject.Inject;
 
@@ -49,6 +50,7 @@ public class WeatherApp extends Application {
 
     private void onInit() {
         FontProvider.init(getAssets());
+        AndroidThreeTen.init(this);
         onScheduleJob();
     }
 

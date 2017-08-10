@@ -23,7 +23,9 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindBool;
 import butterknife.BindView;
@@ -98,8 +100,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         int orientation = (isTabletHorizontal) ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL;
         layoutManager = new LinearLayoutManager(getActivity(), orientation, false);
         forecastRecycler.setLayoutManager(layoutManager);
-        forecastRecyclerAdapter = new ForecastRecyclerAdapter();
-        forecastRecycler.setAdapter(forecastRecyclerAdapter);
         forecastRecycler.setHasFixedSize(true);
 
         if (isTabletHorizontal) onTabletHorizontalMode();
@@ -142,6 +142,12 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     public void stopRefreshing() {
         if (!swipeRefreshLayout.isRefreshing()) return;
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showForecast(LinkedHashMap<WeatherModel, WeatherType> forecasts) {
+        forecastRecyclerAdapter = new ForecastRecyclerAdapter(forecasts);
+        forecastRecycler.setAdapter(forecastRecyclerAdapter);
     }
 
     private void updateWeather(@NonNull WeatherModel weather,

@@ -109,4 +109,6 @@ dependencies {
     compile libraries.room
     compile libraries.roomRxJava
     annotationProcessor libraries.compiler
+
+    compile libraries.threeTenABP
 }

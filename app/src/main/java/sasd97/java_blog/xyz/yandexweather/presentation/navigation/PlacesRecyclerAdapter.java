@@ -48,12 +48,18 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
 
     public void removeSelectedPlaces() {
         for (int i = 0; i < selectedPlaces.size(); i++) {
-            int positionToRemove = selectedPlaces.keyAt(i) - i;
+            int positionToRemove = selectedPlaces.keyAt(i) - i ;
             notifyItemRemoved(positionToRemove);
             notifyItemRangeChanged(positionToRemove, places.size());
             places.remove(positionToRemove);
         }
         selectedPlaces.clear();
+    }
+
+    public void insertPlace(Place place) {
+        places.add(0, place);
+        notifyItemInserted(0);
+        notifyItemRangeChanged(0, places.size());
     }
 
     public interface OnAddPlaceClickListener {

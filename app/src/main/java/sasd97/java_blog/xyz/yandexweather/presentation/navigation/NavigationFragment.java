@@ -184,8 +184,7 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
 
     @Override
     public void onPlaceAdded(Place place) {
-        placesRecyclerAdapter.getPlaces().add(0, place);
-        placesRecyclerAdapter.notifyItemInserted(0);
+        placesRecyclerAdapter.insertPlace(place);
     }
 
     @Override

@@ -48,13 +48,10 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .compose(schedulers.getIoToMainTransformer())
                 .map(weatherModel -> weatherModel.setCorrectCity(placesInteractor.getPlace()))
                 .subscribe(this::chooseWeather);
-        weatherInteractor.updateForecast(placesInteractor.getPlace())
+
+        weatherInteractor.updateForecast16(placesInteractor.getPlace())
                 .compose(schedulers.getIoToMainTransformerSingle())
-                .subscribe(responseForecast -> {
-
-                }, throwable -> {
-
-                });
+                .subscribe(getViewState()::showForecast);
     }
 
     public void fetchWeather() {

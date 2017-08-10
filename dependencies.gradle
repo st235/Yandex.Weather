@@ -35,6 +35,8 @@ ext.versions = [
         junit                        : '4.12',
         mockwebserver                : '3.8.0',
         mockito                      : '2.7.3',
+
+        threeTenABP                  : '1.0.5',
 ]
 
 ext.gradlePlugins = [
@@ -75,6 +77,8 @@ ext.libraries = [
         supportRecyclerView     : "com.android.support:recyclerview-v7:$versions.supportLibs",
         supportCardView         : "com.android.support:cardview-v7:$versions.supportLibs",
         supportConstraint       : "com.android.support.constraint:constraint-layout:$versions.constraint",
+
+        threeTenABP             : "com.jakewharton.threetenabp:threetenabp:$versions.threeTenABP",
 
         // Test dependencies
         junit                   : "junit:junit:$versions.junit",

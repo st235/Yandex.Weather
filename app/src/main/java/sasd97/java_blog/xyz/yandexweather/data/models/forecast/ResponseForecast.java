@@ -1,6 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.data.models.forecast;
 
-import sasd97.java_blog.xyz.yandexweather.data.models.weather.ResponseWeather;
+import java.util.List;
 
 /**
  * Created by Maksim Sukhotski on 8/7/2017.
@@ -8,5 +8,9 @@ import sasd97.java_blog.xyz.yandexweather.data.models.weather.ResponseWeather;
 
 public class ResponseForecast {
     private String cod;
-    private ResponseWeather[] list;
+    private List<WeatherForecast> list;
+
+    public List<WeatherForecast> getForecasts() {
+        return list;
+    }
 }

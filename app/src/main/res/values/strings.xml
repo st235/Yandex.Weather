@@ -35,6 +35,11 @@
     <string name="all_weather_pascal">hPa</string>
     <!-- Endregion -->
 
+    <!--Time-->
+    <string name="tomorrow">Tomorrow</string>
+    <string name="day_after_tomorrow">Day after tomorrow</string>
+    <!--Endregion-->
+
     <!-- About fragment -->
     <string name="about_fragment_description">Application for the weather monitor.
         Mobilization was carried out within the framework of the project.</string>

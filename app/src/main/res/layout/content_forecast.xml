@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:showIn="@layout/item_forecast">
+
+    <TextView
+        android:id="@+id/content_forecast_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:foreground="@drawable/rounded_up_bg"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"
+        android:text="Завтра"
+        android:textAlignment="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="100dp"/>
+
+    <sasd97.java_blog.xyz.richtextview.RichTextView
+        android:id="@+id/content_forecast_icon_morning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:gravity="center"
+        android:textColor="@color/colorGreyMd600"
+        android:textSize="24sp"
+        app:fontAsset="weather_icons.ttf"
+        app:layout_constraintBottom_toTopOf="@+id/content_forecast_temp_morning"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:text="W"/>
+
+    <sasd97.java_blog.xyz.richtextview.RichTextView
+        android:id="@+id/content_forecast_icon_evening"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:gravity="center"
+        android:textColor="@color/colorGreyMd600"
+        android:textSize="24sp"
+        app:fontAsset="weather_icons.ttf"
+        app:layout_constraintBottom_toTopOf="@+id/content_forecast_temp_evening"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline5"
+        app:layout_constraintRight_toLeftOf="@+id/guideline6"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:text="W"/>
+
+    <sasd97.java_blog.xyz.richtextview.RichTextView
+        android:id="@+id/content_forecast_icon_night"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:gravity="center"
+        android:textColor="@color/colorGreyMd600"
+        android:textSize="24sp"
+        app:fontAsset="weather_icons.ttf"
+        app:layout_constraintBottom_toTopOf="@+id/content_forecast_temp_night"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline6"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:text="W"/>
+
+    <sasd97.java_blog.xyz.richtextview.RichTextView
+        android:id="@+id/content_forecast_icon_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:gravity="center"
+        android:textColor="@color/colorGreyMd600"
+        android:textSize="24sp"
+        app:fontAsset="weather_icons.ttf"
+        app:layout_constraintBottom_toTopOf="@+id/content_forecast_temp_day"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
+        app:layout_constraintRight_toLeftOf="@+id/guideline5"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:text="W"/>
+
+    <sasd97.java_blog.xyz.richtextview.RichTextView
+        android:id="@+id/content_forecast_icon_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/colorGreyMd600"
+        android:textSize="36sp"
+        app:fontAsset="weather_icons.ttf"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_forecast_date"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:text="W"/>
+
+    <sasd97.java_blog.xyz.richtextview.RichTextView
+        android:id="@+id/content_forecast_temp_main"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:gravity="right|center"
+        android:textColor="@color/colorGreyMd600"
+        android:textSize="24sp"
+        app:fontAsset="weather_icons.ttf"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_forecast_date"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintTop_creator="1"
+        tools:text="27 °C"/>
+
+    <sasd97.java_blog.xyz.richtextview.RichTextView
+        android:id="@+id/content_forecast_temp_extreme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center"
+        android:textSize="18sp"
+        app:fontAsset="weather_icons.ttf"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_forecast_date"
+        tools:text="27 °C\n27 °C"/>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="8dp"
+        android:text="Night"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline6"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"/>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="99dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="99dp"
+        android:layout_marginTop="8dp"
+        android:text="Evening"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline5"
+        app:layout_constraintRight_toLeftOf="@+id/guideline6"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="83dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="83dp"
+        android:layout_marginTop="8dp"
+        android:text="Day"
+
+        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
+        app:layout_constraintRight_toLeftOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="8dp"
+        android:text="Morning"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/guideline4"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75"/>
+
+    <TextView
+        android:id="@+id/content_forecast_temp_evening"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:text="27 °C"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline5"
+        app:layout_constraintRight_toLeftOf="@+id/guideline6"/>
+
+    <TextView
+        android:id="@+id/content_forecast_temp_night"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:text="27 °C"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline6"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/content_forecast_temp_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:text="27 °C"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline4"
+        app:layout_constraintRight_toLeftOf="@+id/guideline5"/>
+
+    <TextView
+        android:id="@+id/content_forecast_temp_morning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:text="27 °C"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/guideline4"/>
+</android.support.constraint.ConstraintLayout>
+    

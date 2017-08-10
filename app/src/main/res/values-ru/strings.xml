@@ -32,6 +32,10 @@
     <string name="all_weather_pascal">гПа</string>
     <!-- Endregion -->
 
+    <!--Time-->
+    <string name="tomorrow">Завтра</string>
+    <string name="day_after_tomorrow">Послезавтра</string>
+    <!--Endregion-->
 
     <!-- About fragment -->
     <string name="about_fragment_description">Погодное приложение. Сделано в рамках проекта "Мобилизация".</string>

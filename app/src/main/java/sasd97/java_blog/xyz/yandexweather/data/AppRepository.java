@@ -28,7 +28,8 @@ public interface AppRepository {
 
     //net
     Observable<WeatherModel> getWeather(@NonNull Place place);
-    Single<ResponseForecast> getForecast(@NonNull Place place);
+    Single<ResponseForecast> getForecast5(@NonNull Place place);
+    Observable<ResponseForecast> getForecast16(@NonNull Place place);
     Observable<PlacesResponse> getPlaces(@NonNull String s);
     Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId);
 

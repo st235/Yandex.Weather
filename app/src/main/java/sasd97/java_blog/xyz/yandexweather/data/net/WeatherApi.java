@@ -20,7 +20,12 @@ public interface WeatherApi {
                                            @Query("appid") String apiKey);
 
     @GET("forecast")
-    Single<ResponseForecast> getForecast(@Query("lat") Double lat,
-                                         @Query("lon") Double lon,
-                                         @Query("appid") String apiKey);
+    Single<ResponseForecast> getForecast5(@Query("lat") Double lat,
+                                          @Query("lon") Double lon,
+                                          @Query("appid") String apiKey);
+
+    @GET("forecast/daily")
+    Observable<ResponseForecast> getForecast16(@Query("lat") Double lat,
+                                               @Query("lon") Double lon,
+                                               @Query("appid") String apiKey);
 }

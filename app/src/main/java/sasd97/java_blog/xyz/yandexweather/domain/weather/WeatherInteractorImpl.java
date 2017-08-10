@@ -1,19 +1,24 @@
 package sasd97.java_blog.xyz.yandexweather.domain.weather;
 
 import android.support.annotation.NonNull;
+import android.util.Pair;
 
 import com.google.gson.Gson;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast;
+import sasd97.java_blog.xyz.yandexweather.data.models.forecast.WeatherForecast;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.Converter;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 
 import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig.PRESSURE_CONVERTERS_KEY;
 import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig.SPEED_CONVERTERS_KEY;
@@ -32,12 +37,15 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     private List<Converter<Integer, Float>> speedConverters;
     private List<Converter<Integer, Float>> pressuresConverters;
     private List<Converter<Integer, Float>> temperatureConverters;
+    private Set<WeatherType> weatherTypes;
 
     public WeatherInteractorImpl(@NonNull Gson gson,
                                  @NonNull AppRepository repository,
-                                 @NonNull Map<String, List<Converter<Integer, Float>>> converters) {
+                                 @NonNull Map<String, List<Converter<Integer, Float>>> converters,
+                                 @NonNull Set<WeatherType> weatherTypes) {
         this.gson = gson;
         this.repository = repository;
+        this.weatherTypes = weatherTypes;
         this.speedConverters = converters.get(SPEED_CONVERTERS_KEY);
         this.pressuresConverters = converters.get(PRESSURE_CONVERTERS_KEY);
         this.temperatureConverters = converters.get(TEMPERATURE_CONVERTERS_KEY);
@@ -47,36 +55,41 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     public Observable<WeatherModel> getWeather(@NonNull Place place) {
         String cacheWeather = repository.getCachedWeather(place);
         if (cacheWeather == null) return updateWeather(place);
-        Observable<WeatherModel> observable = Observable.just(cacheWeather)
-                .map(cache -> gson.fromJson(cache, WeatherModel.class));
-
-        return convertModel(observable);
+        return Observable.just(cacheWeather)
+                .map(cache -> gson.fromJson(cache, WeatherModel.class))
+                .map(this::convertModel);
     }
 
     @Override
     public Observable<WeatherModel> updateWeather(@NonNull Place place) {
-        Observable<WeatherModel> observable = repository
-                .getWeather(place)
-                .doOnNext(w -> repository.saveWeatherToCache(place, gson.toJson(w)));
-        return convertModel(observable);
+        return repository.getWeather(place)
+                .doOnNext(w -> repository.saveWeatherToCache(place, gson.toJson(w)))
+                .map(this::convertModel);
     }
 
     @Override
-    public Single<ResponseForecast> getForecast(@NonNull Place place) {
-//        String cacheForecast = repository.getCachedWeather(place);
-//        if (cacheForecast == null) return updateWeather(place);
-//        Observable<WeatherModel> observable = Observable.just(cacheForecast)
-//                .map(cache -> gson.fromJson(cache, WeatherModel.class));
+    public Single<ResponseForecast> updateForecast5(@NonNull Place place) {
+        return repository.getForecast5(place);
+    }
 
-//        return convertModel(observable);
+    @Override
+    public Single<LinkedHashMap<WeatherModel, WeatherType>> updateForecast16(@NonNull Place place) {
+        return repository.getForecast16(place)
+                .map(ResponseForecast::getForecasts)
+                .flatMapIterable(forecasts -> forecasts)
+                .map(WeatherForecast::toWeatherModel)
+                .map(this::convertModel)
+                .map(this::getWeatherType)
+                .collectInto(new LinkedHashMap<>(), (map, pair) -> map.put(pair.first, pair.second));
+
+    }
+
+    private Pair<WeatherModel, WeatherType> getWeatherType(@NonNull WeatherModel weather) {
+        for (WeatherType type : weatherTypes) {
+            if (type.isApplicable(weather))  return new Pair<>(weather, type);
+        }
         return null;
     }
-
-    @Override
-    public Single<ResponseForecast> updateForecast(@NonNull Place place) {
-        return repository.getForecast(place);
-    }
-
 
     @Override
     public int getTemperatureUnits() {
@@ -93,35 +106,24 @@ public class WeatherInteractorImpl implements WeatherInteractor {
         return repository.getSpeedUnits();
     }
 
-    private Observable<WeatherModel> convertModel(Observable<WeatherModel> weatherObservable) {
-        return weatherObservable
-                .map(w -> new WeatherModel.Builder(w)
-                        .temperature(
-                                applyConverter(repository.getTemperatureUnits(),
-                                        w.getTemperature(), temperatureConverters)
-                        )
-                        .minTemperature(
-                                applyConverter(repository.getTemperatureUnits(),
-                                        w.getMinTemperature(), temperatureConverters)
-                        )
-                        .maxTemperature(
-                                applyConverter(repository.getTemperatureUnits(),
-                                        w.getMaxTemperature(), temperatureConverters)
-                        )
-                        .pressure(
-                                (int) applyConverter(repository.getPressureUnits(),
-                                        w.getPressure(), pressuresConverters)
-                        )
-                        .windSpeed(
-                                applyConverter(repository.getSpeedUnits(),
-                                        w.getWindSpeed(), speedConverters)
-                        )
-                        .build());
+    private WeatherModel convertModel(WeatherModel model) {
+        return new WeatherModel.Builder(model)
+                .temperature(applyConverter(repository.getTemperatureUnits(),
+                        model.getTemperature(), temperatureConverters))
+                .minTemperature(applyConverter(repository.getTemperatureUnits(),
+                        model.getMinTemperature(), temperatureConverters))
+                .maxTemperature(applyConverter(repository.getTemperatureUnits(),
+                        model.getMaxTemperature(), temperatureConverters))
+                .pressure((int) applyConverter(repository.getPressureUnits(),
+                        model.getPressure(), pressuresConverters))
+                .windSpeed(applyConverter(repository.getSpeedUnits(),
+                        model.getWindSpeed(), speedConverters))
+                .build();
     }
 
     private float applyConverter(int mode, float value,
                                  @NonNull List<Converter<Integer, Float>> converters) {
-        for (Converter<Integer, Float> converter: converters) {
+        for (Converter<Integer, Float> converter : converters) {
             if (converter.isApplicable(mode)) return converter.convert(value);
         }
         return value;
