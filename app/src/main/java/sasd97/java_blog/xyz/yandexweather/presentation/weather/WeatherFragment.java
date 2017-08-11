@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -61,13 +62,16 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_temperature_extreme) TextView weatherTemperatureExtreme;
     @BindView(R.id.fragment_weather_recycler_forecast) RecyclerView forecastRecycler;
     @BindView(R.id.fragment_weather_appbarlayout) @Nullable AppBarLayout appBarLayout;
+    @BindView(R.id.fragment_weather_fab) @Nullable FloatingActionButton fab;
     @BindBool(R.bool.is_tablet_horizontal) boolean isTabletHorizontal;
+    @BindBool(R.bool.is_horizontal) boolean isHorizontal;
 
     @InjectPresenter WeatherPresenter presenter;
 
     private ForecastRecyclerAdapter forecastRecyclerAdapter;
     private RecyclerView.OnScrollListener onScrollListener;
     private LinearLayoutManager layoutManager;
+    private boolean appBarIsExpanded = true;
 
     @ProvidePresenter
     public WeatherPresenter providePresenter() {
@@ -103,11 +107,44 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         forecastRecycler.setLayoutManager(layoutManager);
         forecastRecycler.setHasFixedSize(true);
 
+        if (fab != null && appBarLayout != null) fab.setOnClickListener(v -> {
+            layoutManager.scrollToPositionWithOffset(0, 0);
+            appBarLayout.setExpanded(!appBarIsExpanded);
+            fab.setImageResource(appBarIsExpanded ? R.drawable.ic_action_up : R.drawable.ic_action_down);
+        });
+
         if (isTabletHorizontal) onTabletHorizontalMode();
+        else if (!isHorizontal) onVerticalMode();
     }
 
-    /*For better UX add elevation to nav container when scrolling recycler with horizontal LM*/
+    private void onVerticalMode() {
+        assert fab != null;
+        onScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (fab.isShown() && layoutManager.findFirstCompletelyVisibleItemPosition() != 0 &&
+                        layoutManager.findLastCompletelyVisibleItemPosition() != forecastRecyclerAdapter.getItemCount() - 1) {
+                    fab.hide();
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (!fab.isShown() && newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        (layoutManager.findFirstCompletelyVisibleItemPosition() == 0 ||
+                                layoutManager.findLastCompletelyVisibleItemPosition() ==
+                                        forecastRecyclerAdapter.getItemCount() - 1)) {
+                    fab.show();
+                }
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        };
+        forecastRecycler.addOnScrollListener(onScrollListener);
+    }
+
+
     private void onTabletHorizontalMode() {
+    /*For better UX add elevation to nav container when scrolling recycler with horizontal LM*/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int elevation = AndroidMath.dp2px(16, getResources());
             int elevationBase = AndroidMath.dp2px(2, getResources());
@@ -211,10 +248,14 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         ((MainActivity) getActivity()).changeSearchIconVisibility(this);
     }
 
-    /*Hardcode for correct work of swipeRefreshLayout in conjunction with appBarLayout*/
+    /*For correct work of swipeRefreshLayout in conjunction with appBarLayout*/
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        assert fab != null;
         swipeRefreshLayout.setEnabled(verticalOffset == 0);
+        appBarIsExpanded = verticalOffset == 0;
+        if (verticalOffset == 0) fab.show();
+        fab.setImageResource(verticalOffset == 0 ? R.drawable.ic_action_down : R.drawable.ic_action_up);
     }
 
     @Override
