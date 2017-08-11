@@ -24,7 +24,6 @@
     <string name="all_weather_snowy_title">Snowy</string>
     <string name="all_weather_thunder_title">Thunder</string>
     <string name="all_weather_drizzle_title">Drizzle</string>
-
     <string name="all_weather_ms">m/s</string>
     <string name="all_weather_kmh">km/h</string>
     <string name="all_weather_mmhg">mmHg</string>
@@ -34,6 +33,10 @@
     <!--Time-->
     <string name="tomorrow">Tomorrow</string>
     <string name="day_after_tomorrow">Day after tomorrow</string>
+    <string name="morning">Morning</string>
+    <string name="daytime">Daytime</string>
+    <string name="evening">Evening</string>
+    <string name="night">Night</string>
     <!--Endregion-->
 
     <!-- About fragment -->

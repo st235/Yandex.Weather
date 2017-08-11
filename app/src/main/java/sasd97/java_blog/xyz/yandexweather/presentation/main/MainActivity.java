@@ -1,6 +1,5 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.main;
 
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -340,17 +340,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         else miSearch.setVisible(false);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onNavigationLayoutElevation(int elevation) {
         assert navigationLayout != null;
-        navigationLayout.animate().translationZ(elevation);
+        ViewCompat.animate(navigationLayout).translationZ(elevation);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onToolbarElevation(int elevation) {
-        toolbar.animate().translationZ(elevation);
+        ViewCompat.animate(toolbar).translationZ(elevation);
     }
 
     @Override

@@ -10,4 +10,6 @@
     <dimen name="drawer_width">320dp</dimen>
     <dimen name="nav_recycler_places_padding_bottom">0dp</dimen>
     <dimen name="nav_settings_text_size">18sp</dimen>
+    <dimen name="forecast_card_expanded">228dp</dimen>
+    <dimen name="forecast_card_collapsed">114dp</dimen>
 </resources>

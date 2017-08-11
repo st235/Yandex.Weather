@@ -19,7 +19,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_weather_icon"
-        tools:text="A"/>
+        tools:text="A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        android:layout_marginBottom="8dp"/>
 
     <sasd97.java_blog.xyz.richtextview.RichTextView
         android:id="@+id/fragment_weather_icon"
@@ -56,7 +59,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/fragment_weather_type"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/fragment_weather_icon"
-        app:layout_constraintTop_toTopOf="@+id/fragment_weather_icon"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="1 mPa"/>
 
     <sasd97.java_blog.xyz.richtextview.RichTextView
@@ -118,8 +121,8 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintLeft_toRightOf="@+id/fragment_weather_icon"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fragment_weather_icon"
-        tools:text="27 °C"/>
+        tools:text="27 °C"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_weather_last_refresh"/>
 
     <View
         android:id="@+id/fragment_weather_vertical_delimiter"

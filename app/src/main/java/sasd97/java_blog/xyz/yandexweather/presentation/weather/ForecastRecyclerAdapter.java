@@ -1,10 +1,13 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
 import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.LinkedHashMap;
@@ -22,6 +25,8 @@ import sasd97.java_blog.xyz.yandexweather.utils.Settings;
  */
 
 public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecyclerAdapter.RecyclerViewHolder> {
+    public static final int TYPE_COLLAPSED = 0;
+    public static final int TYPE_EXPANDED = 1;
     private final LinkedHashMap<WeatherModel, WeatherType[]> forecasts;
     private final Settings settings;
 
@@ -33,13 +38,32 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new RecyclerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_forecast, parent, false));
+        if (viewType == TYPE_COLLAPSED) {
+            return new RecyclerViewHolder(LayoutInflater.from(
+                    parent.getContext()).inflate(R.layout.item_forecast_collapsed, parent, false));
+        } else {
+            return new RecyclerViewHolder(LayoutInflater.from(
+                    parent.getContext()).inflate(R.layout.item_forecast_expanded, parent, false));
+        }
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        WeatherModel weather = (WeatherModel) forecasts.keySet().toArray()[position];
+        if (position > forecasts.get(weather).length) return TYPE_COLLAPSED;
+        else return TYPE_EXPANDED;
     }
 
     @Override
     public void onBindViewHolder(ForecastRecyclerAdapter.RecyclerViewHolder holder, int position) {
         WeatherModel weather = (WeatherModel) forecasts.keySet().toArray()[position];
         Resources resources = holder.itemView.getResources();
+        setTheme(holder, weather);
+        setData(holder, position, weather, resources);
+    }
+
+    private void setData(RecyclerViewHolder holder, int position, WeatherModel weather, Resources resources) {
         holder.date.setText(position == 0 ? resources.getString(R.string.tomorrow) : weather.getReadableDate());
         holder.tempMain.setText(resources.getString(R.string.forecasts_temperature,
                 weather.getDayTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
@@ -54,26 +78,55 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         holder.tempExtreme.setText(resources.getString(R.string.weather_fragment_current_temperature_extreme,
                 weather.getMaxTemperature(), weather.getMinTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
         int iconMorning = forecasts.get(weather)[0].getIconRes();
-        if (iconMorning == R.string.all_weather_clear_night_icon) {
+        if (iconMorning == R.string.all_weather_clear_night_icon)
             iconMorning = R.string.all_weather_sunny_icon;
-        }
-        if (forecasts.get(weather).length <= position) {
+        if (position > forecasts.get(weather).length) {
+            /*set icon morning because forecast16 response contains only 1 weather type for whole day*/
+            /*and we put it in [0] position in array*/
             holder.iconMain.setText(iconMorning);
         } else {
             int iconDay = forecasts.get(weather)[1].getIconRes();
             int iconEveninig = forecasts.get(weather)[2].getIconRes();
-            if (iconDay == R.string.all_weather_clear_night_icon) {
+            if (iconDay == R.string.all_weather_clear_night_icon)
                 iconDay = R.string.all_weather_sunny_icon;
-            }
-            if (iconEveninig == R.string.all_weather_clear_night_icon) {
+            if (iconEveninig == R.string.all_weather_clear_night_icon)
                 iconEveninig = R.string.all_weather_sunny_icon;
-            }
             holder.iconMain.setText(iconDay);
             holder.iconMorning.setText(iconMorning);
             holder.iconDay.setText(iconDay);
             holder.iconEvening.setText(iconEveninig);
             holder.iconNight.setText(forecasts.get(weather)[3].getIconRes());
         }
+    }
+
+    private void setTheme(RecyclerViewHolder holder, WeatherModel weather) {
+        boolean isDetailed = forecasts.get(weather)[1] != null;
+        int cardColor = forecasts.get(weather)[isDetailed ? 1 : 0].getCardColor();
+        int textColor = forecasts.get(weather)[isDetailed ? 1 : 0].getTextColor();
+        if (isDetailed) {
+            if (cardColor == R.color.colorClearNightCard) cardColor = R.color.colorSunnyCard;
+            if (textColor == R.color.colorClearNightText) textColor = R.color.colorSunnyText;
+        }
+        cardColor = ContextCompat.getColor(holder.itemView.getContext(), cardColor);
+        textColor = ContextCompat.getColor(holder.itemView.getContext(), textColor);
+        ((CardView)((LinearLayout) holder.itemView).getChildAt(0)).setCardBackgroundColor(cardColor);
+        holder.iconDay.setTextColor(textColor);
+        holder.iconEvening.setTextColor(textColor);
+        holder.iconMorning.setTextColor(textColor);
+        holder.iconNight.setTextColor(textColor);
+        holder.iconMain.setTextColor(textColor);
+        holder.iconDay.setTextColor(textColor);
+        holder.tempMain.setTextColor(textColor);
+        holder.tempDay.setTextColor(textColor);
+        holder.tempEvening.setTextColor(textColor);
+        holder.tempMorning.setTextColor(textColor);
+        holder.tempNight.setTextColor(textColor);
+        holder.tempExtreme.setTextColor(textColor);
+        holder.date.setTextColor(textColor);
+        holder.tvDay.setTextColor(textColor);
+        holder.tvEvening.setTextColor(textColor);
+        holder.tvNight.setTextColor(textColor);
+        holder.tvMorning.setTextColor(textColor);
     }
 
     private String obtainTemperatureTitle(Resources resources, int tempUnits) {
@@ -99,6 +152,10 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         @BindView(R.id.content_forecast_icon_morning) TextView iconMorning;
         @BindView(R.id.content_forecast_icon_evening) TextView iconEvening;
         @BindView(R.id.content_forecast_icon_main) TextView iconMain;
+        @BindView(R.id.content_forecast_tv_day) TextView tvDay;
+        @BindView(R.id.content_forecast_tv_evening) TextView tvEvening;
+        @BindView(R.id.content_forecast_tv_morning) TextView tvMorning;
+        @BindView(R.id.content_forecast_tv_night) TextView tvNight;
 
         RecyclerViewHolder(View itemView) {
             super(itemView);

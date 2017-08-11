@@ -35,8 +35,11 @@
     <!--Time-->
     <string name="tomorrow">Завтра</string>
     <string name="day_after_tomorrow">Послезавтра</string>
+    <string name="morning">Утро</string>
+    <string name="daytime">День</string>
+    <string name="evening">Вечер</string>
+    <string name="night">Ночь</string>
     <!--Endregion-->
-
     <!-- About fragment -->
     <string name="about_fragment_description">Погодное приложение. Сделано в рамках проекта "Мобилизация".</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>

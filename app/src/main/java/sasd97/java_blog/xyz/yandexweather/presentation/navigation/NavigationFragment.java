@@ -1,9 +1,9 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.navigation;
 
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -162,9 +162,8 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
         if (onScrollListener != null) placesRecycler.removeOnScrollListener(onScrollListener);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void onNavigationViewElevation(int elevation) {
-        navigationView.animate().translationZ(elevation);
+        ViewCompat.animate(navigationView).translationZ(elevation);
     }
 
     @Override

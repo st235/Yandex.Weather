@@ -99,7 +99,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,
                 R.color.colorPrimaryDark, R.color.colorPrimary);
-
         swipeRefreshLayout.setOnRefreshListener(presenter::fetchWeather);
 
         int orientation = (isTabletHorizontal) ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL;
@@ -123,7 +122,8 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (fab.isShown() && layoutManager.findFirstCompletelyVisibleItemPosition() != 0 &&
-                        layoutManager.findLastCompletelyVisibleItemPosition() != forecastRecyclerAdapter.getItemCount() - 1) {
+                        layoutManager.findLastCompletelyVisibleItemPosition() !=
+                                forecastRecyclerAdapter.getItemCount() - 1) {
                     fab.hide();
                 }
             }
