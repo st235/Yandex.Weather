@@ -108,6 +108,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
         if (fab != null && appBarLayout != null) fab.setOnClickListener(v -> {
             layoutManager.scrollToPositionWithOffset(0, 0);
+
             appBarLayout.setExpanded(!appBarIsExpanded);
             fab.setImageResource(appBarIsExpanded ? R.drawable.ic_action_up : R.drawable.ic_action_down);
         });
@@ -130,7 +131,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (!fab.isShown() && newState == RecyclerView.SCROLL_STATE_IDLE &&
+                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
                         (layoutManager.findFirstCompletelyVisibleItemPosition() == 0 ||
                                 layoutManager.findLastCompletelyVisibleItemPosition() ==
                                         forecastRecyclerAdapter.getItemCount() - 1)) {

@@ -28,11 +28,17 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
     public static final int TYPE_PLACE = 0;
     private List<Place> places;
     private SerializableSparseArray<Place> selectedPlaces;
-    private OnAddPlaceClickListener onAddPlaceClickListener;
+    private OnAddPlaceClickListener onAddPlaceListener;
     private OnPlaceSelectListener onPlaceSelectListener;
+    private OnPlaceClickListener onPlaceClickListener;
 
-    public PlacesRecyclerAdapter setOnAddPlaceClickListener(OnAddPlaceClickListener addPlaceClickListener) {
-        this.onAddPlaceClickListener = addPlaceClickListener;
+    public PlacesRecyclerAdapter setOnAddPlaceListener(OnAddPlaceClickListener addPlaceClickListener) {
+        this.onAddPlaceListener = addPlaceClickListener;
+        return this;
+    }
+
+    public PlacesRecyclerAdapter setOnPlaceClickListener(OnPlaceClickListener onPlaceClickListener) {
+        this.onPlaceClickListener = onPlaceClickListener;
         return this;
     }
 
@@ -48,7 +54,7 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
 
     public void removeSelectedPlaces() {
         for (int i = 0; i < selectedPlaces.size(); i++) {
-            int positionToRemove = selectedPlaces.keyAt(i) - i ;
+            int positionToRemove = selectedPlaces.keyAt(i) - i;
             notifyItemRemoved(positionToRemove);
             notifyItemRangeChanged(positionToRemove, places.size());
             places.remove(positionToRemove);
@@ -57,6 +63,12 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
     }
 
     public void insertPlace(Place place) {
+        for (int i = 0; i < places.size(); i++) {
+            if (places.get(i).getPlaceId().equals(place.getPlaceId())) {
+                swap(i);
+                return;
+            }
+        }
         places.add(0, place);
         notifyItemInserted(0);
         notifyItemRangeChanged(0, places.size());
@@ -67,7 +79,11 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
     }
 
     public interface OnPlaceSelectListener {
-        void onSelectedPlace(int size);
+        void onPlaceSelect(int size);
+    }
+
+    public interface OnPlaceClickListener {
+        void onPlaceClick(Place selected, Place toReplace);
     }
 
     public PlacesRecyclerAdapter(List<Place> places) {
@@ -93,12 +109,12 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
     public void onBindViewHolder(PlacesRecyclerAdapter.RecyclerViewHolder holder, int position) {
         if (position == getItemCount() - 1) {
             holder.tvPlaceName.setText(R.string.add_place);
-            holder.itemView.setOnClickListener(view -> onAddPlaceClickListener.onAddPlaceClick());
+            holder.itemView.setOnClickListener(view -> onAddPlaceListener.onAddPlaceClick());
         } else {
             assert holder.flipLayout != null;
             assert holder.tvFirstLetter != null;
             holder.tvFirstLetter.setText(String.valueOf(places.get(position).getName().charAt(0)));
-            int hashCode = places.get(position).hashCode();
+            int hashCode = places.get(position).getPlaceId().hashCode();
             holder.ivColor.setColorFilter(holder.colors[AndroidMath.intToDigit(hashCode)]);
             holder.tvPlaceName.setText(places.get(position).getName());
             if (selectedPlaces.get(position) != null) holder.flipLayout.setFlipped(true);
@@ -106,9 +122,24 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
             holder.flipLayout.setOnSelectedListener(selected -> {
                 if (selected) selectedPlaces.put(position, places.get(position));
                 else selectedPlaces.remove(position);
-                onPlaceSelectListener.onSelectedPlace(selectedPlaces.size());
+                onPlaceSelectListener.onPlaceSelect(selectedPlaces.size());
             });
+            holder.itemView.setOnClickListener(v -> swap(position));
         }
+    }
+
+    private void swap(int position) {
+        if (position == 0) return;
+        Place selected = places.get(position);
+        int oldSelectedTime = selected.getTime();
+        selected.setTime(places.get(0).getTime());
+        onPlaceClickListener.onPlaceClick(selected, places.get(0));
+        places.get(0).setTime(oldSelectedTime);
+        places.set(position, places.get(0));
+        places.set(0, selected);
+//                notifyItemMoved(position,0);
+//                notifyItemMoved(1,position);
+        notifyItemRangeChanged(0, places.size());
     }
 
     @Override

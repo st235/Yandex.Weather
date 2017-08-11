@@ -1,3 +1,5 @@
 <resources>
     <dimen name="nav_recycler_places_padding_bottom">56dp</dimen>
+    <dimen name="fab_size">56dp</dimen>
+    <dimen name="padding_fab">88dp</dimen>
 </resources>

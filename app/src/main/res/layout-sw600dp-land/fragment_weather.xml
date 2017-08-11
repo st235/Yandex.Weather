@@ -36,7 +36,9 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_below="@+id/fragment_weather_card"/>
+            android:layout_below="@+id/fragment_weather_card"
+            android:clipToPadding="false"
+            android:paddingRight="16dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
     </RelativeLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -174,10 +174,12 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
             placesRecyclerAdapter.setPlaces(places);
             placesRecyclerAdapter.notifyDataSetChanged();
         }
-        placesRecyclerAdapter.setOnAddPlaceClickListener(() ->
-                ((NavigationFragmentAction) getActivity()).onAddPlaceClicked());
+        placesRecyclerAdapter.setOnAddPlaceListener(() ->
+                ((NavigationFragmentAction) getActivity()).onPlaceAdd());
         placesRecyclerAdapter.setOnPlaceSelectListener(size ->
-                ((NavigationFragmentAction) getActivity()).onSelectPlace(size));
+                ((NavigationFragmentAction) getActivity()).onPlaceSelect(size));
+        placesRecyclerAdapter.setOnPlaceClickListener((selected, toReplace) ->
+                ((NavigationFragmentAction) getActivity()).onPlaceClick(selected, toReplace));
         placesRecycler.setAdapter(placesRecyclerAdapter);
     }
 
@@ -222,5 +224,10 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
                     new PlacesRecyclerAdapter((SerializableSparseArray<Place>) hashMap);
             else placesRecyclerAdapter.setSelectedPlaces((SerializableSparseArray<Place>) hashMap);
         }
+    }
+
+    public void onSearchViewExpand(boolean isExpand) {
+        View view = layoutManager.findViewByPosition(placesRecyclerAdapter.getItemCount()-1);
+        ViewCompat.animate(view).alpha(isExpand ? 0 : 1).start();
     }
 }

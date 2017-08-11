@@ -58,7 +58,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         ElevationScrollListener, NavigationFragmentAction {
 
     private static final String CITY = "city";
-    public static final String TOOLBAR_VISIBILITY_KEY = "MyBoolean";
+    public static final String TOOLBAR_VISIBILITY_KEY = "toolbar_visibility";
 
     private Unbinder unbinder;
     private SimpleCursorAdapter cursorAdapter;
@@ -102,6 +102,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         initNavigation(savedInstanceState);
         initFragments(savedInstanceState);
         initSearchSuggestsAdapter();
+        initSearchViewExpandListener();
         btnDelete.setOnClickListener(v -> {
             ((PlacesActions) getSupportFragmentManager()
                     .findFragmentByTag(TAG_NAVIGATION)).removeSelectedPlaces();
@@ -114,6 +115,31 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
             toolbar.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()));
             toolbarSelected.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()));
         }
+    }
+
+    private void initSearchViewExpandListener() {
+        actionExpandListener = new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                notifyNavigationFragment(true);
+                return true;
+            }
+
+            private void notifyNavigationFragment(boolean isExpand) {
+                ((NavigationFragment) getSupportFragmentManager()
+                        .findFragmentByTag(TAG_NAVIGATION)).onSearchViewExpand(isExpand);
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                notifyNavigationFragment(false);
+                if (isSearchOpenedFromClosedPanel) {
+                    slidingPaneLayout.closePane();
+                    isSearchOpenedFromClosedPanel = false;
+                }
+                return true;
+            }
+        };
     }
 
     private void initSlidingPanelListener() {
@@ -137,21 +163,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
                 if (toolbar.hasExpandedActionView()) toolbar.collapseActionView();
             }
         });
-        actionExpandListener = new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                if (isSearchOpenedFromClosedPanel) {
-                    slidingPaneLayout.closePane();
-                    isSearchOpenedFromClosedPanel = false;
-                }
-                return true;
-            }
-        };
     }
 
     private void initNavigation(Bundle savedInstanceState) {
@@ -251,8 +262,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
         miSearch = menu.findItem(R.id.action_search);
-        if (slidingPaneLayout != null)
-            MenuItemCompat.setOnActionExpandListener(miSearch, actionExpandListener);
+        MenuItemCompat.setOnActionExpandListener(miSearch, actionExpandListener);
         searchView = (SearchView) MenuItemCompat.getActionView(miSearch);
         searchView.findViewById(android.support.v7.appcompat.R.id.search_plate)
                 .setBackgroundColor(Color.TRANSPARENT);
@@ -316,9 +326,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     @Override
     public boolean onSuggestionClick(int position) {
         toolbar.collapseActionView();
-        mainPresenter.saveCity(position, addToFavorites);
+        mainPresenter.saveNewPlace(position, addToFavorites);
         if (!addToFavorites && drawer != null && drawer.isDrawerOpen(GravityCompat.START))
-            drawer.closeDrawer(GravityCompat.START);
+            closeDrawer();
         addToFavorites = false;
         return true;
     }
@@ -352,7 +362,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     }
 
     @Override
-    public void onAddPlaceClicked() {
+    public void onPlaceAdd() {
         if (searchView.isIconified()) {
             addToFavorites = true;
             MenuItemCompat.expandActionView(miSearch);
@@ -364,9 +374,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     }
 
     @Override
-    public void onSelectPlace(int size) {
+    public void onPlaceSelect(int size) {
         if (size > 0 && toolbarSelected.getVisibility() == View.VISIBLE) return;
         else showToolbarSelected(size != 0);
+    }
+
+    @Override
+    public void onPlaceClick(Place place, Place toReplace) {
+        closeDrawer();
+        mainPresenter.saveCurrentPlace(place, toReplace);
     }
 
     private void cancelPlacesSelection() {
@@ -406,6 +422,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        isToolbarSelectedVisible = savedInstanceState.getBoolean("MyBoolean");
+        isToolbarSelectedVisible = savedInstanceState.getBoolean(TOOLBAR_VISIBILITY_KEY);
     }
 }

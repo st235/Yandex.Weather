@@ -21,11 +21,11 @@
 
         <TextView
             android:id="@+id/fragment_navigation_settings"
+            style="@style/TextBase"
             android:layout_width="wrap_content"
             android:layout_height="?android:attr/actionBarSize"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            style="@style/TextBase"
             android:layout_toEndOf="@+id/fragment_navigation_settings_image"
             android:layout_toRightOf="@+id/fragment_navigation_settings_image"
             android:clickable="true"
@@ -80,12 +80,11 @@
         android:layout_marginStart="0dp"
         android:clipToPadding="@bool/is_tablet_horizontal"
         android:overScrollMode="never"
-        android:scrollbars="vertical"
         android:paddingBottom="@dimen/nav_recycler_places_padding_bottom"
+        android:paddingTop="8dp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 </android.support.constraint.ConstraintLayout>

@@ -8,6 +8,7 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import java.util.Date;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -130,14 +131,14 @@ public class MainPresenter extends MvpPresenter<MainView> {
         this.placesResponse = placesResponse;
     }
 
-    void saveCity(int position, boolean addToFavorites) {
+    void saveNewPlace(int position, boolean addToFavorites) {
         placesInteractor.getPlaceDetails(placesResponse.getPlaceIdAt(position))
                 .compose(schedulers.getIoToMainTransformer())
                 .map(placeDetailsResponse -> new Place(
                         placesResponse.getPlaceIdAt(position),
                         placesResponse.getPlaceNameAt(position),
                         placeDetailsResponse.getCoords(),
-                        (int) (new Date().getTime()/1000)))
+                        (int) (new Date().getTime() / 1000)))
                 .doOnNext(place -> {
                     if (addToFavorites) getViewState().showNewFavoritePlace(place);
                 })
@@ -145,6 +146,17 @@ public class MainPresenter extends MvpPresenter<MainView> {
                         .compose(schedulers.getIoToMainTransformerCompletable())
                         .concatWith(settingsInteractor.savePlace(place)) :
                         settingsInteractor.savePlace(place))
+                .doOnComplete(this::openWeatherFragment)
+                .subscribe();
+    }
+
+
+    public void saveCurrentPlace(Place place, Place toReplace) {
+        placesInteractor.savePlaceToFavorites(place)
+                .andThen(placesInteractor.savePlaceToFavorites(toReplace))
+                .andThen(settingsInteractor.savePlace(place))
+                .compose(schedulers.getIoToMainTransformerCompletable())
+                .delay(250, TimeUnit.MILLISECONDS)
                 .doOnComplete(this::openWeatherFragment)
                 .subscribe();
     }

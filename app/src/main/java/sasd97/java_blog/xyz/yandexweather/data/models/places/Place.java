@@ -56,6 +56,10 @@ public class Place {
         return placeId;
     }
 
+    public void setTime(int time) {
+        this.time = time;
+    }
+
     public String getName() {
         return name;
     }
