@@ -10,7 +10,8 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.internal.operators.completable.CompletableFromAction;
-import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast;
+import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
+import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast5;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
@@ -69,13 +70,13 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Single<ResponseForecast> getForecast5(@NonNull Place place) {
+    public Observable<ResponseForecast5> getForecast5(@NonNull Place place) {
         return weatherApi.getForecast5(
                 place.getCoords().first, place.getCoords().second, apiKeys.first);
     }
 
     @Override
-    public Observable<ResponseForecast> getForecast16(@NonNull Place place) {
+    public Observable<ResponseForecast16> getForecast16(@NonNull Place place) {
         return weatherApi.getForecast16(
                 place.getCoords().first, place.getCoords().second, apiKeys.first);
     }

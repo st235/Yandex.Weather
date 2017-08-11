@@ -88,6 +88,7 @@ public class WeatherForecast {
 
     public WeatherModel toWeatherModel() {
         return new WeatherModel.Builder()
+                .isForecast(true)
                 .weatherId(weather[0].getId())
                 .clouds(clouds)
                 .humidity(humidity)

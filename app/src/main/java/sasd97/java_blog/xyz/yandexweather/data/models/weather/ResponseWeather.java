@@ -80,6 +80,10 @@ public class ResponseWeather {
         return weather;
     }
 
+    public int getWeatherId() {
+        return weather.get(0).getId();
+    }
+
     public String getBase() {
         return base;
     }

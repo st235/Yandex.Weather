@@ -26,7 +26,6 @@
         android:id="@+id/fragment_weather_icon"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -36,11 +35,12 @@
         android:textColor="@color/colorGreyMd600"
         android:textSize="105sp"
         app:fontAsset="weather_icons.ttf"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="W"/>
+        tools:text="W"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_weather_temperature"/>
 
     <sasd97.java_blog.xyz.richtextview.RichTextView
         android:id="@+id/fragment_weather_wind_speed"

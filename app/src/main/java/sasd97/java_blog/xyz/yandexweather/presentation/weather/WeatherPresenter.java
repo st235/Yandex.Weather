@@ -1,14 +1,18 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
 import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
@@ -16,6 +20,7 @@ import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
+import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 
 /**
  * Created by alexander on 12/07/2017.
@@ -44,14 +49,38 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     @Override
     public void attachView(WeatherView view) {
         super.attachView(view);
-        weatherInteractor.getWeather(placesInteractor.getPlace())
+        Place place = placesInteractor.getPlace();
+        weatherInteractor.getWeather(place)
                 .compose(schedulers.getIoToMainTransformer())
-                .map(weatherModel -> weatherModel.setCorrectCity(placesInteractor.getPlace()))
+                .map(weatherModel -> weatherModel.setCorrectCity(place))
                 .subscribe(this::chooseWeather);
 
-        weatherInteractor.updateForecast16(placesInteractor.getPlace())
+        weatherInteractor.updateForecast16(place)
+                .zipWith(weatherInteractor.updateForecast5(place), this::zipWithWeatherTypes)
                 .compose(schedulers.getIoToMainTransformerSingle())
+                .map(this::addSettings)
                 .subscribe(getViewState()::showForecast);
+    }
+
+    @NonNull
+    private LinkedHashMap<WeatherModel, WeatherType[]> zipWithWeatherTypes(
+            LinkedHashMap<WeatherModel, WeatherType[]> hashMap, List<WeatherType> weatherTypes) {
+        int currentDay = 0;
+        for (WeatherType[] types : hashMap.values()) {
+            /*5 day forecast with interval 3 hour`s. Get for morning, day, evening, night*/
+            for (int j = 0; j < 8; j += 2) {
+                int index = j + 8 * (currentDay);
+                if (index >= weatherTypes.size()) break;
+                types[j / 2] = weatherTypes.get(index);
+            }
+            currentDay++;
+        }
+        return hashMap;
+    }
+
+    private Pair<LinkedHashMap<WeatherModel, WeatherType[]>, Settings> addSettings(
+            LinkedHashMap<WeatherModel, WeatherType[]> forecasts) {
+        return new Pair<>(forecasts, getSettings());
     }
 
     public void fetchWeather() {
@@ -74,12 +103,18 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     }
 
     private void chooseWeather(@NonNull WeatherModel weather) {
-        for(WeatherType type: weatherTypes) {
+        for (WeatherType type : weatherTypes) {
             if (!type.isApplicable(weather)) continue;
             getViewState().setWeather(weather, type);
             break;
         }
 
         getViewState().stopRefreshing();
+    }
+
+    public Settings getSettings() {
+        return new Settings(weatherInteractor.getTemperatureUnits(),
+                weatherInteractor.getSpeedUnits(),
+                weatherInteractor.getPressureUnits());
     }
 }

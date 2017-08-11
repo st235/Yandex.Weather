@@ -13,9 +13,11 @@ import java.util.Set;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
-import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast;
+import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
+import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast5;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.WeatherForecast;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
+import sasd97.java_blog.xyz.yandexweather.data.models.weather.ResponseWeather;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.Converter;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
@@ -68,27 +70,49 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     }
 
     @Override
-    public Single<ResponseForecast> updateForecast5(@NonNull Place place) {
-        return repository.getForecast5(place);
+    public Single<List<WeatherType>> updateForecast5(@NonNull Place place) {
+        return repository.getForecast5(place)
+                .map(ResponseForecast5::getForecasts)
+                .flatMapIterable(responseForecast5 -> responseForecast5)
+                .map(ResponseWeather::getWeatherId)
+                .map(this::toWeatherModel)
+                .map(this::toWeatherType)
+                .toList();
     }
 
     @Override
-    public Single<LinkedHashMap<WeatherModel, WeatherType>> updateForecast16(@NonNull Place place) {
+    public Single<LinkedHashMap<WeatherModel, WeatherType[]>> updateForecast16(@NonNull Place place) {
         return repository.getForecast16(place)
-                .map(ResponseForecast::getForecasts)
+                .map(ResponseForecast16::getForecasts)
                 .flatMapIterable(forecasts -> forecasts)
                 .map(WeatherForecast::toWeatherModel)
                 .map(this::convertModel)
-                .map(this::getWeatherType)
+                .map(this::addWeatherType)
                 .collectInto(new LinkedHashMap<>(), (map, pair) -> map.put(pair.first, pair.second));
-
+                /*pair.first is weather, pair.second is weather type*/
     }
 
-    private Pair<WeatherModel, WeatherType> getWeatherType(@NonNull WeatherModel weather) {
+    private Pair<WeatherModel, WeatherType[]> addWeatherType(@NonNull WeatherModel weather) {
         for (WeatherType type : weatherTypes) {
-            if (type.isApplicable(weather))  return new Pair<>(weather, type);
+            if (type.isApplicable(weather)) {
+                WeatherType[] weatherTypes = new WeatherType[4];
+                weatherTypes[0] = type;
+                return new Pair<>(weather, weatherTypes);
+            }
         }
-        return null;
+        throw new IllegalStateException("Should not get here");
+    }
+
+    private WeatherModel toWeatherModel(int weatherId) {
+        return new WeatherModel.Builder().isForecast(true).weatherId(weatherId).build();
+    }
+    private WeatherType toWeatherType(WeatherModel weather) {
+        for (WeatherType type : weatherTypes) {
+            if (type.isApplicable(weather)) {
+                return type;
+            }
+        }
+        throw new IllegalStateException("Should not get here");
     }
 
     @Override
@@ -106,18 +130,26 @@ public class WeatherInteractorImpl implements WeatherInteractor {
         return repository.getSpeedUnits();
     }
 
-    private WeatherModel convertModel(WeatherModel model) {
-        return new WeatherModel.Builder(model)
+    private WeatherModel convertModel(WeatherModel weather) {
+        return new WeatherModel.Builder(weather)
                 .temperature(applyConverter(repository.getTemperatureUnits(),
-                        model.getTemperature(), temperatureConverters))
+                        weather.getTemperature(), temperatureConverters))
+                .morningTemperature(applyConverter(repository.getTemperatureUnits(),
+                        weather.getMorningTemperature(), temperatureConverters))
+                .dayTemperature(applyConverter(repository.getTemperatureUnits(),
+                        weather.getDayTemperature(), temperatureConverters))
+                .eveningTemperature(applyConverter(repository.getTemperatureUnits(),
+                        weather.getEveningTemperature(), temperatureConverters))
+                .nightTemperature(applyConverter(repository.getTemperatureUnits(),
+                        weather.getNightTemperature(), temperatureConverters))
                 .minTemperature(applyConverter(repository.getTemperatureUnits(),
-                        model.getMinTemperature(), temperatureConverters))
+                        weather.getMinTemperature(), temperatureConverters))
                 .maxTemperature(applyConverter(repository.getTemperatureUnits(),
-                        model.getMaxTemperature(), temperatureConverters))
+                        weather.getMaxTemperature(), temperatureConverters))
                 .pressure((int) applyConverter(repository.getPressureUnits(),
-                        model.getPressure(), pressuresConverters))
+                        weather.getPressure(), pressuresConverters))
                 .windSpeed(applyConverter(repository.getSpeedUnits(),
-                        model.getWindSpeed(), speedConverters))
+                        weather.getWindSpeed(), speedConverters))
                 .build();
     }
 

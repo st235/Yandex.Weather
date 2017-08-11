@@ -20,6 +20,9 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 public class WeatherModel {
 
     @Expose
+    private boolean isForecast;
+
+    @Expose
     private int weatherId;
 
     @Expose
@@ -83,6 +86,7 @@ public class WeatherModel {
     private String descriptionLocalized;
 
     private WeatherModel(@NonNull Builder builder) {
+        this.isForecast = builder.isForecast;
         this.weatherId = builder.weatherId;
         this.city = builder.city;
         this.humidity = builder.humidity;
@@ -100,6 +104,10 @@ public class WeatherModel {
         this.eveningTemperature = builder.eveningTemperature;
         this.dayTemperature = builder.dayTemperature;
         this.morningTemperature = builder.morningTemperature;
+    }
+
+    public boolean isForecast() {
+        return isForecast;
     }
 
     public int getWeatherId() {
@@ -162,9 +170,10 @@ public class WeatherModel {
 
     public String getReadableDate() {
         if (readableDate == null) {
-            readableDate = Instant.ofEpochSecond(updateTime)
+            String[] strings = Instant.ofEpochSecond(updateTime)
                     .atZone(ZoneId.of(TimeZone.getDefault().getID()))
-                    .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)).split(",")[0];
+                    .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)).split(" ");
+            readableDate = (strings[0] + " " + strings[1]).replace(",","");
         }
         return readableDate;
     }
@@ -235,11 +244,13 @@ public class WeatherModel {
         private float eveningTemperature;
         private float dayTemperature;
         private float morningTemperature;
+        private boolean isForecast;
 
         public Builder() {
         }
 
         public Builder(@NonNull WeatherModel weather) {
+            isForecast = weather.isForecast();
             weatherId = weather.getWeatherId();
             city = weather.getCity();
             humidity = weather.getHumidity();
@@ -265,6 +276,11 @@ public class WeatherModel {
 
         public Builder readableDate(String readableDate) {
             this.readableDate = readableDate;
+            return this;
+        }
+
+        public Builder isForecast(boolean isForecast) {
+            this.isForecast = isForecast;
             return this;
         }
 

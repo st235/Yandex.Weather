@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import butterknife.BindBool;
 import butterknife.BindView;
@@ -37,6 +37,7 @@ import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
+import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -145,8 +146,8 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     }
 
     @Override
-    public void showForecast(LinkedHashMap<WeatherModel, WeatherType> forecasts) {
-        forecastRecyclerAdapter = new ForecastRecyclerAdapter(forecasts);
+    public void showForecast(Pair<LinkedHashMap<WeatherModel, WeatherType[]>, Settings> pair) {
+        forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second);
         forecastRecycler.setAdapter(forecastRecyclerAdapter);
     }
 

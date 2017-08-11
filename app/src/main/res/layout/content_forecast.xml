@@ -122,9 +122,10 @@
 
     <sasd97.java_blog.xyz.richtextview.RichTextView
         android:id="@+id/content_forecast_temp_main"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
         android:gravity="right|center"
         android:textColor="@color/colorGreyMd600"
@@ -132,6 +133,7 @@
         app:fontAsset="weather_icons.ttf"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/content_forecast_icon_main"
         app:layout_constraintTop_toBottomOf="@+id/content_forecast_date"
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintTop_creator="1"
@@ -142,11 +144,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:gravity="center"
         android:textSize="18sp"
         app:fontAsset="weather_icons.ttf"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintLeft_toRightOf="@+id/content_forecast_icon_main"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content_forecast_date"
         tools:text="27 °C\n27 °C"/>

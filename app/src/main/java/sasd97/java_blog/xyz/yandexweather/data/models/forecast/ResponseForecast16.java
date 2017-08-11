@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Maksim Sukhotski on 8/7/2017.
  */
 
-public class ResponseForecast {
+public class ResponseForecast16 {
     private String cod;
     private List<WeatherForecast> list;
 
