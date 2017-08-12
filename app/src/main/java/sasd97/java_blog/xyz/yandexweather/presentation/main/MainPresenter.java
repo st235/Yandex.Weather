@@ -29,6 +29,7 @@ import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 
 import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment.TAG_NAVIGATION;
+import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment.TAG_WEATHER;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -63,7 +64,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     public void openWeatherFragment() {
-        weatherFragmentRouter.pushForward(new Replace(WeatherFragment.newInstance()));
+        weatherFragmentRouter.pushForward(new Replace(WeatherFragment.newInstance()), TAG_WEATHER);
         menuItemsStack.push(R.id.main_activity_navigation_weather);
     }
 
@@ -73,8 +74,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     public void onBackClicked() {
-        menuItemsStack.pop();
         if (menuItemsStack.isEmpty()) return;
+        menuItemsStack.pop();
     }
 
     /**

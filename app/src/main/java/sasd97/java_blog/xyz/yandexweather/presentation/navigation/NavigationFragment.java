@@ -227,7 +227,11 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     }
 
     public void onSearchViewExpand(boolean isExpand) {
-        View view = layoutManager.findViewByPosition(placesRecyclerAdapter.getItemCount()-1);
-        ViewCompat.animate(view).alpha(isExpand ? 0 : 1).start();
+        View view = layoutManager.findViewByPosition(placesRecyclerAdapter.getItemCount() - 1);
+        if (isExpand) {
+            ViewCompat.animate(view).alpha(0).start();
+        } else {
+            view.setAlpha(1);
+        }
     }
 }

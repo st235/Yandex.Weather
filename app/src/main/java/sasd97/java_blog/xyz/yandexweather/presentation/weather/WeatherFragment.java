@@ -1,6 +1,5 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
@@ -10,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,18 +35,22 @@ import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
+import sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerFragment;
+import sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerPagerAdapter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
-import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
-import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
+import sasd97.java_blog.xyz.yandexweather.utils.PagerAction;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
+
+import static sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerPagerAdapter.getTagFor;
 
 /**
  * Created by alexander on 09/07/2017.
  */
 
 public class WeatherFragment extends MvpAppCompatFragment implements WeatherView,
-        AppBarLayout.OnOffsetChangedListener {
+        AppBarLayout.OnOffsetChangedListener, PagerAction {
 
+    public static final String TAG_WEATHER = "TAG_WEATHER";
     private SimpleDateFormat fmt = new SimpleDateFormat("E, MMM dd, HH:mm", Locale.getDefault());
 
     @BindView(R.id.fragment_weather_icon) TextView weatherIcon;
@@ -60,9 +64,10 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_vertical_delimiter) View weatherVerticalDelimiter;
     @BindView(R.id.fragment_weather_swipe_to_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.fragment_weather_temperature_extreme) TextView weatherTemperatureExtreme;
-    @BindView(R.id.fragment_weather_recycler_forecast) RecyclerView forecastRecycler;
+    @BindView(R.id.fragment_weather_recycler_forecast) @Nullable RecyclerView forecastRecycler;
     @BindView(R.id.fragment_weather_appbarlayout) @Nullable AppBarLayout appBarLayout;
     @BindView(R.id.fragment_weather_fab) @Nullable FloatingActionButton fab;
+    @BindView(R.id.fragment_weather_view_pager) @Nullable ViewPager pager;
     @BindBool(R.bool.is_tablet_horizontal) boolean isTabletHorizontal;
     @BindBool(R.bool.is_horizontal) boolean isHorizontal;
 
@@ -72,6 +77,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     private RecyclerView.OnScrollListener onScrollListener;
     private LinearLayoutManager layoutManager;
     private boolean appBarIsExpanded = true;
+    private RecyclerPagerAdapter pagerAdapter;
 
     @ProvidePresenter
     public WeatherPresenter providePresenter() {
@@ -103,8 +109,10 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
         int orientation = (isTabletHorizontal) ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL;
         layoutManager = new LinearLayoutManager(getActivity(), orientation, false);
-        forecastRecycler.setLayoutManager(layoutManager);
-        forecastRecycler.setHasFixedSize(true);
+        if (forecastRecycler != null) {
+            forecastRecycler.setLayoutManager(layoutManager);
+            forecastRecycler.setHasFixedSize(true);
+        }
 
         if (fab != null && appBarLayout != null) fab.setOnClickListener(v -> {
             layoutManager.scrollToPositionWithOffset(0, 0);
@@ -113,8 +121,14 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             fab.setImageResource(appBarIsExpanded ? R.drawable.ic_action_up : R.drawable.ic_action_down);
         });
 
-        if (isTabletHorizontal) onTabletHorizontalMode();
-        else if (!isHorizontal) onVerticalMode();
+        if (!isHorizontal) onVerticalMode();
+        if (isTabletHorizontal) {
+            assert pager != null;
+            pagerAdapter = new RecyclerPagerAdapter(getFragmentManager());
+            pager.setAdapter(pagerAdapter);
+        } else {
+            presenter.fetchForecast();
+        }
     }
 
     private void onVerticalMode() {
@@ -143,34 +157,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         forecastRecycler.addOnScrollListener(onScrollListener);
     }
 
-
-    private void onTabletHorizontalMode() {
-    /*For better UX add elevation to nav container when scrolling recycler with horizontal LM*/
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int elevation = AndroidMath.dp2px(16, getResources());
-            int elevationBase = AndroidMath.dp2px(2, getResources());
-
-            onScrollListener = new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(final RecyclerView recyclerView, final int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                        ((ElevationScrollListener) getActivity()).onNavigationLayoutElevation(elevation);
-                    } else if (layoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
-                        ((ElevationScrollListener) getActivity()).onNavigationLayoutElevation(elevationBase);
-                    }
-                }
-
-                @Override
-                public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                }
-            };
-            forecastRecycler.addOnScrollListener(onScrollListener);
-            ((ElevationScrollListener) getActivity()).onNavigationLayoutElevation(elevationBase);
-        }
-    }
-
     @Override
     public void setWeather(@NonNull WeatherModel weather, @NonNull WeatherType type) {
         updateWeatherTheme(type.getCardColor(), type.getTextColor());
@@ -185,8 +171,29 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
     @Override
     public void showForecast(Pair<LinkedHashMap<WeatherModel, WeatherType[]>, Settings> pair) {
-        forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second);
-        forecastRecycler.setAdapter(forecastRecyclerAdapter);
+        if (isTabletHorizontal) {
+            RecyclerFragment recyclerFragment1 = (RecyclerFragment) getFragmentManager().findFragmentByTag(getTagFor(0));
+            RecyclerFragment recyclerFragment2 = (RecyclerFragment) getFragmentManager().findFragmentByTag(getTagFor(1));
+            if (recyclerFragment1 == null || recyclerFragment2 == null) return;
+            LinkedHashMap<WeatherModel, WeatherType[]> rv1items;
+            LinkedHashMap<WeatherModel, WeatherType[]> rv2items;
+            rv1items = new LinkedHashMap<>(5);
+            for (int i = 0; i < 5; i++) {
+                WeatherModel key = (WeatherModel) pair.first.keySet().toArray()[i];
+                rv1items.put(key, pair.first.get(key));
+            }
+
+            rv2items = new LinkedHashMap<>(11);
+            for (int i = 5; i < 16; i++) {
+                WeatherModel key = (WeatherModel) pair.first.keySet().toArray()[i];
+                rv2items.put(key, pair.first.get(key));
+            }
+            recyclerFragment1.show(rv1items, pair.second);
+            recyclerFragment2.show(rv2items, pair.second);
+        } else {
+            forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second);
+            forecastRecycler.setAdapter(forecastRecyclerAdapter);
+        }
     }
 
     private void updateWeather(@NonNull WeatherModel weather,
@@ -266,4 +273,20 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         if (onScrollListener != null) forecastRecycler.removeOnScrollListener(onScrollListener);
     }
 
+    @Override
+    public void onPagerFragmentAttached() {
+        presenter.fetchForecast();
+    }
+
+    @Override
+    public void onNextFabClick() {
+        assert pager != null;
+        pager.setCurrentItem(1, true);
+    }
+
+    @Override
+    public void onPrevFabClick() {
+        assert pager != null;
+        pager.setCurrentItem(0, true);
+    }
 }

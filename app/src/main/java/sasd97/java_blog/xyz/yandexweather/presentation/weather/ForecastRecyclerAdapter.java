@@ -29,16 +29,25 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
     public static final int TYPE_EXPANDED = 1;
     private final LinkedHashMap<WeatherModel, WeatherType[]> forecasts;
     private final Settings settings;
+    private final boolean isSecondary;
 
     public ForecastRecyclerAdapter(LinkedHashMap<WeatherModel, WeatherType[]> forecasts,
                                    Settings settings) {
         this.forecasts = forecasts;
         this.settings = settings;
+        this.isSecondary = false;
+    }
+
+    public ForecastRecyclerAdapter(LinkedHashMap<WeatherModel, WeatherType[]> forecasts,
+                                   Settings settings, boolean isSecondary) {
+        this.forecasts = forecasts;
+        this.settings = settings;
+        this.isSecondary = isSecondary;
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_COLLAPSED) {
+        if (viewType == TYPE_COLLAPSED || isSecondary) {
             return new RecyclerViewHolder(LayoutInflater.from(
                     parent.getContext()).inflate(R.layout.item_forecast_collapsed, parent, false));
         } else {
@@ -64,7 +73,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
     }
 
     private void setData(RecyclerViewHolder holder, int position, WeatherModel weather, Resources resources) {
-        holder.date.setText(position == 0 ? resources.getString(R.string.tomorrow) : weather.getReadableDate());
+        holder.date.setText(position == 0 && !isSecondary ? resources.getString(R.string.tomorrow) : weather.getReadableDate());
         holder.tempMain.setText(resources.getString(R.string.forecasts_temperature,
                 weather.getDayTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
         holder.tempMorning.setText(resources.getString(R.string.forecasts_temperature,
@@ -80,7 +89,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         int iconMorning = forecasts.get(weather)[0].getIconRes();
         if (iconMorning == R.string.all_weather_clear_night_icon)
             iconMorning = R.string.all_weather_sunny_icon;
-        if (position > forecasts.get(weather).length) {
+        if (position > forecasts.get(weather).length || forecasts.get(weather)[1] == null) {
             /*set icon morning because forecast16 response contains only 1 weather type for whole day*/
             /*and we put it in [0] position in array*/
             holder.iconMain.setText(iconMorning);
@@ -95,6 +104,9 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
             holder.iconMorning.setText(iconMorning);
             holder.iconDay.setText(iconDay);
             holder.iconEvening.setText(iconEveninig);
+            if (forecasts.get(weather)[3] == null) {
+                forecasts.get(weather)[3] = forecasts.get(weather)[2];
+            }
             holder.iconNight.setText(forecasts.get(weather)[3].getIconRes());
         }
     }
@@ -103,13 +115,11 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         boolean isDetailed = forecasts.get(weather)[1] != null;
         int cardColor = forecasts.get(weather)[isDetailed ? 1 : 0].getCardColor();
         int textColor = forecasts.get(weather)[isDetailed ? 1 : 0].getTextColor();
-        if (isDetailed) {
-            if (cardColor == R.color.colorClearNightCard) cardColor = R.color.colorSunnyCard;
-            if (textColor == R.color.colorClearNightText) textColor = R.color.colorSunnyText;
-        }
+        if (cardColor == R.color.colorClearNightCard) cardColor = R.color.colorSunnyCard;
+        if (textColor == R.color.colorClearNightText) textColor = R.color.colorSunnyText;
         cardColor = ContextCompat.getColor(holder.itemView.getContext(), cardColor);
         textColor = ContextCompat.getColor(holder.itemView.getContext(), textColor);
-        ((CardView)((LinearLayout) holder.itemView).getChildAt(0)).setCardBackgroundColor(cardColor);
+        ((CardView) ((LinearLayout) holder.itemView).getChildAt(0)).setCardBackgroundColor(cardColor);
         holder.iconDay.setTextColor(textColor);
         holder.iconEvening.setTextColor(textColor);
         holder.iconMorning.setTextColor(textColor);

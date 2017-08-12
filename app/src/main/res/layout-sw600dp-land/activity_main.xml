@@ -10,6 +10,7 @@
     <RelativeLayout
         android:id="@+id/navigation_layout"
         android:layout_width="@dimen/drawer_width"
+        android:elevation="16dp"
         android:layout_height="match_parent"
         android:background="@color/colorWhite">
 

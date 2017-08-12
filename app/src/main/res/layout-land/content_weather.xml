@@ -3,7 +3,7 @@
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
                                              xmlns:tools="http://schemas.android.com/tools"
                                              android:layout_width="match_parent"
-                                             android:layout_height="wrap_content"
+                                             android:layout_height="match_parent"
                                              android:orientation="vertical"
                                              tools:layout_editor_absoluteX="0dp"
                                              tools:layout_editor_absoluteY="81dp">
@@ -29,7 +29,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="72dp"
         android:gravity="center"
         android:textColor="@color/colorGreyMd600"
         android:textSize="60sp"
@@ -44,7 +44,6 @@
         android:id="@+id/fragment_weather_wind_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginStart="0dp"
@@ -53,7 +52,6 @@
 
         android:textSize="15sp"
         app:fontAsset="weather_icons.ttf"
-        app:layout_constraintBottom_toBottomOf="@+id/fragment_weather_type"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/fragment_weather_icon"
         app:layout_constraintTop_toTopOf="@+id/fragment_weather_icon"
@@ -110,7 +108,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="32dp"
         android:gravity="center"
         android:textColor="@color/colorGreyMd600"
         android:textSize="26sp"
@@ -118,7 +116,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintLeft_toRightOf="@+id/fragment_weather_icon"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fragment_weather_icon"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_weather_last_refresh"
         tools:text="27 °C"/>
 
     <View

@@ -19,8 +19,6 @@ import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface WeatherView extends MvpView {
     void setWeather(@NonNull WeatherModel weather, @NonNull WeatherType type);
-
     void stopRefreshing();
-
     void showForecast(Pair<LinkedHashMap<WeatherModel, WeatherType[]>, Settings> pair);
 }

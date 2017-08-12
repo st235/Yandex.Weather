@@ -21,6 +21,8 @@ import sasd97.java_blog.xyz.yandexweather.data.storages.PlacesDao;
 import sasd97.java_blog.xyz.yandexweather.data.storages.Storage;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
+import static sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi.days;
+
 /**
  * Created by alexander on 12/07/2017.
  */
@@ -78,7 +80,7 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public Observable<ResponseForecast16> getForecast16(@NonNull Place place) {
         return weatherApi.getForecast16(
-                place.getCoords().first, place.getCoords().second, apiKeys.first);
+                place.getCoords().first, place.getCoords().second, days, apiKeys.first);
     }
 
     @Override

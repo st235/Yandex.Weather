@@ -12,20 +12,22 @@ import sasd97.java_blog.xyz.yandexweather.data.models.weather.ResponseWeather;
  */
 
 public interface WeatherApi {
-    public static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
+    String base_url = "http://api.openweathermap.org/data/2.5/";
+    int days = 16;
 
     @GET("weather")
-    Observable<ResponseWeather> getWeather(@Query("lat") Double lat,
-                                           @Query("lon") Double lon,
+    Observable<ResponseWeather> getWeather(@Query("lat") double lat,
+                                           @Query("lon") double lon,
                                            @Query("appid") String apiKey);
 
     @GET("forecast")
-    Observable<ResponseForecast5> getForecast5(@Query("lat") Double lat,
-                                               @Query("lon") Double lon,
+    Observable<ResponseForecast5> getForecast5(@Query("lat") double lat,
+                                               @Query("lon") double lon,
                                                @Query("appid") String apiKey);
 
     @GET("forecast/daily")
-    Observable<ResponseForecast16> getForecast16(@Query("lat") Double lat,
-                                                 @Query("lon") Double lon,
+    Observable<ResponseForecast16> getForecast16(@Query("lat") double lat,
+                                                 @Query("lon") double lon,
+                                                 @Query("cnt") int cnt,
                                                  @Query("appid") String apiKey);
 }

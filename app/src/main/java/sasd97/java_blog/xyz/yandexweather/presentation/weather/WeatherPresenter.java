@@ -54,12 +54,6 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .compose(schedulers.getIoToMainTransformer())
                 .map(weatherModel -> weatherModel.setCorrectCity(place))
                 .subscribe(this::chooseWeather);
-
-        weatherInteractor.updateForecast16(place)
-                .zipWith(weatherInteractor.updateForecast5(place), this::zipWithWeatherTypes)
-                .compose(schedulers.getIoToMainTransformerSingle())
-                .map(this::addSettings)
-                .subscribe(getViewState()::showForecast);
     }
 
     @NonNull
@@ -88,6 +82,15 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .compose(schedulers.getIoToMainTransformer())
                 .map(weatherModel -> weatherModel.setCorrectCity(placesInteractor.getPlace()))
                 .subscribe(this::chooseWeather, Throwable::printStackTrace);
+    }
+
+    public void fetchForecast() {
+        Place place = placesInteractor.getPlace();
+        weatherInteractor.updateForecast16(place)
+                .zipWith(weatherInteractor.updateForecast5(place), this::zipWithWeatherTypes)
+                .compose(schedulers.getIoToMainTransformerSingle())
+                .map(this::addSettings)
+                .subscribe(getViewState()::showForecast);
     }
 
     public boolean isCelsius() {

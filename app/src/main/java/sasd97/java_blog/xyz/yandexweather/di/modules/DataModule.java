@@ -36,7 +36,7 @@ public class DataModule {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(WeatherApi.BASE_URL)
+                .baseUrl(WeatherApi.base_url)
                 .build();
     }
 
