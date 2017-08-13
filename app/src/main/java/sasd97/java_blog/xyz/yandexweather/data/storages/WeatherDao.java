@@ -14,12 +14,12 @@ import static sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel.WEAT
 
 @Dao
 public interface WeatherDao {
-    @Query("SELECT * FROM " + WEATHER + " WHERE uid IN (:placeId) ORDER BY updateTime DESC")
+    @Query("SELECT * FROM " + WEATHER + " WHERE placeId IN (:placeId) ORDER BY updateTime DESC")
     Single<List<WeatherModel>> getForecast(String placeId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertForecast(List<WeatherModel> forecast);
 
-    @Query("DELETE FROM " + WEATHER + " WHERE uid = (:placeId)")
+    @Query("DELETE FROM " + WEATHER + " WHERE placeId = (:placeId)")
     void removeForecast(String placeId);
 }

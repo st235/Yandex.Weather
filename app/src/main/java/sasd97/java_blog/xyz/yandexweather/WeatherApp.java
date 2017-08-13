@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDelegate;
 
 import com.evernote.android.job.JobManager;
+import com.facebook.stetho.Stetho;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import javax.inject.Inject;
@@ -52,6 +53,7 @@ public class WeatherApp extends Application {
         FontProvider.init(getAssets());
         AndroidThreeTen.init(this);
         onScheduleJob();
+        Stetho.initializeWithDefaults(this);
     }
 
     private void onScheduleJob() {

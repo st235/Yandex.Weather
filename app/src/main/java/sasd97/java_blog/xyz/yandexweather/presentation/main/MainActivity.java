@@ -298,7 +298,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
                 })
                 .map(CharSequence::toString)
                 .flatMap(s -> mainPresenter.search(s))
-                .subscribe();
+                .subscribe(strings -> {}, Throwable::printStackTrace);
     }
 
     @Override

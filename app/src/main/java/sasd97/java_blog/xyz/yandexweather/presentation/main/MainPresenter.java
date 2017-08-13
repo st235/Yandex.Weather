@@ -143,7 +143,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
                         .concatWith(settingsInteractor.savePlace(place)) :
                         settingsInteractor.savePlace(place))
                 .doOnComplete(this::openWeatherFragment)
-                .subscribe();
+                .subscribe(() -> {}, Throwable::printStackTrace);
     }
 
 
@@ -154,6 +154,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 .compose(schedulers.getIoToMainTransformerCompletable())
                 .delay(250, TimeUnit.MILLISECONDS)
                 .doOnComplete(this::openWeatherFragment)
-                .subscribe();
+                .subscribe(() -> {}, Throwable::printStackTrace);
     }
 }

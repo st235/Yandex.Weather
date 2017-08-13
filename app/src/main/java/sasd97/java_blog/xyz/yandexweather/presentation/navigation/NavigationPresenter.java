@@ -37,12 +37,12 @@ public class NavigationPresenter extends MvpPresenter<NavigationView> {
         placesInteractor.getFavoritePlaces()
                 .compose(schedulers.getComputationToMainTransformerSingle())
                 .doOnSuccess(getViewState()::showPlaces)
-                .subscribe();
+                .subscribe(places -> {}, Throwable::printStackTrace);
     }
 
     public void removeSelectedPlaces(List<Place> places) {
         placesInteractor.removePlacesFromFavorites(places)
                 .compose(schedulers.getIoToMainTransformerCompletable())
-                .subscribe();
+                .subscribe(() -> {}, Throwable::printStackTrace);
     }
 }

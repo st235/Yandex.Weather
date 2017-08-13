@@ -49,6 +49,13 @@ public class Place {
         this.time = time;
     }
 
+    @Ignore
+    public Place(String placeId, Pair<Double, Double> coords, int time) {
+        this.placeId = placeId;
+        this.coords = coords;
+        this.time = time;
+    }
+
     public int getTime() {
         return time;
     }
@@ -71,6 +78,6 @@ public class Place {
 
     @Override
     public String toString() {
-        return name + " " + coords.first.toString() + " " + coords.second.toString();
+        return name + " *** " + coords.first.toString() + " " + coords.second.toString() + " " + placeId;
     }
 }

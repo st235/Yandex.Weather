@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Set;
 
 import butterknife.BindBool;
 import butterknife.BindView;
@@ -181,8 +182,10 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             LinkedHashMap<WeatherModel, WeatherType[]> rv1items;
             LinkedHashMap<WeatherModel, WeatherType[]> rv2items;
             rv1items = new LinkedHashMap<>(5);
+            Set<WeatherModel> weatherModelSet = pair.first.keySet();
+            if (weatherModelSet.size() == 0) return;
             for (int i = 0; i < 5; i++) {
-                WeatherModel key = (WeatherModel) pair.first.keySet().toArray()[i];
+                WeatherModel key = (WeatherModel) weatherModelSet.toArray()[i];
                 rv1items.put(key, pair.first.get(key));
             }
 

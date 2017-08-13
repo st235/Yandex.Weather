@@ -165,7 +165,7 @@ public class AppRepositoryTest {
     public void savePlace() {
         Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
         Place place = new Place("Москва", coords);
-        repo.savePlace(place).subscribe();
+        repo.savePlace(place).subscribe(() -> {}, Throwable::printStackTrace);
         verify(prefsStorage, times(1)).put(PLACE_PREFS_KEY, place);
     }
 
