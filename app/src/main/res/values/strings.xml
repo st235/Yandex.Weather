@@ -81,6 +81,7 @@
     <string name="settings_fragment_available_intervals_ok">OK</string>
     <string name="settings_fragment_available_intervals_switcher">Enable background updates</string>
     <string name="navigation_fragment_settings">Settings</string>
+    <string name="today_card">Today, </string>
 
     <string-array name="settings_fragment_available_interval_titles">
         <item>15 minutes</item>

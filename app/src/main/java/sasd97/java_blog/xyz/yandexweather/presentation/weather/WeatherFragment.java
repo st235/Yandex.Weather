@@ -38,7 +38,7 @@ import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerPagerAdapter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
-import sasd97.java_blog.xyz.yandexweather.utils.PagerAction;
+import sasd97.java_blog.xyz.yandexweather.utils.ViewPagerAction;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 
 import static sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerPagerAdapter.getTagFor;
@@ -48,10 +48,10 @@ import static sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.Recy
  */
 
 public class WeatherFragment extends MvpAppCompatFragment implements WeatherView,
-        AppBarLayout.OnOffsetChangedListener, PagerAction {
+        AppBarLayout.OnOffsetChangedListener, ViewPagerAction {
 
     public static final String TAG_WEATHER = "TAG_WEATHER";
-    private SimpleDateFormat fmt = new SimpleDateFormat("E, MMM dd, HH:mm", Locale.getDefault());
+    private SimpleDateFormat fmt = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     @BindView(R.id.fragment_weather_icon) TextView weatherIcon;
     @BindView(R.id.fragment_weather_type) TextView weatherType;
@@ -124,7 +124,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         if (!isHorizontal) onVerticalMode();
         if (isTabletHorizontal) {
             assert pager != null;
-            pagerAdapter = new RecyclerPagerAdapter(getFragmentManager());
+            pagerAdapter = new RecyclerPagerAdapter(getChildFragmentManager());
             pager.setAdapter(pagerAdapter);
         } else {
             presenter.fetchForecast();
@@ -172,8 +172,8 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @Override
     public void showForecast(Pair<LinkedHashMap<WeatherModel, WeatherType[]>, Settings> pair) {
         if (isTabletHorizontal) {
-            RecyclerFragment recyclerFragment1 = (RecyclerFragment) getFragmentManager().findFragmentByTag(getTagFor(0));
-            RecyclerFragment recyclerFragment2 = (RecyclerFragment) getFragmentManager().findFragmentByTag(getTagFor(1));
+            RecyclerFragment recyclerFragment1 = (RecyclerFragment) getChildFragmentManager().findFragmentByTag(getTagFor(0));
+            RecyclerFragment recyclerFragment2 = (RecyclerFragment) getChildFragmentManager().findFragmentByTag(getTagFor(1));
             if (recyclerFragment1 == null || recyclerFragment2 == null) return;
             LinkedHashMap<WeatherModel, WeatherType[]> rv1items;
             LinkedHashMap<WeatherModel, WeatherType[]> rv2items;
@@ -246,7 +246,8 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     }
 
     private String obtainRefreshTime(long updateTime) {
-        return fmt.format(new Date(updateTime));
+        String formatted = fmt.format(new Date(updateTime));
+        return getString(R.string.today_card) + formatted;
     }
 
     @Override

@@ -10,4 +10,5 @@ public interface PlacesActions {
     void onPlaceAdded(Place place);
     void removeSelectedPlaces();
     void cancelSelection();
+    void setSlidingPanelOpen(boolean isOpen);
 }

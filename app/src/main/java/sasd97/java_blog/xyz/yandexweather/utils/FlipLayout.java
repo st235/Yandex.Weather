@@ -99,7 +99,6 @@ public class FlipLayout extends FrameLayout
         }
 
         isFlipped = !isFlipped;
-        if (onSelectedListener != null) onSelectedListener.OnSelected(isFlipped);
     }
 
     public void setOnFlipListener(OnFlipListener listener) {
@@ -166,7 +165,8 @@ public class FlipLayout extends FrameLayout
 
     @Override
     public void onClick(View view) {
-        toggleDown();
+//        toggleDown();
+        if (onSelectedListener != null) onSelectedListener.OnSelected(!isFlipped);
     }
 
     @Override
@@ -186,7 +186,7 @@ public class FlipLayout extends FrameLayout
 
     @Override
     public void onSwipeDown() {
-        toggleDown();
+//        toggleDown();
     }
 
     public void setOnSelectedListener(@Nullable OnSelectedListener onSelectedListener) {

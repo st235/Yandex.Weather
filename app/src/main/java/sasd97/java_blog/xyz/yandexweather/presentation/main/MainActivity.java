@@ -6,10 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.MatrixCursor;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -50,12 +50,15 @@ import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
 import sasd97.java_blog.xyz.yandexweather.utils.NavigationFragmentAction;
 import sasd97.java_blog.xyz.yandexweather.utils.PlacesActions;
+import sasd97.java_blog.xyz.yandexweather.utils.ViewPagerAction;
+import sasd97.java_blog.xyz.yandexweather.utils.YandexListAdapter;
 
 import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment.TAG_NAVIGATION;
+import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment.TAG_WEATHER;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView,
         SearchView.OnSuggestionListener, View.OnFocusChangeListener,
-        ElevationScrollListener, NavigationFragmentAction {
+        ElevationScrollListener, NavigationFragmentAction, ViewPagerAction {
 
     private static final String CITY = "city";
     public static final String TOOLBAR_VISIBILITY_KEY = "toolbar_visibility";
@@ -69,6 +72,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.navigation_layout) @Nullable RelativeLayout navigationLayout;
     @BindView(R.id.drawer_layout) @Nullable DrawerLayout drawer;
+    @BindView(R.id.collapsing_toolbar) @Nullable CollapsingToolbarLayout collapsingToolbar;
     @BindView(R.id.sliding_panel_layout) @Nullable SlidingPaneLayout slidingPaneLayout;
     @BindView(R.id.part_selected_toolbar_layout) RelativeLayout toolbarSelected;
     @BindView(R.id.part_selected_toolbar_delete) ImageView btnDelete;
@@ -147,19 +151,23 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         slidingPaneLayout.setPanelSlideListener(new SlidingPaneLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                //// TODO: 8/7/2017 move numbers to resources
                 ((NavigationFragment) getSupportFragmentManager()
                         .findFragmentByTag(TAG_NAVIGATION)).makeNavigationView(slideOffset);
-                toolbar.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()) * (1 - slideOffset));
-                toolbarSelected.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()) * (1 - slideOffset));
+                int baseWidth = getResources().getDimensionPixelSize(R.dimen.drawer_minus_panel_width);
+                toolbar.setTranslationX(-baseWidth * (1 - slideOffset));
+                toolbarSelected.setTranslationX(-baseWidth * (1 - slideOffset));
             }
 
             @Override
             public void onPanelOpened(View panel) {
+                ((PlacesActions) getSupportFragmentManager()
+                        .findFragmentByTag(TAG_NAVIGATION)).setSlidingPanelOpen(true);
             }
 
             @Override
             public void onPanelClosed(View panel) {
+                ((PlacesActions) getSupportFragmentManager()
+                        .findFragmentByTag(TAG_NAVIGATION)).setSlidingPanelOpen(false);
                 if (toolbar.hasExpandedActionView()) toolbar.collapseActionView();
             }
         });
@@ -202,7 +210,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     private void initSearchSuggestsAdapter() {
         final String[] from = new String[]{CITY};
         final int[] to = new int[]{android.R.id.text1};
-        cursorAdapter = new SimpleCursorAdapter(this, R.layout.item_search_suggest,
+        cursorAdapter = new YandexListAdapter(this, R.layout.item_search_suggest,
                 null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
     }
 
@@ -393,24 +401,17 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
 
     private void showToolbarSelected(boolean isToolbarSelectedVisible) {
         this.isToolbarSelectedVisible = isToolbarSelectedVisible;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            toolbar.animate().alpha(isToolbarSelectedVisible ? 0 : 1)
-                    .withStartAction(() -> {
-                        if (!isToolbarSelectedVisible) toolbar.setVisibility(View.VISIBLE);
-                    })
-                    .withEndAction(() -> {
-                        if (isToolbarSelectedVisible) toolbar.setVisibility(View.INVISIBLE);
-                    });
-            toolbarSelected.animate()
-                    .alpha(isToolbarSelectedVisible ? 1 : 0)
-                    .withStartAction(() -> toolbarSelected.setVisibility(
-                            isToolbarSelectedVisible ? View.VISIBLE : View.GONE));
-        } else {
-            toolbarSelected.setVisibility(isToolbarSelectedVisible ? View.VISIBLE : View.GONE);
-            toolbarSelected.setAlpha(isToolbarSelectedVisible ? 1 : 0);
-            toolbar.setVisibility(!isToolbarSelectedVisible ? View.VISIBLE : View.INVISIBLE);
-            toolbar.setAlpha(!isToolbarSelectedVisible ? 1 : 0);
-        }
+        ViewCompat.animate(toolbar).alpha(isToolbarSelectedVisible ? 0 : 1)
+                .withStartAction(() -> {
+                    if (!isToolbarSelectedVisible) toolbar.setVisibility(View.VISIBLE);
+                })
+                .withEndAction(() -> {
+                    if (isToolbarSelectedVisible) toolbar.setVisibility(View.INVISIBLE);
+                });
+        ViewCompat.animate(toolbarSelected)
+                .alpha(isToolbarSelectedVisible ? 1 : 0)
+                .withStartAction(() -> toolbarSelected.setVisibility(
+                        isToolbarSelectedVisible ? View.VISIBLE : View.GONE));
     }
 
     @Override
@@ -423,5 +424,27 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         isToolbarSelectedVisible = savedInstanceState.getBoolean(TOOLBAR_VISIBILITY_KEY);
+    }
+
+    @Override
+    public void onPagerFragmentAttached() {
+        ((ViewPagerAction) getSupportFragmentManager()
+                .findFragmentByTag(TAG_WEATHER)).onPagerFragmentAttached();
+    }
+
+    @Override
+    public void onNextFabClick() {
+        ((ViewPagerAction) getSupportFragmentManager()
+                .findFragmentByTag(TAG_WEATHER)).onNextFabClick();
+    }
+
+    @Override
+    public void onPrevFabClick() {
+        ((ViewPagerAction) getSupportFragmentManager()
+                .findFragmentByTag(TAG_WEATHER)).onPrevFabClick();
+    }
+
+    public boolean isSlidingPanelOpen() {
+        return slidingPaneLayout == null || slidingPaneLayout.isOpen();
     }
 }

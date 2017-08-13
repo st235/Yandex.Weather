@@ -31,6 +31,7 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
     private OnAddPlaceClickListener onAddPlaceListener;
     private OnPlaceSelectListener onPlaceSelectListener;
     private OnPlaceClickListener onPlaceClickListener;
+    private boolean slidingPanelOpen;
 
     public PlacesRecyclerAdapter setOnAddPlaceListener(OnAddPlaceClickListener addPlaceClickListener) {
         this.onAddPlaceListener = addPlaceClickListener;
@@ -119,12 +120,17 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
             holder.tvPlaceName.setText(places.get(position).getName());
             if (selectedPlaces.get(position) != null) holder.flipLayout.setFlipped(true);
             else holder.flipLayout.setFlipped(false);
+            holder.itemView.setOnClickListener(v -> swap(position));
             holder.flipLayout.setOnSelectedListener(selected -> {
+                if (!slidingPanelOpen) {
+                    swap(position);
+                    return;
+                }
                 if (selected) selectedPlaces.put(position, places.get(position));
                 else selectedPlaces.remove(position);
                 onPlaceSelectListener.onPlaceSelect(selectedPlaces.size());
+                holder.flipLayout.toggleDown();
             });
-            holder.itemView.setOnClickListener(v -> swap(position));
         }
     }
 
@@ -137,8 +143,6 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
         places.get(0).setTime(oldSelectedTime);
         places.set(position, places.get(0));
         places.set(0, selected);
-//                notifyItemMoved(position,0);
-//                notifyItemMoved(1,position);
         notifyItemRangeChanged(0, places.size());
     }
 
@@ -157,6 +161,10 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
 
     public void setSelectedPlaces(SerializableSparseArray<Place> selectedPlaces) {
         this.selectedPlaces = selectedPlaces;
+    }
+
+    public void setSlidingPanelOpen(boolean slidingPanelOpen) {
+        this.slidingPanelOpen = slidingPanelOpen;
     }
 
     public void setPlaces(List<Place> places) {

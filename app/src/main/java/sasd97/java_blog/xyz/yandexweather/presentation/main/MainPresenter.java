@@ -78,11 +78,6 @@ public class MainPresenter extends MvpPresenter<MainView> {
         menuItemsStack.pop();
     }
 
-    /**
-     * IMHO Alexander`s FragmentMananager wrapper implementation is very complicated and
-     * over-engineered sometimes. So navigation will not be so plain and predictable as I want.
-     * 💩
-     */
     public void navigateWeatherTo(@IdRes int id) {
         if (isSameFragmentAtTheTop(id)) {
             getViewState().closeDrawer();

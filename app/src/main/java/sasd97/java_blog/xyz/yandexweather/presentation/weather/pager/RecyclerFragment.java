@@ -19,10 +19,8 @@ import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.ForecastRecyclerAdapter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
-import sasd97.java_blog.xyz.yandexweather.utils.PagerAction;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
-
-import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment.TAG_WEATHER;
+import sasd97.java_blog.xyz.yandexweather.utils.ViewPagerAction;
 
 /**
  * Created by Maksim Sukhotski on 8/12/2017.
@@ -76,10 +74,10 @@ public class RecyclerFragment extends Fragment {
         fab.setOnClickListener(v -> {
             if (getArguments().getBoolean(PAGE_LAST_ARG)) {
                 gridLayoutManager.scrollToPositionWithOffset(0, 0);
-                ((PagerAction) getFragmentManager().findFragmentByTag(TAG_WEATHER)).onPrevFabClick();
+                ((ViewPagerAction)getActivity()).onPrevFabClick();
                 fab.hide();
             } else {
-                ((PagerAction) getFragmentManager().findFragmentByTag(TAG_WEATHER)).onNextFabClick();
+                ((ViewPagerAction)getActivity()).onNextFabClick();
             }
         });
         forecastRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -111,8 +109,7 @@ public class RecyclerFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getArguments().getBoolean(PAGE_LAST_ARG)) {
-            ((PagerAction) getFragmentManager()
-                    .findFragmentByTag(TAG_WEATHER)).onPagerFragmentAttached();
+            ((ViewPagerAction)getActivity()).onPagerFragmentAttached();
         }
     }
 

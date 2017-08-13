@@ -17,9 +17,9 @@
             android:id="@+id/fragment_weather_card"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="16dp"
+            android:layout_marginTop="@dimen/content_outer_margin"
+            android:layout_marginBottom="@dimen/content_outer_margin"
             android:layout_marginLeft="@dimen/content_outer_margin"
-            android:layout_marginRight="@dimen/content_outer_margin"
             app:cardCornerRadius="@dimen/card_corner_radius"
             android:layout_weight="1">
 
@@ -29,6 +29,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_weather_recycler_forecast"
             android:layout_width="match_parent"
+            android:paddingTop="16dp"
+            android:clipToPadding="false"
+            android:layout_marginLeft="8dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"

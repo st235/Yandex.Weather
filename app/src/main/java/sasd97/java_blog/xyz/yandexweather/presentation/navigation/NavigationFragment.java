@@ -119,11 +119,10 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     }
 
     private void initOnScrollListener() {
-        int toolbarElevation = AndroidMath.dp2px(isTablet ? 4 : 0, getResources());
-        int toolbarElevationBase = AndroidMath.dp2px(1, getResources());
-        int navViewElevation = AndroidMath.dp2px(18, getResources());
-        int navViewElevationBase = AndroidMath.dp2px(6, getResources());
-        //// TODO: 8/6/2017 move to resources
+        int toolbarElevation = getResources().getDimensionPixelSize(R.dimen.toolbar_elevation);
+        int toolbarElevationBase = getResources().getDimensionPixelSize(R.dimen.toolbar_elevation_base);
+        int navViewElevation = getResources().getDimensionPixelSize(R.dimen.nav_view_elevation);
+        int navViewElevationBase = getResources().getDimensionPixelSize(R.dimen.nav_view_elevation_base);
         onScrollListener = new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(final RecyclerView recyclerView, final int newState) {
@@ -168,11 +167,17 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
 
     @Override
     public void showPlaces(List<Place> places) {
+        boolean panelOpen = ((NavigationFragmentAction) getActivity()).isSlidingPanelOpen();
         if (placesRecyclerAdapter == null) {
             placesRecyclerAdapter = new PlacesRecyclerAdapter(places);
         } else {
             placesRecyclerAdapter.setPlaces(places);
             placesRecyclerAdapter.notifyDataSetChanged();
+        }
+        if (!isTabletVertical) {
+            placesRecyclerAdapter.setSlidingPanelOpen(true);
+        } else {
+            placesRecyclerAdapter.setSlidingPanelOpen(!panelOpen);
         }
         placesRecyclerAdapter.setOnAddPlaceListener(() ->
                 ((NavigationFragmentAction) getActivity()).onPlaceAdd());
@@ -206,6 +211,11 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     }
 
     @Override
+    public void setSlidingPanelOpen(boolean isOpen) {
+        placesRecyclerAdapter.setSlidingPanelOpen(isOpen);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         if (null != placesRecyclerAdapter) {
             outState.putSerializable(SPARSE_ARRAY_KEY, placesRecyclerAdapter.getSelectedPlaces());
@@ -228,6 +238,7 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
 
     public void onSearchViewExpand(boolean isExpand) {
         View view = layoutManager.findViewByPosition(placesRecyclerAdapter.getItemCount() - 1);
+        if (view == null) return;
         if (isExpand) {
             ViewCompat.animate(view).alpha(0).start();
         } else {

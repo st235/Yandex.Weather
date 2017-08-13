@@ -10,4 +10,5 @@ public interface NavigationFragmentAction {
     void onPlaceAdd();
     void onPlaceSelect(int size);
     void onPlaceClick(Place place, Place toReplace);
+    boolean isSlidingPanelOpen();
 }
