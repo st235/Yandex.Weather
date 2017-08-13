@@ -94,8 +94,12 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     }
 
     @Override
-    public Single<List<WeatherModel>> getForecast(String placeId) {
-        return repository.getForecast(placeId);
+    public Single<LinkedHashMap<WeatherModel, WeatherType[]>> getForecast(String placeId) {
+        return repository.getForecast(placeId)
+                .toObservable()
+                .flatMapIterable(weatherModels -> weatherModels)
+                .map(this::addWeatherType)
+                .collectInto(new LinkedHashMap<>(), (map, pair) -> map.put(pair.first, pair.second));
     }
 
     @Override

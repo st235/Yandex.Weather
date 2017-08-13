@@ -55,6 +55,14 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .compose(schedulers.getIoToMainTransformer())
                 .map(weatherModel -> weatherModel.setCorrectCity(place))
                 .subscribe(this::chooseWeather);
+        getForecastFromDb();
+    }
+
+    public void getForecastFromDb() {
+        weatherInteractor.getForecast(placesInteractor.getPlace().getPlaceId())
+                .compose(schedulers.getComputationToMainTransformerSingle())
+                .map(this::addSettings)
+                .subscribe(getViewState()::showForecast);
     }
 
     @NonNull
@@ -96,7 +104,9 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     }
 
     private void saveForecastToDb(LinkedHashMap<WeatherModel, WeatherType[]> hashMap) {
-        weatherInteractor.saveForecast(new ArrayList<>(hashMap.keySet()))
+        ArrayList<WeatherModel> forecast = new ArrayList<>(hashMap.keySet());
+        forecast.forEach(weatherModel -> weatherModel.setPlaceId(placesInteractor.getPlace().getPlaceId()));
+        weatherInteractor.saveForecast(forecast)
                 .compose(schedulers.getIoToMainTransformerCompletable())
                 .subscribe();
     }

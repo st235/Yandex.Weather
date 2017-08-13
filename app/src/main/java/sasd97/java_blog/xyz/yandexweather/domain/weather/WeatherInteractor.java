@@ -24,7 +24,7 @@ public interface WeatherInteractor {
     Single<LinkedHashMap<WeatherModel, WeatherType[]>> updateForecast16(@NonNull Place place);
 
     //db
-    Single<List<WeatherModel>> getForecast(String placeId);
+    Single<LinkedHashMap<WeatherModel, WeatherType[]>> getForecast(String placeId);
     Completable saveForecast(List<WeatherModel> forecast);
     Completable removeForecast(String placeId);
 

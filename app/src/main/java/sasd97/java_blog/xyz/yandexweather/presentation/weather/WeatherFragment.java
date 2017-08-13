@@ -105,7 +105,10 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,
                 R.color.colorPrimaryDark, R.color.colorPrimary);
-        swipeRefreshLayout.setOnRefreshListener(presenter::fetchWeather);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            presenter.fetchWeather();
+            presenter.fetchForecast();
+        });
 
         int orientation = (isTabletHorizontal) ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL;
         layoutManager = new LinearLayoutManager(getActivity(), orientation, false);
@@ -127,7 +130,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             pagerAdapter = new RecyclerPagerAdapter(getChildFragmentManager());
             pager.setAdapter(pagerAdapter);
         } else {
-            presenter.fetchForecast();
+//            presenter.fetchForecast();
         }
     }
 
@@ -276,7 +279,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
     @Override
     public void onPagerFragmentAttached() {
-        presenter.fetchForecast();
+        presenter.getForecastFromDb();
     }
 
     @Override
