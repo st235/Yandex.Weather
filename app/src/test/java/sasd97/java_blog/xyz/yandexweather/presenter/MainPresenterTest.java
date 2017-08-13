@@ -1,12 +1,16 @@
 package sasd97.java_blog.xyz.yandexweather.presenter;
 
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.util.Pair;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.threeten.bp.Instant;
 
 import io.reactivex.Observable;
+import io.reactivex.internal.operators.completable.CompletableFromAction;
 import sasd97.java_blog.xyz.yandexweather.R;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Predictions;
 import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractor;
@@ -17,7 +21,6 @@ import sasd97.java_blog.xyz.yandexweather.presentation.main.MainView;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,6 +37,8 @@ public class MainPresenterTest {
     private RxSchedulers rxSchedulers;
     private int settingsFragmentId;
     private int weatherFragmentId;
+    private SettingsInteractor settingsInteractor;
+    private String placeId;
 
     @Before
     public void setup() {
@@ -41,7 +46,9 @@ public class MainPresenterTest {
         FragmentActivity fragmentActivity = mock(FragmentActivity.class);
         rxSchedulers = mock(RxSchedulers.class);
         placesInteractor = mock(PlacesInteractor.class);
-        SettingsInteractor settingsInteractor = mock(SettingsInteractor.class);
+        settingsInteractor = mock(SettingsInteractor.class);
+        placeId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
+        when(rxSchedulers.getIoToMainTransformer()).thenReturn(objectObservable -> objectObservable);
 
         presenter = new MainPresenter(rxSchedulers, placesInteractor, settingsInteractor);
         presenter.setWeatherRouter(new AppFragmentRouter(R.id.fragment_container_weather, fragmentActivity));
@@ -66,7 +73,6 @@ public class MainPresenterTest {
         PlacesResponse placesResponse = new PlacesResponse(somePredictions, "OK");
 
         when(placesInteractor.getPlaces(query)).thenReturn(Observable.just(placesResponse));
-        when(rxSchedulers.getIoToMainTransformer()).thenReturn(objectObservable -> objectObservable);
 
         presenter.search(query).test()
                 .awaitTerminalEvent();
@@ -84,5 +90,30 @@ public class MainPresenterTest {
     public void replaceFragment() {
         presenter.replaceWeatherFragment(settingsFragmentId);
         verify(view, times(1)).closeDrawer();
+    }
+
+    @Test
+    public void navigateWeatherTo() {
+        presenter.navigateWeatherTo(settingsFragmentId);
+        verify(view, times(1)).closeDrawer();
+    }
+
+    @Test
+    public void saveCurrentPlace() {
+        Place place = new Place(placeId, "Москва",
+                new Pair<>(0.0, 0.0), (int) Instant.now().getEpochSecond());
+        Place toReplace = new Place("ChIJybDUc_xKtUYRTM9XV8zWRD0", "Москва",
+                new Pair<>(0.0, 0.0), (int) Instant.now().getEpochSecond());
+
+        when(rxSchedulers.getIoToMainTransformerCompletable()).thenReturn(t -> t);
+        when(placesInteractor.savePlaceToFavorites(toReplace)).thenReturn(new CompletableFromAction(() -> {
+        }));
+        when(placesInteractor.savePlaceToFavorites(place)).thenReturn(new CompletableFromAction(() -> {
+        }));
+        when(settingsInteractor.savePlace(place)).thenReturn(new CompletableFromAction(() -> {
+        }));
+
+        presenter.saveCurrentPlace(place, toReplace);
+        verify(placesInteractor, times(1)).savePlaceToFavorites(place);
     }
 }

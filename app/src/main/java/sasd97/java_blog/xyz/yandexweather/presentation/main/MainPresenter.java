@@ -127,7 +127,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
         this.placesResponse = placesResponse;
     }
 
-    void saveNewPlace(int position, boolean addToFavorites) {
+    public void saveNewPlace(int position, boolean addToFavorites) {
         placesInteractor.getPlaceDetails(placesResponse.getPlaceIdAt(position))
                 .compose(schedulers.getIoToMainTransformer())
                 .map(placeDetailsResponse -> new Place(

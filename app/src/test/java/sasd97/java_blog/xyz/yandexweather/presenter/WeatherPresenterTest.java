@@ -24,7 +24,6 @@ import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherView;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
-import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -125,16 +124,12 @@ public class WeatherPresenterTest {
 
     @Test
     public void fetchForecast() {
+        ArrayList<WeatherModel> forecast = new ArrayList<>();
 
         presenter.fetchForecast();
         verify(weatherInteractor, times(3)).getTemperatureUnits();
         verify(weatherInteractor, times(2)).updateForecast16(place);
         verify(placesInteractor, times(6)).getPlace();
-        ArrayList<WeatherModel> forecast = new ArrayList<>();
         verify(weatherInteractor, times(2)).saveForecast(forecast);
-        Settings settings = new Settings(weatherInteractor.getTemperatureUnits(),
-                weatherInteractor.getSpeedUnits(),
-                weatherInteractor.getPressureUnits());
-        LinkedHashMap<WeatherModel, WeatherType[]> hashMap = new LinkedHashMap<>();
     }
 }
