@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
@@ -90,6 +91,21 @@ public class WeatherInteractorImpl implements WeatherInteractor {
                 .map(this::addWeatherType)
                 .collectInto(new LinkedHashMap<>(), (map, pair) -> map.put(pair.first, pair.second));
                 /*pair.first is weather, pair.second is weather type*/
+    }
+
+    @Override
+    public Single<List<WeatherModel>> getForecast(String placeId) {
+        return repository.getForecast(placeId);
+    }
+
+    @Override
+    public Completable saveForecast(List<WeatherModel> forecast) {
+        return repository.insertForecast(forecast);
+    }
+
+    @Override
+    public Completable removeForecast(String placeId) {
+        return repository.removeForecast(placeId);
     }
 
     private Pair<WeatherModel, WeatherType[]> addWeatherType(@NonNull WeatherModel weather) {

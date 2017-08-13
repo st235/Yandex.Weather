@@ -38,6 +38,9 @@ public interface AppRepository {
     Single<List<Place>> getFavoritePlaces();
     Completable insertPlace(Place place);
     Completable removePlaces(List<Place> places);
+    Single<List<WeatherModel>> getForecast(String placeId);
+    Completable insertForecast(List<WeatherModel> forecast);
+    Completable removeForecast(String placeId);
 
     //cache
     String getCachedWeather(@NonNull Place place);

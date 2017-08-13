@@ -6,6 +6,7 @@ import android.support.v4.util.Pair;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -89,9 +90,17 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
         weatherInteractor.updateForecast16(place)
                 .zipWith(weatherInteractor.updateForecast5(place), this::zipWithWeatherTypes)
                 .compose(schedulers.getIoToMainTransformerSingle())
+                .doOnSuccess(this::saveForecastToDb)
                 .map(this::addSettings)
                 .subscribe(getViewState()::showForecast);
     }
+
+    private void saveForecastToDb(LinkedHashMap<WeatherModel, WeatherType[]> hashMap) {
+        weatherInteractor.saveForecast(new ArrayList<>(hashMap.keySet()))
+                .compose(schedulers.getIoToMainTransformerCompletable())
+                .subscribe();
+    }
+
 
     public boolean isCelsius() {
         return weatherInteractor.getTemperatureUnits() == ConvertersConfig.TEMPERATURE_CELSIUS;

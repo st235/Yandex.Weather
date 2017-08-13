@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
@@ -21,6 +22,11 @@ public interface WeatherInteractor {
 
     Single<List<WeatherType>> updateForecast5(@NonNull Place place);
     Single<LinkedHashMap<WeatherModel, WeatherType[]>> updateForecast16(@NonNull Place place);
+
+    //db
+    Single<List<WeatherModel>> getForecast(String placeId);
+    Completable saveForecast(List<WeatherModel> forecast);
+    Completable removeForecast(String placeId);
 
     int getTemperatureUnits();
     int getPressureUnits();

@@ -20,6 +20,7 @@ import sasd97.java_blog.xyz.yandexweather.data.storages.AppDatabase;
 import sasd97.java_blog.xyz.yandexweather.data.storages.CacheStorage;
 import sasd97.java_blog.xyz.yandexweather.data.storages.PlacesDao;
 import sasd97.java_blog.xyz.yandexweather.data.storages.PrefsStorage;
+import sasd97.java_blog.xyz.yandexweather.data.storages.WeatherDao;
 
 /**
  * Created by alexander on 13/07/2017.
@@ -93,5 +94,11 @@ public class DataModule {
     @Provides
     PlacesDao providePlacesDao(AppDatabase database) {
         return database.placesDao();
+    }
+
+    @Singleton
+    @Provides
+    WeatherDao provideWeatherDao(AppDatabase database) {
+        return database.weatherDao();
     }
 }

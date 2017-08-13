@@ -17,14 +17,13 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 
 public interface PlacesInteractor {
     Observable<PlacesResponse> getPlaces(@NonNull String s);
-
     Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId);
 
     @NonNull
     Place getPlace();
 
-    Completable savePlaceToFavorites(Place place);
+    //db
     Single<List<Place>> getFavoritePlaces();
-
+    Completable savePlaceToFavorites(Place place);
     Completable removePlacesFromFavorites(List<Place> places);
 }

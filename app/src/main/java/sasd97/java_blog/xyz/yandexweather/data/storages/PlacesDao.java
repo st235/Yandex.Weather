@@ -11,9 +11,11 @@ import java.util.List;
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 
+import static sasd97.java_blog.xyz.yandexweather.data.models.places.Place.PLACES_TABLE;
+
 @Dao
 public interface PlacesDao {
-    @Query("SELECT * FROM Places ORDER BY time DESC")
+    @Query("SELECT * FROM " + PLACES_TABLE + " ORDER BY time DESC")
     Single<List<Place>> getPlaces();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

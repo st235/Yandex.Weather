@@ -15,9 +15,10 @@ import sasd97.java_blog.xyz.yandexweather.data.storages.RoomTypeConverters;
  * Created by Maksim Sukhotski on 7/25/2017.
  */
 
-@Entity(tableName = "Places")
+@Entity(tableName = Place.PLACES_TABLE)
 @TypeConverters(RoomTypeConverters.class)
 public class Place {
+    public static final String PLACES_TABLE = "Places";
     @PrimaryKey
     @SerializedName("place_id")
     @Expose

@@ -19,6 +19,7 @@ import sasd97.java_blog.xyz.yandexweather.data.net.PlacesApi;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 import sasd97.java_blog.xyz.yandexweather.data.storages.PlacesDao;
 import sasd97.java_blog.xyz.yandexweather.data.storages.Storage;
+import sasd97.java_blog.xyz.yandexweather.data.storages.WeatherDao;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
 import static sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi.days;
@@ -35,13 +36,16 @@ public final class AppRepositoryImpl implements AppRepository {
     private Storage<String> prefsStorage;
     private Pair<String, String> apiKeys;
     private PlacesDao placesDao;
+    private WeatherDao weatherDao;
 
     public AppRepositoryImpl(@NonNull PlacesDao placesDao,
+                             @NonNull WeatherDao weatherDao,
                              @NonNull WeatherApi weatherApi,
                              @NonNull PlacesApi placesApi,
                              @NonNull Pair<String, String> apiKeys,
                              @NonNull Storage<String> cacheStorage,
                              @NonNull Storage<String> prefsStorage) {
+        this.weatherDao = weatherDao;
         this.placesDao = placesDao;
         this.weatherApi = weatherApi;
         this.placesApi = placesApi;
@@ -106,6 +110,21 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public Completable removePlaces(List<Place> places) {
         return new CompletableFromAction(() -> placesDao.removePlaces(places));
+    }
+
+    @Override
+    public Single<List<WeatherModel>> getForecast(String placeId) {
+        return weatherDao.getForecast(placeId);
+    }
+
+    @Override
+    public Completable insertForecast(List<WeatherModel> forecast) {
+        return Completable.fromAction(() -> weatherDao.insertForecast(forecast));
+    }
+
+    @Override
+    public Completable removeForecast(String placeId) {
+        return new CompletableFromAction(() -> weatherDao.removeForecast(placeId));
     }
 
     @Override

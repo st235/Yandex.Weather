@@ -1,5 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.domain.models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
@@ -17,7 +19,16 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
  * Created by alexander on 14/07/2017.
  */
 
+@Entity(tableName = "Weather")
 public class WeatherModel {
+    public static final String WEATHER = "Weather";
+
+    @Expose
+    @PrimaryKey(autoGenerate = true)
+    private long uid;
+
+    @Expose
+    private String placeId;
 
     @Expose
     private boolean isForecast;
@@ -85,6 +96,9 @@ public class WeatherModel {
     @Expose
     private String descriptionLocalized;
 
+    public WeatherModel() {
+    }
+
     private WeatherModel(@NonNull Builder builder) {
         this.isForecast = builder.isForecast;
         this.weatherId = builder.weatherId;
@@ -104,6 +118,110 @@ public class WeatherModel {
         this.eveningTemperature = builder.eveningTemperature;
         this.dayTemperature = builder.dayTemperature;
         this.morningTemperature = builder.morningTemperature;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+
+    public void setForecast(boolean forecast) {
+        isForecast = forecast;
+    }
+
+    public void setWeatherId(int weatherId) {
+        this.weatherId = weatherId;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setHumidity(float humidity) {
+        this.humidity = humidity;
+    }
+
+    public void setPressure(float pressure) {
+        this.pressure = pressure;
+    }
+
+    public void setTemperature(float temperature) {
+        this.temperature = temperature;
+    }
+
+    public void setMinTemperature(float minTemperature) {
+        this.minTemperature = minTemperature;
+    }
+
+    public void setMaxTemperature(float maxTemperature) {
+        this.maxTemperature = maxTemperature;
+    }
+
+    public void setNightTemperature(float nightTemperature) {
+        this.nightTemperature = nightTemperature;
+    }
+
+    public void setEveningTemperature(float eveningTemperature) {
+        this.eveningTemperature = eveningTemperature;
+    }
+
+    public void setDayTemperature(float dayTemperature) {
+        this.dayTemperature = dayTemperature;
+    }
+
+    public void setMorningTemperature(float morningTemperature) {
+        this.morningTemperature = morningTemperature;
+    }
+
+    public void setWindDegree(float windDegree) {
+        this.windDegree = windDegree;
+    }
+
+    public void setWindSpeed(float windSpeed) {
+        this.windSpeed = windSpeed;
+    }
+
+    public void setClouds(int clouds) {
+        this.clouds = clouds;
+    }
+
+    public void setSunRiseTime(long sunRiseTime) {
+        this.sunRiseTime = sunRiseTime;
+    }
+
+    public void setSunSetTime(long sunSetTime) {
+        this.sunSetTime = sunSetTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public void setRainPercent(float rainPercent) {
+        this.rainPercent = rainPercent;
+    }
+
+    public void setReadableDate(String readableDate) {
+        this.readableDate = readableDate;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDescriptionLocalized(String descriptionLocalized) {
+        this.descriptionLocalized = descriptionLocalized;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public String getPlaceId() {
+        return placeId;
     }
 
     public boolean isForecast() {
