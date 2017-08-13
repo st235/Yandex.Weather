@@ -62,7 +62,12 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
         weatherInteractor.getForecast(placesInteractor.getPlace().getPlaceId())
                 .compose(schedulers.getComputationToMainTransformerSingle())
                 .map(this::addSettings)
-                .subscribe(getViewState()::showForecast, Throwable::printStackTrace);
+                .doOnSuccess(this::checkIfEmpty)
+                .subscribe(hashMapSettingsPair -> {}, Throwable::printStackTrace);
+    }
+
+    private void checkIfEmpty(Pair<LinkedHashMap<WeatherModel, WeatherType[]>, Settings> hashMapSettingsPair) {
+        if (hashMapSettingsPair.first.keySet().size() == 0) fetchForecast();
     }
 
     @NonNull

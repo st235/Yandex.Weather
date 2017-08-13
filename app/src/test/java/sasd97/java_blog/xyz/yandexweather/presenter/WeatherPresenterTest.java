@@ -5,10 +5,15 @@ import android.support.v4.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.internal.operators.completable.CompletableFromAction;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.modules.WeatherTypesModule;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
@@ -55,12 +60,26 @@ public class WeatherPresenterTest {
         types.add(weatherTypesModule.provideThunder());
         Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
         String placeName = "Moscow";
+        String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
         Place place = new Place(placeName, coords);
-
+        place.setPlaceId(testId);
         when(placesInteractor.getPlace()).thenReturn(place);
         WeatherModel weatherModel = new WeatherModel.Builder().build();
         when(weatherInteractor.getWeather(place)).thenReturn(Observable.just(weatherModel));
         when(rxSchedulers.getIoToMainTransformer()).thenReturn(objectObservable -> objectObservable);
+        when(rxSchedulers.getIoToMainTransformerSingle()).thenReturn(objectObservable -> objectObservable);
+        when(rxSchedulers.getComputationToMainTransformerSingle()).thenReturn(objectObservable -> objectObservable);
+        when(rxSchedulers.getIoToMainTransformerCompletable()).thenReturn(objectObservable -> objectObservable);
+        when(placesInteractor.getPlace()).thenReturn(place);
+        when(weatherInteractor.getForecast(testId)).thenReturn(Single.fromCallable(LinkedHashMap::new));
+        when(weatherInteractor.updateForecast5(place)).thenReturn(Single.fromCallable(ArrayList::new));
+        when(weatherInteractor.updateForecast16(place)).thenReturn(Single.fromCallable(LinkedHashMap::new));
+        when(weatherInteractor.getPressureUnits()).thenReturn(ConvertersConfig.TEMPERATURE_CELSIUS);
+        when(weatherInteractor.getTemperatureUnits()).thenReturn(ConvertersConfig.TEMPERATURE_CELSIUS);
+        when(weatherInteractor.getSpeedUnits()).thenReturn(ConvertersConfig.SPEED_MS);
+
+        List<WeatherModel> weatherModels = new ArrayList<>();
+        when(weatherInteractor.saveForecast(weatherModels)).thenReturn(new CompletableFromAction(() -> {}));
 
         presenter = new WeatherPresenter(rxSchedulers, types, placesInteractor, weatherInteractor);
         presenter.attachView(view);
@@ -74,8 +93,9 @@ public class WeatherPresenterTest {
         WeatherModel weatherModel = new WeatherModel.Builder().build();
 
         when(placesInteractor.getPlace()).thenReturn(place);
+        String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
+        when(weatherInteractor.getForecast(testId)).thenReturn(Single.fromCallable(LinkedHashMap::new));
         when(weatherInteractor.updateWeather(place)).thenReturn(Observable.just(weatherModel));
-        when(rxSchedulers.getIoToMainTransformer()).thenReturn(objectObservable -> objectObservable);
 
         presenter.fetchWeather();
         verify(view, times(2)).stopRefreshing();
@@ -83,20 +103,20 @@ public class WeatherPresenterTest {
 
     @Test
     public void isMs() {
-        when(weatherInteractor.getSpeedUnits()).thenReturn(ConvertersConfig.SPEED_MS);
         presenter.isMs();
-        verify(weatherInteractor, times(1)).getSpeedUnits();
+        verify(weatherInteractor, times(3)).getSpeedUnits();
     }
 
     @Test
     public void isMmHg() {
+        when(weatherInteractor.getPressureUnits()).thenReturn(1);
         presenter.isMmHg();
-        verify(weatherInteractor, times(1)).getPressureUnits();
+        verify(weatherInteractor, times(3)).getPressureUnits();
     }
 
     @Test
     public void isCelsius() {
         presenter.isCelsius();
-        verify(weatherInteractor, times(1)).getTemperatureUnits();
+        verify(weatherInteractor, times(3)).getTemperatureUnits();
     }
 }

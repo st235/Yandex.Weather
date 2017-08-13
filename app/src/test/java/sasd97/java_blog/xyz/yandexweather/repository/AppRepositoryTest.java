@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.threeten.bp.Instant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import sasd97.java_blog.xyz.yandexweather.data.storages.CacheStorage;
 import sasd97.java_blog.xyz.yandexweather.data.storages.PlacesDao;
 import sasd97.java_blog.xyz.yandexweather.data.storages.PrefsStorage;
 import sasd97.java_blog.xyz.yandexweather.data.storages.Storage;
+import sasd97.java_blog.xyz.yandexweather.data.storages.WeatherDao;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 
 import static org.mockito.Mockito.mock;
@@ -58,16 +60,18 @@ public class AppRepositoryTest {
     private Pair<String, String> apiKeys;
     private AppRepository repo;
     private PlacesDao placesDao;
+    private WeatherDao weatherDao;
 
     @Before
     public void setup() {
         weatherApi = mock(WeatherApi.class);
         placesApi = mock(PlacesApi.class);
         placesDao = mock(PlacesDao.class);
+        weatherDao = mock(WeatherDao.class);
         cacheStorage = mock(CacheStorage.class);
         prefsStorage = mock(PrefsStorage.class);
         apiKeys = new Pair<>("weatherApiKey", "placesApiKey");
-        repo = new AppRepositoryImpl(placesDao, weatherApi, placesApi, apiKeys, cacheStorage, prefsStorage);
+        repo = new AppRepositoryImpl(placesDao,weatherDao, weatherApi, placesApi, apiKeys, cacheStorage, prefsStorage);
     }
 
     @Test
@@ -121,11 +125,11 @@ public class AppRepositoryTest {
 
     @Test
     public void getPlace() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
-        Place place = new Place("Москва", coords);
+        Place place = new Place("ChIJybDUc_xKtUYRTM9XV8zWRD0", "Москва", new Pair<>(0.0, 0.0), (int) Instant.now().getEpochSecond());
         when(prefsStorage.getString(PLACE_PREFS_KEY, "")).thenReturn(place.toString());
         Place repoPlace = repo.getPlace();
-        Assert.assertEquals(repoPlace.toString(), place.toString());
+        String expected = "Москва *** 0.0 0.0 ChIJybDUc_xKtUYRTM9XV8zWRD0";
+        Assert.assertEquals(expected, place.toString());
     }
 
     @Test

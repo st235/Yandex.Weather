@@ -62,11 +62,11 @@
     <!-- Endregion -->
 
     <!-- Forecasts -->
-    <string name="forecasts_temperature">%1$.0f %2$s</string>
-    <string name="forecasts_current_temperature_extreme">%1$.0f %3$s\n%2$.0f %3$s</string>
-    <string name="forecasts_wind_speed">&#xf082; %0$.0f %2$s</string>
-    <string name="forecasts_pressure">&#xf079; %0$.0f %2$s</string>
-    <string name="forecasts_humidity">&#xf04e; %1$.0f %%</string>
+    <string name="forecasts_temperature" translatable="false">%1$.0f %2$s</string>
+    <string name="forecasts_current_temperature_extreme" translatable="false">%1$.0f %3$s\n%2$.0f %3$s</string>
+    <string name="forecasts_wind_speed" translatable="false">&#xf082; %0$.0f %2$s</string>
+    <string name="forecasts_pressure" translatable="false">&#xf079; %0$.0f %2$s</string>
+    <string name="forecasts_humidity" translatable="false">&#xf04e; %1$.0f %%</string>
     <!-- Endregion -->
 
     <!-- Settings fragment -->

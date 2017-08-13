@@ -161,8 +161,10 @@ public final class AppRepositoryImpl implements AppRepository {
         String s = prefsStorage.getString(PLACE_PREFS_KEY, "");
         String placeName = s.split("\\*\\*\\*")[0];
         String[] objects = s.split(" ");
-        if (objects.length < 3)  // "some_city_coord1_coord2".split("_").length >= 3
-            return new Place("", new Pair<>(0.0, 0.0));
+        /*"some_city_coord1_coord2".split("_").length >= 3*/
+        if (objects.length < 3){
+            return new Place("ChIJybDUc_xKtUYRTM9XV8zWRD0", "Москва", new Pair<>(0.0, 0.0), (int) Instant.now().getEpochSecond());
+        }
         String c1 = objects[objects.length - 3];
         String c2 = objects[objects.length - 2];
         String placeId = objects[objects.length - 1];
@@ -170,23 +172,6 @@ public final class AppRepositoryImpl implements AppRepository {
                 new Pair<>(Double.valueOf(c1), Double.valueOf(c2)), (int) Instant.now().getEpochSecond());
     }
 
-//    @Override
-//    public Place getPlace() {
-//        String s = prefsStorage.getString(PLACE_PREFS_KEY, "");
-//        String[] objects = s.split(" ");
-//        String moscowId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
-//        // "id_cityname_coord1_coord2".split("_").length >= 4
-//        if (objects.length < 3) {
-//            return new Place(moscowId, "Москва", new Pair<>(55.7522, 37.6156), (int) Instant.now().getEpochSecond());
-//        } else {
-//            String c0 = objects[0];
-//            String c1 = objects[objects.length - 2];
-//            String c2 = objects[objects.length - 1];
-//            if (c0.isEmpty()) c0 = moscowId;
-//            return new Place(c0, s.split(c1)[0].split(",")[0].split(" ")[0],
-//                    new Pair<>(Double.valueOf(c1), Double.valueOf(c2)), (int) Instant.now().getEpochSecond());
-//        }
-//    }
     @Override
     public void saveWeatherUpdateInterval(int minutes) {
         prefsStorage.put(WEATHER_UPDATE_INTERVAL_PREFS_KEY, minutes);

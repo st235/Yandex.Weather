@@ -76,6 +76,10 @@ public class Place {
         return coords;
     }
 
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+
     @Override
     public String toString() {
         return name + " *** " + coords.first.toString() + " " + coords.second.toString() + " " + placeId;
