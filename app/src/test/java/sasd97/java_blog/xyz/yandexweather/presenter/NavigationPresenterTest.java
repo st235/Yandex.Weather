@@ -40,7 +40,7 @@ public class NavigationPresenterTest {
     }
 
     @Test
-    public void getCurrentInterval() {
+    public void removeSelectedPlaces() {
         ArrayList<sasd97.java_blog.xyz.yandexweather.data.models.places.Place> places = new ArrayList<>();
         when(interactor.removePlacesFromFavorites(places)).thenReturn(Completable.fromAction(() -> {}));
         presenter.removeSelectedPlaces(places);
