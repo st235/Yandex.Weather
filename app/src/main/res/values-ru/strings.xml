@@ -64,7 +64,7 @@
     <string name="settings_fragment_available_intervals_cancel">Отмена</string>
     <string name="settings_fragment_available_intervals_ok">Применить</string>
     <string name="settings_fragment_available_intervals_switcher">Разрешить работу в фоне</string>
-    <string name="today_card">Сегодня, </string>
+    <string name="today_card">Сегодня,&#160;</string>
 
     <!--Navigation fragment-->
     <string name="navigation_fragment_settings">Настройки</string>

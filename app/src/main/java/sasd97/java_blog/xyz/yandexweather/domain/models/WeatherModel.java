@@ -15,6 +15,8 @@ import java.util.TimeZone;
 
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 
+import static sasd97.java_blog.xyz.yandexweather.WeatherApp.SPACE;
+
 /**
  * Created by alexander on 14/07/2017.
  */
@@ -290,8 +292,8 @@ public class WeatherModel {
         if (readableDate == null) {
             String[] strings = Instant.ofEpochSecond(updateTime)
                     .atZone(ZoneId.of(TimeZone.getDefault().getID()))
-                    .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)).split(" ");
-            readableDate = (strings[0] + " " + strings[1]).replace(",","");
+                    .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)).split(SPACE);
+            readableDate = (strings[0] + SPACE + strings[1]).replace(",","");
         }
         return readableDate;
     }

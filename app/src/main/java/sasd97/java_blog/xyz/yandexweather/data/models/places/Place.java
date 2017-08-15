@@ -11,6 +11,8 @@ import com.google.gson.annotations.SerializedName;
 
 import sasd97.java_blog.xyz.yandexweather.data.storages.RoomTypeConverters;
 
+import static sasd97.java_blog.xyz.yandexweather.WeatherApp.SPACE;
+
 /**
  * Created by Maksim Sukhotski on 7/25/2017.
  */
@@ -19,6 +21,7 @@ import sasd97.java_blog.xyz.yandexweather.data.storages.RoomTypeConverters;
 @TypeConverters(RoomTypeConverters.class)
 public class Place {
     public static final String PLACES_TABLE = "Places";
+
     @PrimaryKey
     @SerializedName("place_id")
     @Expose
@@ -82,6 +85,6 @@ public class Place {
 
     @Override
     public String toString() {
-        return name + " *** " + coords.first.toString() + " " + coords.second.toString() + " " + placeId;
+        return name + " *** " + coords.first.toString() + SPACE + coords.second.toString() + SPACE + placeId;
     }
 }

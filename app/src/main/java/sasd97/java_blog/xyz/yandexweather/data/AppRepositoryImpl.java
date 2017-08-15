@@ -24,6 +24,7 @@ import sasd97.java_blog.xyz.yandexweather.data.storages.Storage;
 import sasd97.java_blog.xyz.yandexweather.data.storages.WeatherDao;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
+import static sasd97.java_blog.xyz.yandexweather.WeatherApp.SPACE;
 import static sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi.days;
 
 /**
@@ -160,7 +161,7 @@ public final class AppRepositoryImpl implements AppRepository {
     public Place getPlace() {
         String s = prefsStorage.getString(PLACE_PREFS_KEY, "");
         String placeName = s.split("\\*\\*\\*")[0];
-        String[] objects = s.split(" ");
+        String[] objects = s.split(SPACE);
         /*"some_city_coord1_coord2".split("_").length >= 3*/
         if (objects.length < 3){
             return new Place("ChIJybDUc_xKtUYRTM9XV8zWRD0", "Москва", new Pair<>(0.0, 0.0), (int) Instant.now().getEpochSecond());
@@ -213,6 +214,6 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     public static String toFileName(@NonNull Place place) {
-        return place.getName().replaceAll(" ", "_").replaceAll(",", "").toLowerCase();
+        return place.getName().replaceAll(SPACE, "_").replaceAll(",", "").toLowerCase();
     }
 }

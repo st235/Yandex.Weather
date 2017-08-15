@@ -5,10 +5,15 @@ import android.util.Pair;
 
 import com.google.gson.Gson;
 
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.format.DateTimeFormatter;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -86,11 +91,21 @@ public class WeatherInteractorImpl implements WeatherInteractor {
         return repository.getForecast16(place)
                 .map(ResponseForecast16::getForecasts)
                 .flatMapIterable(forecasts -> forecasts)
+                .filter(this::isForFuture)
                 .map(WeatherForecast::toWeatherModel)
                 .map(this::convertModel)
                 .map(this::addWeatherType)
                 .collectInto(new LinkedHashMap<>(), (map, pair) -> map.put(pair.first, pair.second));
                 /*pair.first is weather, pair.second is weather type*/
+    }
+
+    private boolean isForFuture(WeatherForecast weatherForecast) {
+        String current = Instant.now().atZone(ZoneId.of(TimeZone.getDefault().getID()))
+                .format(DateTimeFormatter.BASIC_ISO_DATE).split("\\+")[0];
+        Instant instantForecast = Instant.ofEpochSecond(weatherForecast.getUpdateTime());
+        String date = instantForecast.atZone(ZoneId.of(TimeZone.getDefault().getID()))
+                .format(DateTimeFormatter.BASIC_ISO_DATE).split("\\+")[0];
+        return !current.equals(date) && Instant.now().isBefore(instantForecast);
     }
 
     @Override
@@ -126,6 +141,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     private WeatherModel toWeatherModel(int weatherId) {
         return new WeatherModel.Builder().isForecast(true).weatherId(weatherId).build();
     }
+
     private WeatherType toWeatherType(WeatherModel weather) {
         for (WeatherType type : weatherTypes) {
             if (type.isApplicable(weather)) {
