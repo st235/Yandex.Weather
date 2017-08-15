@@ -44,7 +44,7 @@ public class MainPresenterTest {
         SettingsInteractor settingsInteractor = mock(SettingsInteractor.class);
 
         presenter = new MainPresenter(rxSchedulers, placesInteractor, settingsInteractor);
-        presenter.setRouter(new AppFragmentRouter(R.id.fragment_container, fragmentActivity));
+        presenter.setWeatherRouter(new AppFragmentRouter(R.id.fragment_container_weather, fragmentActivity));
         presenter.openWeatherFragment();
         settingsFragmentId = R.id.main_activity_navigation_settings;
         weatherFragmentId = R.id.main_activity_navigation_weather;
@@ -54,7 +54,7 @@ public class MainPresenterTest {
     @Test
     public void navigateTo() {
         int settingsId = R.id.main_activity_navigation_settings;
-        presenter.navigateTo(settingsId);
+        presenter.navigateWeatherTo(settingsId);
         verify(view, only()).closeDrawer();
     }
 
@@ -74,21 +74,15 @@ public class MainPresenterTest {
     }
 
     @Test
-    public void onBackClickedWith1ElementInStack() {
-        presenter.onBackClicked();
-        verify(view, never()).selectNavigationItem(weatherFragmentId);
-    }
-
-    @Test
     public void onBackClickedWith2ElementStack() {
-        presenter.navigateTo(settingsFragmentId);
+        presenter.navigateWeatherTo(settingsFragmentId);
         presenter.onBackClicked();
         verify(view, times(1)).closeDrawer();
     }
 
     @Test
     public void replaceFragment() {
-        presenter.replaceFragment(settingsFragmentId);
+        presenter.replaceWeatherFragment(settingsFragmentId);
         verify(view, times(1)).closeDrawer();
     }
 }

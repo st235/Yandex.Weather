@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.Date;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -21,9 +23,13 @@ import sasd97.java_blog.xyz.yandexweather.navigation.fragments.AddToBackStack;
 import sasd97.java_blog.xyz.yandexweather.navigation.fragments.FragmentCommand;
 import sasd97.java_blog.xyz.yandexweather.navigation.fragments.Replace;
 import sasd97.java_blog.xyz.yandexweather.presentation.about.AboutFragment;
+import sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.settings.SettingsFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
+
+import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment.TAG_NAVIGATION;
+import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment.TAG_WEATHER;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -35,9 +41,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
     private final PlacesInteractor placesInteractor;
     private final SettingsInteractor settingsInteractor;
     private final RxSchedulers schedulers;
-    private Router<FragmentCommand> fragmentRouter;
     private Stack<Integer> menuItemsStack = new Stack<>();
     private PlacesResponse placesResponse;
+    private Router<FragmentCommand> weatherFragmentRouter;
+    private Router<FragmentCommand> navigationFragmentRouter;
 
     @Inject
     public MainPresenter(@NonNull RxSchedulers schedulers,
@@ -48,36 +55,43 @@ public class MainPresenter extends MvpPresenter<MainView> {
         this.settingsInteractor = settingsInteractor;
     }
 
-    public void setRouter(Router<FragmentCommand> fragmentRouter) {
-        this.fragmentRouter = fragmentRouter;
+    public void setWeatherRouter(Router<FragmentCommand> weatherFragmentRouter) {
+        this.weatherFragmentRouter = weatherFragmentRouter;
+    }
+
+    public void setNavigationRouter(Router<FragmentCommand> navigationFragmentRouter) {
+        this.navigationFragmentRouter = navigationFragmentRouter;
     }
 
     public void openWeatherFragment() {
-        fragmentRouter.pushForward(new Replace(WeatherFragment.newInstance()));
+        weatherFragmentRouter.pushForward(new Replace(WeatherFragment.newInstance()), TAG_WEATHER);
         menuItemsStack.push(R.id.main_activity_navigation_weather);
     }
 
-    public void onBackClicked() {
-        menuItemsStack.pop();
-        if (menuItemsStack.isEmpty()) return;
-        int id = menuItemsStack.peek();
-        getViewState().selectNavigationItem(id);
+    public void openNavigationFragment() {
+        navigationFragmentRouter.pushForward(new Replace(NavigationFragment.newInstance()), TAG_NAVIGATION);
+        menuItemsStack.push(R.id.fragment_container_navigation);
     }
 
-    public void navigateTo(@IdRes int id) {
+    public void onBackClicked() {
+        if (menuItemsStack.isEmpty()) return;
+        menuItemsStack.pop();
+    }
+
+    public void navigateWeatherTo(@IdRes int id) {
         if (isSameFragmentAtTheTop(id)) {
             getViewState().closeDrawer();
             return;
         }
 
-        replaceFragment(id);
+        replaceWeatherFragment(id);
     }
 
     private boolean isSameFragmentAtTheTop(@IdRes int id) {
         return menuItemsStack.size() > 0 && id == menuItemsStack.peek();
     }
 
-    public void replaceFragment(@IdRes int id) {
+    public void replaceWeatherFragment(@IdRes int id) {
         Replace replace;
         menuItemsStack.add(id);
 
@@ -96,7 +110,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
         }
 
         replace.setNext(new AddToBackStack());
-        fragmentRouter.pushForward(replace);
+        weatherFragmentRouter.pushForward(replace);
         getViewState().closeDrawer();
     }
 
@@ -113,13 +127,33 @@ public class MainPresenter extends MvpPresenter<MainView> {
         this.placesResponse = placesResponse;
     }
 
-    void saveCity(int position) {
+    void saveNewPlace(int position, boolean addToFavorites) {
         placesInteractor.getPlaceDetails(placesResponse.getPlaceIdAt(position))
                 .compose(schedulers.getIoToMainTransformer())
-                .flatMapCompletable(placeDetails -> settingsInteractor.savePlace(
-                        new Place(placesResponse.getPlaceNameAt(position),
-                                placeDetails.getCoords())))
+                .map(placeDetailsResponse -> new Place(
+                        placesResponse.getPlaceIdAt(position),
+                        placesResponse.getPlaceNameAt(position),
+                        placeDetailsResponse.getCoords(),
+                        (int) (new Date().getTime() / 1000)))
+                .doOnNext(place -> {
+                    if (addToFavorites) getViewState().showNewFavoritePlace(place);
+                })
+                .flatMapCompletable(place -> addToFavorites ? placesInteractor.savePlaceToFavorites(place)
+                        .compose(schedulers.getIoToMainTransformerCompletable())
+                        .concatWith(settingsInteractor.savePlace(place)) :
+                        settingsInteractor.savePlace(place))
                 .doOnComplete(this::openWeatherFragment)
-                .subscribe();
+                .subscribe(() -> {}, Throwable::printStackTrace);
+    }
+
+
+    public void saveCurrentPlace(Place place, Place toReplace) {
+        placesInteractor.savePlaceToFavorites(place)
+                .andThen(placesInteractor.savePlaceToFavorites(toReplace))
+                .andThen(settingsInteractor.savePlace(place))
+                .compose(schedulers.getIoToMainTransformerCompletable())
+                .delay(250, TimeUnit.MILLISECONDS)
+                .doOnComplete(this::openWeatherFragment)
+                .subscribe(() -> {}, Throwable::printStackTrace);
     }
 }

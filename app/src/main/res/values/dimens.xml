@@ -5,6 +5,22 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fragment_padding">16dp</dimen>
-    <dimen name="card_corner_radius">4dp</dimen>
+    <dimen name="card_corner_radius">12dp</dimen>
     <dimen name="content_outer_margin">16dp</dimen>
+    <dimen name="drawer_width">320dp</dimen>
+    <dimen name="drawer_minus_panel_width">240dp</dimen>
+    <dimen name="nav_recycler_places_padding_bottom">0dp</dimen>
+    <dimen name="nav_settings_text_size">18sp</dimen>
+    <dimen name="forecast_card_width_expanded">228dp</dimen>
+    <dimen name="forecast_card_width_collapsed">114dp</dimen>
+    <dimen name="forecast_card_height_expanded_tablet">208dp</dimen>
+    <dimen name="fab_size">48dp</dimen>
+    <dimen name="padding_fab">72dp</dimen>
+    <dimen name="select_padding">8dp</dimen>
+    <dimen name="select_height">56dp</dimen>
+    <dimen name="nav_view_elevation">18dp</dimen>
+    <dimen name="nav_view_elevation_base">6dp</dimen>
+    <dimen name="toolbar_elevation_base">1dp</dimen>
+    <dimen name="toolbar_elevation">0dp</dimen>
+
 </resources>

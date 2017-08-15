@@ -18,7 +18,7 @@ public class Sunny implements WeatherType {
         boolean timeCondition =
                 currentTime >= weather.getSunRiseTime() && currentTime < weather.getSunSetTime();
 
-        return timeCondition && weather.getWeatherId() == 800;
+        return (timeCondition || weather.isForecast()) && weather.getWeatherId() == 800;
     }
 
     @Override

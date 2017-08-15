@@ -2,8 +2,13 @@ package sasd97.java_blog.xyz.yandexweather.data;
 
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
+import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast5;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
@@ -24,8 +29,18 @@ public interface AppRepository {
 
     //net
     Observable<WeatherModel> getWeather(@NonNull Place place);
+    Observable<ResponseForecast5> getForecast5(@NonNull Place place);
+    Observable<ResponseForecast16> getForecast16(@NonNull Place place);
     Observable<PlacesResponse> getPlaces(@NonNull String s);
     Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId);
+
+    //db
+    Single<List<Place>> getFavoritePlaces();
+    Completable insertPlace(Place place);
+    Completable removePlaces(List<Place> places);
+    Single<List<WeatherModel>> getForecast(String placeId);
+    Completable insertForecast(List<WeatherModel> forecast);
+    Completable removeForecast(String placeId);
 
     //cache
     String getCachedWeather(@NonNull Place place);

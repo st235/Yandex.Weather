@@ -3,18 +3,28 @@ package sasd97.java_blog.xyz.yandexweather.data;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
+import org.threeten.bp.Instant;
+
 import java.util.Date;
+import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.internal.operators.completable.CompletableFromAction;
+import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
+import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast5;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 import sasd97.java_blog.xyz.yandexweather.data.net.PlacesApi;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
+import sasd97.java_blog.xyz.yandexweather.data.storages.PlacesDao;
 import sasd97.java_blog.xyz.yandexweather.data.storages.Storage;
+import sasd97.java_blog.xyz.yandexweather.data.storages.WeatherDao;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
+
+import static sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi.days;
 
 /**
  * Created by alexander on 12/07/2017.
@@ -27,12 +37,18 @@ public final class AppRepositoryImpl implements AppRepository {
     private Storage<String> cacheStorage;
     private Storage<String> prefsStorage;
     private Pair<String, String> apiKeys;
+    private PlacesDao placesDao;
+    private WeatherDao weatherDao;
 
-    public AppRepositoryImpl(@NonNull WeatherApi weatherApi,
+    public AppRepositoryImpl(@NonNull PlacesDao placesDao,
+                             @NonNull WeatherDao weatherDao,
+                             @NonNull WeatherApi weatherApi,
                              @NonNull PlacesApi placesApi,
                              @NonNull Pair<String, String> apiKeys,
                              @NonNull Storage<String> cacheStorage,
                              @NonNull Storage<String> prefsStorage) {
+        this.weatherDao = weatherDao;
+        this.placesDao = placesDao;
         this.weatherApi = weatherApi;
         this.placesApi = placesApi;
         this.apiKeys = apiKeys;
@@ -62,6 +78,18 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
+    public Observable<ResponseForecast5> getForecast5(@NonNull Place place) {
+        return weatherApi.getForecast5(
+                place.getCoords().first, place.getCoords().second, apiKeys.first);
+    }
+
+    @Override
+    public Observable<ResponseForecast16> getForecast16(@NonNull Place place) {
+        return weatherApi.getForecast16(
+                place.getCoords().first, place.getCoords().second, days, apiKeys.first);
+    }
+
+    @Override
     public Observable<PlacesResponse> getPlaces(@NonNull String s) {
         return placesApi.getPlaces(s, apiKeys.second);
     }
@@ -69,6 +97,36 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId) {
         return placesApi.getPlaceDetails(placeId, apiKeys.second);
+    }
+
+    @Override
+    public Single<List<Place>> getFavoritePlaces() {
+        return placesDao.getPlaces();
+    }
+
+    @Override
+    public Completable insertPlace(Place place) {
+        return Completable.fromAction(() -> placesDao.insertPlace(place));
+    }
+
+    @Override
+    public Completable removePlaces(List<Place> places) {
+        return new CompletableFromAction(() -> placesDao.removePlaces(places));
+    }
+
+    @Override
+    public Single<List<WeatherModel>> getForecast(String placeId) {
+        return weatherDao.getForecast(placeId);
+    }
+
+    @Override
+    public Completable insertForecast(List<WeatherModel> forecast) {
+        return Completable.fromAction(() -> weatherDao.insertForecast(forecast));
+    }
+
+    @Override
+    public Completable removeForecast(String placeId) {
+        return new CompletableFromAction(() -> weatherDao.removeForecast(placeId));
     }
 
     @Override
@@ -101,13 +159,17 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public Place getPlace() {
         String s = prefsStorage.getString(PLACE_PREFS_KEY, "");
+        String placeName = s.split("\\*\\*\\*")[0];
         String[] objects = s.split(" ");
-        if (objects.length < 3)  // "some_city_coord1_coord2".split("_").length >= 3
-            return new Place("", new Pair<>(0.0, 0.0));
-        String c1 = objects[objects.length - 2];
-        String c2 = objects[objects.length - 1];
-        return new Place(s.split(c1)[0].split(",")[0].split(" ")[0],
-                new Pair<>(Double.valueOf(c1), Double.valueOf(c2)));
+        /*"some_city_coord1_coord2".split("_").length >= 3*/
+        if (objects.length < 3){
+            return new Place("ChIJybDUc_xKtUYRTM9XV8zWRD0", "Москва", new Pair<>(0.0, 0.0), (int) Instant.now().getEpochSecond());
+        }
+        String c1 = objects[objects.length - 3];
+        String c2 = objects[objects.length - 2];
+        String placeId = objects[objects.length - 1];
+        return new Place(placeId , placeName,
+                new Pair<>(Double.valueOf(c1), Double.valueOf(c2)), (int) Instant.now().getEpochSecond());
     }
 
     @Override

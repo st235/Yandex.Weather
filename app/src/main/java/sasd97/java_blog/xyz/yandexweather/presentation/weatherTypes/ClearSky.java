@@ -16,7 +16,7 @@ public class ClearSky implements WeatherType {
         long currentTime = new Date().getTime();
         boolean timeCondition =
                 currentTime < weather.getSunRiseTime() || currentTime >= weather.getSunSetTime();
-        return timeCondition && weather.getWeatherId() == 800;
+        return (timeCondition || weather.isForecast()) && weather.getWeatherId() == 800;
     }
 
     @Override

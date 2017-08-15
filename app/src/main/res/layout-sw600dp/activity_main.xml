@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity">
+
+    <android.support.v4.widget.SlidingPaneLayout
+        android:id="@+id/sliding_panel_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:id="@+id/navigation_layout"
+            android:layout_width="@dimen/drawer_width"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:background="@color/colorWhite"
+                android:elevation="0dp"
+                android:paddingRight="12dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <include layout="@layout/part_selected_toolbar"/>
+
+            <FrameLayout
+                android:id="@+id/fragment_container_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/toolbar"/>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_container_weather"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="80dp"
+            android:layout_marginStart="80dp"
+            android:background="@color/colorWhite"
+            android:elevation="4dp"/>
+
+
+    </android.support.v4.widget.SlidingPaneLayout>
+
+</android.support.design.widget.CoordinatorLayout>

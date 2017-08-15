@@ -104,4 +104,12 @@ dependencies {
 
     //ui
     compile libraries.rxbinding
+
+    //db
+    compile libraries.room
+    compile libraries.roomRxJava
+    annotationProcessor libraries.compiler
+    compile 'com.facebook.stetho:stetho:1.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp:1.5.0'
+    compile libraries.threeTenABP
 }

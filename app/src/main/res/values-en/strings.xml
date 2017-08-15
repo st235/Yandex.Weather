@@ -11,7 +11,7 @@
 
     <!-- Actionbar region -->
     <string name="main_activity_action_search">Search</string>
-    <string name="main_activity_action_search_hint">New York</string>
+    <string name="main_activity_action_search_hint">Specify place</string>
     <string name="main_activity_action_search_settings_description">City list</string>
     <!-- Endregion -->
 
@@ -24,12 +24,20 @@
     <string name="all_weather_snowy_title">Snowy</string>
     <string name="all_weather_thunder_title">Thunder</string>
     <string name="all_weather_drizzle_title">Drizzle</string>
-
     <string name="all_weather_ms">m/s</string>
     <string name="all_weather_kmh">km/h</string>
     <string name="all_weather_mmhg">mmHg</string>
     <string name="all_weather_pascal">hPa</string>
     <!-- Endregion -->
+
+    <!--Time-->
+    <string name="tomorrow">Tomorrow</string>
+    <string name="day_after_tomorrow">Day after tomorrow</string>
+    <string name="morning">Morning</string>
+    <string name="daytime">Daytime</string>
+    <string name="evening">Evening</string>
+    <string name="night">Night</string>
+    <!--Endregion-->
 
     <!-- About fragment -->
     <string name="about_fragment_description">Application for the weather monitor.
@@ -40,7 +48,8 @@
     <!-- Weather fragment -->
     <string name="weather_fragment_current_temperature">&#xf055; %1$.0f %2$s</string>
     <string name="weather_fragment_current_temperature_extreme">%1$.0f %3$s\n%2$.0f %3$s</string>
-    <string name="weather_fragment_wind_speed">&#xf082; %1$.2f %2$s\n&#xf079; %3$.0f %4$s</string>
+    <string name="weather_fragment_wind_speed">&#xf082; %0$.0f %2$s</string>
+    <string name="weather_fragment_pressure">&#xf079; %0$.0f %2$s</string>
     <string name="weather_fragment_humidity">&#xf04e; %1$.0f %%</string>
     <!-- Endregion -->
 
@@ -56,6 +65,9 @@
     <string name="settings_fragment_available_intervals_cancel">Cancel</string>
     <string name="settings_fragment_available_intervals_ok">OK</string>
     <string name="settings_fragment_available_intervals_switcher">Enable background updates</string>
+    <string name="navigation_fragment_settings">Settings</string>
+    <string name="add_place">Add place</string>
+    <string name="today_card">Today, </string>
 
     <string-array name="settings_fragment_available_interval_titles">
         <item>15 minutes</item>

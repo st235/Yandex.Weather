@@ -31,4 +31,14 @@ public class AppFragmentRouter implements Router<FragmentCommand> {
             frame.apply(transaction).commit();
         }
     }
+
+    @Override
+    public void pushForward(FragmentCommand frame, String tag) {
+        if (this.fragmentManager != null) {
+            FragmentTransaction transaction = this.fragmentManager.beginTransaction();
+            frame.setContainer(fragmentContainerId);
+            transaction.addToBackStack(tag);
+            frame.apply(transaction, tag).commit();
+        }
+    }
 }

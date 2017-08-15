@@ -12,4 +12,9 @@ public class FadeAnimation extends FragmentCommandDecorator {
     protected FragmentTransaction onApply(FragmentTransaction transaction) {
         return transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
     }
+
+    @Override
+    protected FragmentTransaction onApply(FragmentTransaction transaction, String tag) {
+        return null;
+    }
 }

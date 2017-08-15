@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDelegate;
 
 import com.evernote.android.job.JobManager;
+import com.facebook.stetho.Stetho;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import javax.inject.Inject;
 
@@ -26,7 +28,7 @@ import sasd97.java_blog.xyz.yandexweather.di.modules.NavigationModule;
 public class WeatherApp extends Application {
 
     static {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 
     private AppComponent appComponent;
@@ -49,7 +51,9 @@ public class WeatherApp extends Application {
 
     private void onInit() {
         FontProvider.init(getAssets());
+        AndroidThreeTen.init(this);
         onScheduleJob();
+        Stetho.initializeWithDefaults(this);
     }
 
     private void onScheduleJob() {

@@ -7,11 +7,12 @@
     <string name="main_activity_navigation_common_group">Общее</string>
     <string name="main_activity_navigation_settings">Настройки</string>
     <string name="main_activity_navigation_about">О приложении</string>
+    <string name="add_place">Добавить место</string>
     <!-- Endregion -->
 
     <!-- Actionbar region -->
     <string name="main_activity_action_search">Поиск</string>
-    <string name="main_activity_action_search_hint">Москва</string>
+    <string name="main_activity_action_search_hint">Укажите место</string>
     <string name="main_activity_action_search_settings_description">Список городов</string>
     <!-- Endregion -->
 
@@ -31,7 +32,14 @@
     <string name="all_weather_pascal">гПа</string>
     <!-- Endregion -->
 
-
+    <!--Time-->
+    <string name="tomorrow">Завтра</string>
+    <string name="day_after_tomorrow">Послезавтра</string>
+    <string name="morning">Утро</string>
+    <string name="daytime">День</string>
+    <string name="evening">Вечер</string>
+    <string name="night">Ночь</string>
+    <!--Endregion-->
     <!-- About fragment -->
     <string name="about_fragment_description">Погодное приложение. Сделано в рамках проекта "Мобилизация".</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>
@@ -40,7 +48,8 @@
     <!-- Weather fragment -->
     <string name="weather_fragment_current_temperature">&#xf055; %1$.0f %2$s</string>
     <string name="weather_fragment_current_temperature_extreme">%1$.0f %3$s\n%2$.0f %3$s</string>
-    <string name="weather_fragment_wind_speed">&#xf082; %1$.2f %2$s\n&#xf079; %3$.0f %4$s</string>
+    <string name="weather_fragment_wind_speed">&#xf082; %0$.0f %2$s</string>
+    <string name="weather_fragment_pressure">&#xf079; %0$.0f %2$s</string>
     <string name="weather_fragment_humidity">&#xf04e; %1$.0f %%</string>
     <!-- Endregion -->
 
@@ -55,6 +64,10 @@
     <string name="settings_fragment_available_intervals_cancel">Отмена</string>
     <string name="settings_fragment_available_intervals_ok">Применить</string>
     <string name="settings_fragment_available_intervals_switcher">Разрешить работу в фоне</string>
+    <string name="today_card">Сегодня, </string>
+
+    <!--Navigation fragment-->
+    <string name="navigation_fragment_settings">Настройки</string>
 
     <string-array name="settings_fragment_available_interval_titles">
         <item>15 минут</item>

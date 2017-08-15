@@ -14,4 +14,9 @@ public class AppActivityRouter implements Router<ActivityCommand> {
         if (!(frame instanceof MoveForward)) return;
         frame.apply();
     }
+
+    @Override
+    public void pushForward(ActivityCommand frame, String tag) {
+
+    }
 }

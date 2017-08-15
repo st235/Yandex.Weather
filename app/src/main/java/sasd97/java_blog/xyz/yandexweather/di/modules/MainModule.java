@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,6 +20,7 @@ import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractorImpl;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -31,8 +33,9 @@ public class MainModule {
     @MainScope
     public WeatherInteractor provideWeatherInteractor(Gson gson,
                                                       AppRepository repository,
-                                                      Map<String, List<Converter<Integer, Float>>> converters) {
-        return new WeatherInteractorImpl(gson, repository, converters);
+                                                      Map<String, List<Converter<Integer, Float>>> converters,
+                                                      Set<WeatherType> weatherTypes) {
+        return new WeatherInteractorImpl(gson, repository, converters, weatherTypes);
     }
 
     @Provides

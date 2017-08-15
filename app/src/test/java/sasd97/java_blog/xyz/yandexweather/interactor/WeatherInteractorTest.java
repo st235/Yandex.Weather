@@ -10,8 +10,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import io.reactivex.Observable;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
@@ -23,12 +25,12 @@ import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -45,10 +47,17 @@ public class WeatherInteractorTest {
     private AppRepository repo;
     private Gson gson;
     private WeatherInteractor weatherInteractor;
+    private Set<WeatherType> weatherTypes;
 
     @Before
     public void setup() {
         repo = mock(AppRepository.class);
+        WeatherType weatherType0 = mock(WeatherType.class);
+        WeatherType weatherType1 = mock(WeatherType.class);
+        Set<WeatherType> weatherTypes = new HashSet<>(2);
+        weatherTypes = new HashSet<WeatherType>(2);
+        weatherTypes.add(weatherType0);
+        weatherTypes.add(weatherType1);
         DataModule dataModule = new DataModule();
         ConvertersModule convertersModule = new ConvertersModule();
         gson = dataModule.provideGson();
@@ -56,7 +65,7 @@ public class WeatherInteractorTest {
         converters.put(PRESSURE_CONVERTERS_KEY, convertersModule.providePressureConverters());
         converters.put(SPEED_CONVERTERS_KEY, convertersModule.provideSpeedConverters());
         converters.put(TEMPERATURE_CONVERTERS_KEY, convertersModule.provideTemperatureConverters());
-        weatherInteractor = new WeatherInteractorImpl(gson, repo, converters);
+        weatherInteractor = new WeatherInteractorImpl(gson, repo, converters, weatherTypes);
     }
 
     @Test
@@ -100,18 +109,6 @@ public class WeatherInteractorTest {
         verify(repo, never()).getCachedWeather(place);
         verify(repo, times(1)).getWeather(place);
         verify(repo, times(1)).saveWeatherToCache(place, gson.toJson(fromRemote));
-    }
-
-    @Test
-    public void getPlace() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
-        String placeName = "Moscow";
-        Place place = new Place(placeName, coords);
-
-        when(repo.getPlace()).thenReturn(place);
-
-        weatherInteractor.getPlace();
-        verify(repo, only()).getPlace(); //// TODO: 7/30/2017 apply to all where need
     }
 
     @Test

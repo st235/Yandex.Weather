@@ -1,8 +1,17 @@
 package sasd97.java_blog.xyz.yandexweather.domain.models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
+
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.FormatStyle;
+
+import java.util.TimeZone;
 
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 
@@ -10,7 +19,19 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
  * Created by alexander on 14/07/2017.
  */
 
+@Entity(tableName = "Weather")
 public class WeatherModel {
+    public static final String WEATHER = "Weather";
+
+    @Expose
+    @PrimaryKey(autoGenerate = true)
+    private long uid;
+
+    @Expose
+    private String placeId;
+
+    @Expose
+    private boolean isForecast;
 
     @Expose
     private int weatherId;
@@ -34,6 +55,18 @@ public class WeatherModel {
     private float maxTemperature;
 
     @Expose
+    private float nightTemperature;
+
+    @Expose
+    private float eveningTemperature;
+
+    @Expose
+    private float dayTemperature;
+
+    @Expose
+    private float morningTemperature;
+
+    @Expose
     private float windDegree;
 
     @Expose
@@ -51,7 +84,23 @@ public class WeatherModel {
     @Expose
     private long updateTime;
 
+    @Expose
+    private float rainPercent;
+
+    @Expose
+    private String readableDate;
+
+    @Expose
+    private String description;
+
+    @Expose
+    private String descriptionLocalized;
+
+    public WeatherModel() {
+    }
+
     private WeatherModel(@NonNull Builder builder) {
+        this.isForecast = builder.isForecast;
         this.weatherId = builder.weatherId;
         this.city = builder.city;
         this.humidity = builder.humidity;
@@ -65,6 +114,118 @@ public class WeatherModel {
         this.sunRiseTime = builder.sunRiseTime;
         this.sunSetTime = builder.sunSetTime;
         this.updateTime = builder.updateTime;
+        this.nightTemperature = builder.nightTemperature;
+        this.eveningTemperature = builder.eveningTemperature;
+        this.dayTemperature = builder.dayTemperature;
+        this.morningTemperature = builder.morningTemperature;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+
+    public void setForecast(boolean forecast) {
+        isForecast = forecast;
+    }
+
+    public void setWeatherId(int weatherId) {
+        this.weatherId = weatherId;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setHumidity(float humidity) {
+        this.humidity = humidity;
+    }
+
+    public void setPressure(float pressure) {
+        this.pressure = pressure;
+    }
+
+    public void setTemperature(float temperature) {
+        this.temperature = temperature;
+    }
+
+    public void setMinTemperature(float minTemperature) {
+        this.minTemperature = minTemperature;
+    }
+
+    public void setMaxTemperature(float maxTemperature) {
+        this.maxTemperature = maxTemperature;
+    }
+
+    public void setNightTemperature(float nightTemperature) {
+        this.nightTemperature = nightTemperature;
+    }
+
+    public void setEveningTemperature(float eveningTemperature) {
+        this.eveningTemperature = eveningTemperature;
+    }
+
+    public void setDayTemperature(float dayTemperature) {
+        this.dayTemperature = dayTemperature;
+    }
+
+    public void setMorningTemperature(float morningTemperature) {
+        this.morningTemperature = morningTemperature;
+    }
+
+    public void setWindDegree(float windDegree) {
+        this.windDegree = windDegree;
+    }
+
+    public void setWindSpeed(float windSpeed) {
+        this.windSpeed = windSpeed;
+    }
+
+    public void setClouds(int clouds) {
+        this.clouds = clouds;
+    }
+
+    public void setSunRiseTime(long sunRiseTime) {
+        this.sunRiseTime = sunRiseTime;
+    }
+
+    public void setSunSetTime(long sunSetTime) {
+        this.sunSetTime = sunSetTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public void setRainPercent(float rainPercent) {
+        this.rainPercent = rainPercent;
+    }
+
+    public void setReadableDate(String readableDate) {
+        this.readableDate = readableDate;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDescriptionLocalized(String descriptionLocalized) {
+        this.descriptionLocalized = descriptionLocalized;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public boolean isForecast() {
+        return isForecast;
     }
 
     public int getWeatherId() {
@@ -125,6 +286,44 @@ public class WeatherModel {
         return updateTime;
     }
 
+    public String getReadableDate() {
+        if (readableDate == null) {
+            String[] strings = Instant.ofEpochSecond(updateTime)
+                    .atZone(ZoneId.of(TimeZone.getDefault().getID()))
+                    .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)).split(" ");
+            readableDate = (strings[0] + " " + strings[1]).replace(",","");
+        }
+        return readableDate;
+    }
+
+    public float getRainPercent() {
+        return rainPercent;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getDescriptionLocalized() {
+        return descriptionLocalized;
+    }
+
+    public float getNightTemperature() {
+        return nightTemperature;
+    }
+
+    public float getEveningTemperature() {
+        return eveningTemperature;
+    }
+
+    public float getDayTemperature() {
+        return dayTemperature;
+    }
+
+    public float getMorningTemperature() {
+        return morningTemperature;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("WeatherModel{");
@@ -155,11 +354,21 @@ public class WeatherModel {
         private long sunRiseTime;
         private long sunSetTime;
         private long updateTime;
+        private String readableDate;
+        private float rainPercent;
+        private String description;
+        private String descriptionLocalized;
+        private float nightTemperature;
+        private float eveningTemperature;
+        private float dayTemperature;
+        private float morningTemperature;
+        private boolean isForecast;
 
         public Builder() {
         }
 
         public Builder(@NonNull WeatherModel weather) {
+            isForecast = weather.isForecast();
             weatherId = weather.getWeatherId();
             city = weather.getCity();
             humidity = weather.getHumidity();
@@ -173,6 +382,24 @@ public class WeatherModel {
             sunRiseTime = weather.getSunRiseTime();
             sunSetTime = weather.getSunSetTime();
             updateTime = weather.getUpdateTime();
+            readableDate = weather.getReadableDate();
+            rainPercent = weather.getRainPercent();
+            description = weather.getDescription();
+            descriptionLocalized = weather.getDescriptionLocalized();
+            nightTemperature = weather.getNightTemperature();
+            eveningTemperature = weather.getEveningTemperature();
+            dayTemperature = weather.getDayTemperature();
+            morningTemperature = weather.getMorningTemperature();
+        }
+
+        public Builder readableDate(String readableDate) {
+            this.readableDate = readableDate;
+            return this;
+        }
+
+        public Builder isForecast(boolean isForecast) {
+            this.isForecast = isForecast;
+            return this;
         }
 
         public Builder weatherId(int weatherId) {
@@ -237,6 +464,41 @@ public class WeatherModel {
 
         public Builder updateTime(long updateTime) {
             this.updateTime = updateTime;
+            return this;
+        }
+
+        public Builder rainPercent(float rainPercent) {
+            this.rainPercent = rainPercent;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder descriptionLocalized(String descriptionLocalized) {
+            this.descriptionLocalized = descriptionLocalized;
+            return this;
+        }
+
+        public Builder nightTemperature(float nightTemperature) {
+            this.nightTemperature = nightTemperature;
+            return this;
+        }
+
+        public Builder eveningTemperature(float eveningTemperature) {
+            this.eveningTemperature = eveningTemperature;
+            return this;
+        }
+
+        public Builder dayTemperature(float dayTemperature) {
+            this.dayTemperature = dayTemperature;
+            return this;
+        }
+
+        public Builder morningTemperature(float morningTemperature) {
+            this.morningTemperature = morningTemperature;
             return this;
         }
 

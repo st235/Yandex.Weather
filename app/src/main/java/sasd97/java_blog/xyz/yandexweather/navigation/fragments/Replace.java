@@ -20,4 +20,9 @@ public class Replace extends FragmentCommandDecorator {
     protected FragmentTransaction onApply(FragmentTransaction transaction) {
         return transaction.replace(getContainer(), destinationFragment);
     }
+
+    @Override
+    protected FragmentTransaction onApply(FragmentTransaction transaction, String tag) {
+        return transaction.replace(getContainer(), destinationFragment, tag);
+    }
 }

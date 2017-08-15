@@ -5,14 +5,20 @@ import android.support.v4.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.internal.operators.completable.CompletableFromAction;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.modules.WeatherTypesModule;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
+import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherView;
@@ -31,7 +37,8 @@ import static org.mockito.Mockito.when;
 public class WeatherPresenterTest {
     private WeatherView view;
     private WeatherPresenter presenter;
-    private WeatherInteractor interactor;
+    private WeatherInteractor weatherInteractor;
+    private PlacesInteractor placesInteractor;
     private RxSchedulers rxSchedulers;
     private WeatherType weatherType;
 
@@ -39,7 +46,8 @@ public class WeatherPresenterTest {
     public void setup() {
         view = mock(WeatherView.class);
         rxSchedulers = mock(RxSchedulers.class);
-        interactor = mock(WeatherInteractor.class);
+        weatherInteractor = mock(WeatherInteractor.class);
+        placesInteractor = mock(PlacesInteractor.class);
         WeatherTypesModule weatherTypesModule = new WeatherTypesModule();
         Set<WeatherType> types = new HashSet<>();
         types.add(weatherTypesModule.provideClearSky());
@@ -52,14 +60,28 @@ public class WeatherPresenterTest {
         types.add(weatherTypesModule.provideThunder());
         Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
         String placeName = "Moscow";
+        String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
         Place place = new Place(placeName, coords);
-
-        when(interactor.getPlace()).thenReturn(place);
+        place.setPlaceId(testId);
+        when(placesInteractor.getPlace()).thenReturn(place);
         WeatherModel weatherModel = new WeatherModel.Builder().build();
-        when(interactor.getWeather(place)).thenReturn(Observable.just(weatherModel));
+        when(weatherInteractor.getWeather(place)).thenReturn(Observable.just(weatherModel));
         when(rxSchedulers.getIoToMainTransformer()).thenReturn(objectObservable -> objectObservable);
+        when(rxSchedulers.getIoToMainTransformerSingle()).thenReturn(objectObservable -> objectObservable);
+        when(rxSchedulers.getComputationToMainTransformerSingle()).thenReturn(objectObservable -> objectObservable);
+        when(rxSchedulers.getIoToMainTransformerCompletable()).thenReturn(objectObservable -> objectObservable);
+        when(placesInteractor.getPlace()).thenReturn(place);
+        when(weatherInteractor.getForecast(testId)).thenReturn(Single.fromCallable(LinkedHashMap::new));
+        when(weatherInteractor.updateForecast5(place)).thenReturn(Single.fromCallable(ArrayList::new));
+        when(weatherInteractor.updateForecast16(place)).thenReturn(Single.fromCallable(LinkedHashMap::new));
+        when(weatherInteractor.getPressureUnits()).thenReturn(ConvertersConfig.TEMPERATURE_CELSIUS);
+        when(weatherInteractor.getTemperatureUnits()).thenReturn(ConvertersConfig.TEMPERATURE_CELSIUS);
+        when(weatherInteractor.getSpeedUnits()).thenReturn(ConvertersConfig.SPEED_MS);
 
-        presenter = new WeatherPresenter(rxSchedulers, types, interactor);
+        List<WeatherModel> weatherModels = new ArrayList<>();
+        when(weatherInteractor.saveForecast(weatherModels)).thenReturn(new CompletableFromAction(() -> {}));
+
+        presenter = new WeatherPresenter(rxSchedulers, types, placesInteractor, weatherInteractor);
         presenter.attachView(view);
     }
 
@@ -70,9 +92,10 @@ public class WeatherPresenterTest {
         Place place = new Place(placeName, coords);
         WeatherModel weatherModel = new WeatherModel.Builder().build();
 
-        when(interactor.getPlace()).thenReturn(place);
-        when(interactor.updateWeather(place)).thenReturn(Observable.just(weatherModel));
-        when(rxSchedulers.getIoToMainTransformer()).thenReturn(objectObservable -> objectObservable);
+        when(placesInteractor.getPlace()).thenReturn(place);
+        String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
+        when(weatherInteractor.getForecast(testId)).thenReturn(Single.fromCallable(LinkedHashMap::new));
+        when(weatherInteractor.updateWeather(place)).thenReturn(Observable.just(weatherModel));
 
         presenter.fetchWeather();
         verify(view, times(2)).stopRefreshing();
@@ -80,20 +103,20 @@ public class WeatherPresenterTest {
 
     @Test
     public void isMs() {
-        when(interactor.getSpeedUnits()).thenReturn(ConvertersConfig.SPEED_MS);
         presenter.isMs();
-        verify(interactor, times(1)).getSpeedUnits();
+        verify(weatherInteractor, times(3)).getSpeedUnits();
     }
 
     @Test
     public void isMmHg() {
+        when(weatherInteractor.getPressureUnits()).thenReturn(1);
         presenter.isMmHg();
-        verify(interactor, times(1)).getPressureUnits();
+        verify(weatherInteractor, times(3)).getPressureUnits();
     }
 
     @Test
     public void isCelsius() {
         presenter.isCelsius();
-        verify(interactor, times(1)).getTemperatureUnits();
+        verify(weatherInteractor, times(3)).getTemperatureUnits();
     }
 }
