@@ -7,6 +7,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.Observable;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
@@ -69,6 +72,35 @@ public class PlacesInteractorTest {
         when(repo.getPlace()).thenReturn(place);
 
         placesInteractor.getPlace();
-        verify(repo, only()).getPlace(); //// TODO: 7/30/2017 apply to all where need
+        verify(repo, only()).getPlace();
+    }
+
+    @Test
+    public void savePlaceToFavorites() {
+        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        String placeName = "Moscow";
+        Place place = new Place(placeName, coords);
+
+        placesInteractor.savePlaceToFavorites(place);
+        verify(repo, only()).insertPlace(place);
+    }
+
+    @Test
+    public void removePlacesFromFavorites() {
+        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        String placeName = "Moscow";
+        Place place = new Place(placeName, coords);
+        List<Place> list = new ArrayList<>();
+        list.add(place);
+        placesInteractor.removePlacesFromFavorites(list);
+        verify(repo, only()).removePlaces(list);
+    }
+
+    @Test
+    public void getPlaces() {
+        String placeId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
+
+        placesInteractor.getPlaces(placeId);
+        verify(repo, only()).getPlaces(placeId);
     }
 }

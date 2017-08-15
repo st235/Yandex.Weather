@@ -41,6 +41,7 @@ public class WeatherPresenterTest {
     private PlacesInteractor placesInteractor;
     private RxSchedulers rxSchedulers;
     private WeatherType weatherType;
+    Place place;
 
     @Before
     public void setup() {
@@ -61,7 +62,7 @@ public class WeatherPresenterTest {
         Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
         String placeName = "Moscow";
         String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
-        Place place = new Place(placeName, coords);
+        place = new Place(placeName, coords);
         place.setPlaceId(testId);
         when(placesInteractor.getPlace()).thenReturn(place);
         WeatherModel weatherModel = new WeatherModel.Builder().build();
@@ -79,7 +80,8 @@ public class WeatherPresenterTest {
         when(weatherInteractor.getSpeedUnits()).thenReturn(ConvertersConfig.SPEED_MS);
 
         List<WeatherModel> weatherModels = new ArrayList<>();
-        when(weatherInteractor.saveForecast(weatherModels)).thenReturn(new CompletableFromAction(() -> {}));
+        when(weatherInteractor.saveForecast(weatherModels)).thenReturn(new CompletableFromAction(() -> {
+        }));
 
         presenter = new WeatherPresenter(rxSchedulers, types, placesInteractor, weatherInteractor);
         presenter.attachView(view);
@@ -118,5 +120,16 @@ public class WeatherPresenterTest {
     public void isCelsius() {
         presenter.isCelsius();
         verify(weatherInteractor, times(3)).getTemperatureUnits();
+    }
+
+    @Test
+    public void fetchForecast() {
+        ArrayList<WeatherModel> forecast = new ArrayList<>();
+
+        presenter.fetchForecast();
+        verify(weatherInteractor, times(3)).getTemperatureUnits();
+        verify(weatherInteractor, times(2)).updateForecast16(place);
+        verify(placesInteractor, times(6)).getPlace();
+        verify(weatherInteractor, times(2)).saveForecast(forecast);
     }
 }
