@@ -65,16 +65,17 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     public void openWeatherFragment() {
         weatherFragmentRouter.pushForward(new Replace(WeatherFragment.newInstance()), TAG_WEATHER);
-        menuItemsStack.push(R.id.main_activity_navigation_weather);
     }
 
     public void openNavigationFragment() {
         navigationFragmentRouter.pushForward(new Replace(NavigationFragment.newInstance()), TAG_NAVIGATION);
-        menuItemsStack.push(R.id.fragment_container_navigation);
     }
 
     public void onBackClicked() {
-        if (menuItemsStack.isEmpty()) return;
+        if (menuItemsStack.isEmpty()) {
+            getViewState().closeActivity();
+            return;
+        }
         menuItemsStack.pop();
     }
 

@@ -325,6 +325,11 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     }
 
     @Override
+    public void closeActivity() {
+        finish();
+    }
+
+    @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (!hasFocus) {
             toolbar.collapseActionView();

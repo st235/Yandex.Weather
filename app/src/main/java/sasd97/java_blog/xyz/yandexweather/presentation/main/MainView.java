@@ -15,4 +15,5 @@ public interface MainView extends MvpView {
     void showNewFavoritePlace(Place place);
     void closeDrawer();
     void showSuggestions(String[] strings);
+    void closeActivity();
 }

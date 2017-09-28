@@ -282,7 +282,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
     @Override
     public void onPagerFragmentAttached() {
-        presenter.getForecastFromDb();
+        presenter.fetchForecast();
     }
 
     @Override
