@@ -165,7 +165,7 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Single<Place> getUserLocationPlace() {
+    public Single<Place> getSavedLocationPlace() {
         return Single.fromCallable(() -> {
             String placeJson = prefsStorage.getString(PLACE_PREFS_KEY, null);
             if (placeJson == null) {

@@ -34,10 +34,10 @@ public class UpdateWeatherJob extends Job {
     protected Result onRunJob(Params params) {
         Log.i(TAG, "Update had been started");
 
-        repository.getUserLocationPlace()
+        repository.getSavedLocationPlace()
                 .flatMap(repository::getWeather)
                 .map(weatherModel -> gson.toJson(weatherModel))
-                .zipWith(repository.getUserLocationPlace(), Pair::new)
+                .zipWith(repository.getSavedLocationPlace(), Pair::new)
                 .map(pair -> repository.saveWeatherToCache(pair.second, pair.first))
                 .subscribe(completable -> {}, Throwable::printStackTrace);
 

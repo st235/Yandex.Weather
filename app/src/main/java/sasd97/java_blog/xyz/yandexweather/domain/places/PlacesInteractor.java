@@ -24,7 +24,7 @@ public interface PlacesInteractor {
     Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId);
 
     @NonNull
-    Single<Place> getUserLocationPlace();
+    Single<Place> getSavedLocationPlace();
 
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     Single<Place> getCurrentLocation();

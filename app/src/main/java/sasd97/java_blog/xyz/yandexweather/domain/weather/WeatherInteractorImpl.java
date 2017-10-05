@@ -17,6 +17,7 @@ import java.util.TimeZone;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast5;
@@ -76,9 +77,14 @@ public class WeatherInteractorImpl implements WeatherInteractor {
         return repository.getWeather(place)
                 .doOnEvent((weatherModel, throwable) ->
                         repository.saveWeatherToCache(place, gson.toJson(weatherModel))
-                                .subscribe(() -> {}, Throwable::printStackTrace))
+                                .subscribe(() -> {
+
+                                }, throwable1 -> {
+
+                                }))
                 .map(this::convertModel)
-                .map(weatherModel -> weatherModel.setCorrectCity(place));
+                .map(weatherModel -> weatherModel.setCorrectCity(place))
+                .subscribeOn(Schedulers.io());
     }
 
     @Override

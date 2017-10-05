@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
@@ -51,7 +52,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
         getWeather();
 
 //         noinspection MissingPermission
-//        placesInteractor.getUserLocationPlace()
+//        placesInteractor.getSavedLocationPlace()
 //                .compose(schedulers.getIoToMainTransformerSingle())
 //                .onErrorResumeNext(throwable -> placesInteractor.getCurrentLocation())
 //                .flatMap(weatherInteractor::getForecast)
@@ -70,13 +71,17 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
     @SuppressWarnings({"ResourceType"})
     public void getWeather() {
-        placesInteractor.getUserLocationPlace()
-                .onErrorResumeNext(throwable -> placesInteractor.getCurrentLocation()
+        placesInteractor.getSavedLocationPlace()
+                .onErrorResumeNext(locationNotAdded -> placesInteractor.getCurrentLocation()
                         .doOnSuccess(placesInteractor::savePlace)
-                        .doOnError(throwable1 -> getViewState().requestLocationPermissions(this::getWeather)))
+                        .doOnError(gpsDenied -> getViewState().requestLocationPermissions(this::getWeather))
+                        .subscribeOn(AndroidSchedulers.mainThread()))
                 .flatMap(weatherInteractor::getWeather)
                 .compose(schedulers.getIoToMainTransformerSingle())
-                .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
+                .subscribe(this::chooseWeatherType,
+                        throwable -> {
+
+                        });
     }
 
     @NonNull
@@ -101,21 +106,21 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     }
 
     public void fetchWeather() {
-        placesInteractor.getUserLocationPlace()
+        placesInteractor.getSavedLocationPlace()
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .flatMap(weatherInteractor::updateWeather)
                 .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
     }
 
     public void fetchForecast() {
-        placesInteractor.getUserLocationPlace()
+        placesInteractor.getSavedLocationPlace()
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .flatMap(weatherInteractor::updateForecast16)
-                .zipWith(placesInteractor.getUserLocationPlace()
+                .zipWith(placesInteractor.getSavedLocationPlace()
                         .flatMap(weatherInteractor::updateForecast5), this::zipWithWeatherTypes)
                 .map(this::addSettings)
                 .doOnEvent((hashMapSettingsPair, throwable) -> getViewState().showForecast(hashMapSettingsPair))
-                .zipWith(placesInteractor.getUserLocationPlace(), Pair::new)
+                .zipWith(placesInteractor.getSavedLocationPlace(), Pair::new)
                 .map(pairOfPairAndPlace -> {
                     Set<WeatherModel> weatherModelSet = pairOfPairAndPlace.first.first.keySet();
                     for (WeatherModel weather : weatherModelSet) {
@@ -152,6 +157,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
         getViewState().stopRefreshing();
     }
+
 
     public Settings getSettings() {
         return new Settings(weatherInteractor.getTemperatureUnits(),

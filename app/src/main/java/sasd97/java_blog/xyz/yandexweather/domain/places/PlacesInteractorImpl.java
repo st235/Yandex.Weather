@@ -41,8 +41,8 @@ public class PlacesInteractorImpl implements PlacesInteractor {
 
     @NonNull
     @Override
-    public Single<Place> getUserLocationPlace() {
-        return repository.getUserLocationPlace();
+    public Single<Place> getSavedLocationPlace() {
+        return repository.getSavedLocationPlace();
     }
 
     @Override

@@ -58,7 +58,7 @@ public interface AppRepository {
     boolean switchBackgroundServiceState();
 
     Completable savePlace(@NonNull Place place);
-    Single<Place> getUserLocationPlace();
+    Single<Place> getSavedLocationPlace();
 
     void saveWeatherUpdateInterval(int minutes);
     int getWeatherUpdateInterval();

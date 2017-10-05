@@ -70,10 +70,10 @@ public class PlacesInteractorTest {
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
 
-        when(repo.getUserLocationPlace()).thenReturn(Single.just(place));
+        when(repo.getSavedLocationPlace()).thenReturn(Single.just(place));
 
-        placesInteractor.getUserLocationPlace();
-        verify(repo, only()).getUserLocationPlace();
+        placesInteractor.getSavedLocationPlace();
+        verify(repo, only()).getSavedLocationPlace();
     }
 
     @Test

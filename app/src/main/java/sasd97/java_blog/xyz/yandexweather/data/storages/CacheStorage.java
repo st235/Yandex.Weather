@@ -33,10 +33,17 @@ public class CacheStorage implements Storage<String> {
             File file = new File(cacheDirectory, key);
             outputStream = new FileOutputStream(file);
             outputStream.write(representation.getBytes());
-            outputStream.close();
             Log.d(TAG, "Putted key (/folder): " + key + " value: " + value);
         } catch (IOException exception) {
             Log.e(TAG, "Cache cannot be writtable");
+        } finally {
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                Log.e("tag", e.toString());
+            }
         }
 
         return this;

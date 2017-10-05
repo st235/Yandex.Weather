@@ -221,8 +221,8 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 //                        presenter.fetchForecast();
                     });
         } else {
-            Intent onGPS = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(onGPS);
+            String openLocationSettings = android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+            startActivity(new Intent(openLocationSettings));
         }
     }
 
