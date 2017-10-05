@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.modules.ConvertersModule;
@@ -87,7 +87,7 @@ public class WeatherInteractorTest {
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
 
-        when(repo.getWeather(place)).thenReturn(Observable.just(new WeatherModel.Builder().build()));
+        when(repo.getWeather(place)).thenReturn(Single.just(new WeatherModel.Builder().build()));
         when(repo.getCachedWeather(place)).thenReturn(null);
 
         weatherInteractor.getWeather(place);
@@ -103,7 +103,7 @@ public class WeatherInteractorTest {
 
         WeatherModel fromRemote = new WeatherModel.Builder().build();
 
-        when(repo.getWeather(place)).thenReturn(Observable.just(fromRemote));
+        when(repo.getWeather(place)).thenReturn(Single.just(fromRemote));
 
         weatherInteractor.updateWeather(place).test();
         verify(repo, never()).getCachedWeather(place);

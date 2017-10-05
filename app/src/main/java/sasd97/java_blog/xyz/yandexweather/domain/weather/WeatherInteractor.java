@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
@@ -17,14 +16,14 @@ import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
  */
 
 public interface WeatherInteractor {
-    Observable<WeatherModel> getWeather(@NonNull Place place);
-    Observable<WeatherModel> updateWeather(@NonNull Place place);
+    Single<WeatherModel> getWeather(@NonNull Place place);
+    Single<WeatherModel> updateWeather(@NonNull Place place);
 
     Single<List<WeatherType>> updateForecast5(@NonNull Place place);
     Single<LinkedHashMap<WeatherModel, WeatherType[]>> updateForecast16(@NonNull Place place);
 
     //db
-    Single<LinkedHashMap<WeatherModel, WeatherType[]>> getForecast(String placeId);
+    Single<LinkedHashMap<WeatherModel, WeatherType[]>> getForecast(Place place);
     Completable saveForecast(List<WeatherModel> forecast);
     Completable removeForecast(String placeId);
 

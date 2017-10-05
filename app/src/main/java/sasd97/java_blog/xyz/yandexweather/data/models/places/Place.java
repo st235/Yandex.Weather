@@ -6,12 +6,11 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.v4.util.Pair;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import sasd97.java_blog.xyz.yandexweather.data.storages.RoomTypeConverters;
-
-import static sasd97.java_blog.xyz.yandexweather.WeatherApp.SPACE;
 
 /**
  * Created by Maksim Sukhotski on 7/25/2017.
@@ -85,6 +84,6 @@ public class Place {
 
     @Override
     public String toString() {
-        return name + " *** " + coords.first.toString() + SPACE + coords.second.toString() + SPACE + placeId;
+        return new Gson().toJson(this);
     }
 }

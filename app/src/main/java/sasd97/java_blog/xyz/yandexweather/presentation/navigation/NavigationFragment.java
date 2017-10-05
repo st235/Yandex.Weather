@@ -29,7 +29,7 @@ import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
-import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
+import sasd97.java_blog.xyz.yandexweather.utils.AndroidUtils;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
 import sasd97.java_blog.xyz.yandexweather.utils.FlipLayout;
 import sasd97.java_blog.xyz.yandexweather.utils.NavigationFragmentAction;
@@ -195,7 +195,7 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
 
     @Override
     public void removeSelectedPlaces() {
-        presenter.removeSelectedPlaces(AndroidMath.asList(placesRecyclerAdapter.getSelectedPlaces()));
+        presenter.removeSelectedPlaces(AndroidUtils.asList(placesRecyclerAdapter.getSelectedPlaces()));
         placesRecyclerAdapter.removeSelectedPlaces();
     }
 

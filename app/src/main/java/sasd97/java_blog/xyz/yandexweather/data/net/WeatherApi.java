@@ -1,6 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.data.net;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
@@ -16,9 +17,9 @@ public interface WeatherApi {
     int days = 16;
 
     @GET("weather")
-    Observable<ResponseWeather> getWeather(@Query("lat") double lat,
-                                           @Query("lon") double lon,
-                                           @Query("appid") String apiKey);
+    Single<ResponseWeather> getWeather(@Query("lat") double lat,
+                                       @Query("lon") double lon,
+                                       @Query("appid") String apiKey);
 
     @GET("forecast")
     Observable<ResponseForecast5> getForecast5(@Query("lat") double lat,

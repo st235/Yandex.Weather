@@ -1,5 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
+import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,8 +42,9 @@ import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerPagerAdapter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
-import sasd97.java_blog.xyz.yandexweather.utils.ViewPagerAction;
+import sasd97.java_blog.xyz.yandexweather.utils.AndroidUtils;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
+import sasd97.java_blog.xyz.yandexweather.utils.ViewPagerAction;
 
 import static sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerPagerAdapter.getTagFor;
 
@@ -162,7 +166,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     }
 
     @Override
-    public void setWeather(@NonNull WeatherModel weather, @NonNull WeatherType type) {
+    public void showWeather(@NonNull WeatherModel weather, @NonNull WeatherType type) {
         updateWeatherTheme(type.getCardColor(), type.getTextColor());
         updateWeather(weather, type.getIconRes(), type.getTitleRes());
     }
@@ -197,8 +201,28 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             recyclerFragment1.show(rv1items, pair.second);
             recyclerFragment2.show(rv2items, pair.second);
         } else {
+            assert forecastRecycler != null;
             forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second);
             forecastRecycler.setAdapter(forecastRecyclerAdapter);
+        }
+    }
+
+    @Override
+    public void requestLocationPermissions(Runnable callingMethod) {
+        if (AndroidUtils.isLocationPermissionsDenied(getContext())) {
+            RxPermissions rxPermissions = new RxPermissions(getActivity());
+            rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION)
+                    .subscribe(granted -> {
+                        if (!granted) {
+                            //TODO implement action when permissions not granted
+                            return;
+                        }
+                        callingMethod.run();
+//                        presenter.fetchForecast();
+                    });
+        } else {
+            Intent onGPS = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(onGPS);
         }
     }
 

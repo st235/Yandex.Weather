@@ -45,7 +45,7 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
 import sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
-import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
+import sasd97.java_blog.xyz.yandexweather.utils.AndroidUtils;
 import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
 import sasd97.java_blog.xyz.yandexweather.utils.NavigationFragmentAction;
@@ -116,8 +116,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         toolbarSelected.setVisibility(View.GONE);
         if (slidingPaneLayout != null) {
             initSlidingPanelListener();
-            toolbar.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()));
-            toolbarSelected.setTranslationX(-AndroidMath.dp2px(320 - 80, getResources()));
+            toolbar.setTranslationX(-AndroidUtils.dp2px(320 - 80, getResources()));
+            toolbarSelected.setTranslationX(-AndroidUtils.dp2px(320 - 80, getResources()));
         }
     }
 

@@ -1,6 +1,9 @@
 package sasd97.java_blog.xyz.yandexweather.domain.places;
 
+import android.content.res.Resources;
+import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
 
 import java.util.List;
 
@@ -18,7 +21,8 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 
 public class PlacesInteractorImpl implements PlacesInteractor {
 
-    private static final String TAG = PlacesInteractorImpl.class.getCanonicalName();
+    private static final String GPS_IS_OFF = "Gps is off";
+    private static final String EMPTY_NAME = "";
     private AppRepository repository;
 
     public PlacesInteractorImpl(@NonNull AppRepository repository) {
@@ -37,8 +41,20 @@ public class PlacesInteractorImpl implements PlacesInteractor {
 
     @NonNull
     @Override
-    public Place getPlace() {
-        return repository.getPlace();
+    public Single<Place> getUserLocationPlace() {
+        return repository.getUserLocationPlace();
+    }
+
+    @Override
+    public Single<Place> getCurrentLocation() {
+        return Single.fromCallable(() -> {
+            // noinspection MissingPermission
+            Location location = repository.getCurrentLocation();
+            if (location == null) {
+                throw new Resources.NotFoundException(GPS_IS_OFF);
+            }
+            return new Place(EMPTY_NAME, new Pair<>(location.getLatitude(), location.getLongitude()));
+        });
     }
 
     @Override
@@ -54,5 +70,10 @@ public class PlacesInteractorImpl implements PlacesInteractor {
     @Override
     public Completable removePlacesFromFavorites(List<Place> places) {
         return repository.removePlaces(places);
+    }
+
+    @Override
+    public Completable savePlace(@NonNull Place place) {
+        return repository.savePlace(place);
     }
 }

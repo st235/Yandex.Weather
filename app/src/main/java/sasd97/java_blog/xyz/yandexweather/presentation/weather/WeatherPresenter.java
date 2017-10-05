@@ -6,14 +6,12 @@ import android.support.v4.util.Pair;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 
-import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
@@ -31,10 +29,10 @@ import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 @InjectViewState
 public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
-    private RxSchedulers schedulers;
-    private PlacesInteractor placesInteractor;
-    private WeatherInteractor weatherInteractor;
-    private Set<WeatherType> weatherTypes;
+    private final RxSchedulers schedulers;
+    private final PlacesInteractor placesInteractor;
+    private final WeatherInteractor weatherInteractor;
+    private final Set<WeatherType> weatherTypes;
 
     @Inject
     public WeatherPresenter(@NonNull RxSchedulers schedulers,
@@ -50,24 +48,35 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     @Override
     public void attachView(WeatherView view) {
         super.attachView(view);
-        Place place = placesInteractor.getPlace();
-        weatherInteractor.getWeather(place)
-                .compose(schedulers.getIoToMainTransformer())
-                .map(weatherModel -> weatherModel.setCorrectCity(place))
-                .subscribe(this::chooseWeather, Throwable::printStackTrace);
-        getForecastFromDb();
+        getWeather();
+
+//         noinspection MissingPermission
+//        placesInteractor.getUserLocationPlace()
+//                .compose(schedulers.getIoToMainTransformerSingle())
+//                .onErrorResumeNext(throwable -> placesInteractor.getCurrentLocation())
+//                .flatMap(weatherInteractor::getForecast)
+//                .compose(schedulers.getIoToMainTransformerSingle())
+//                .map(this::addSettings)
+//                .filter(hashMapSettingsPair -> {
+//                    if (hashMapSettingsPair.first.keySet().isEmpty()) {
+//                        fetchForecast();
+//                        return false;
+//                    }
+//                    return true;
+//                })
+//                .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair),
+//                        Throwable::printStackTrace);
     }
 
-    public void getForecastFromDb() {
-        weatherInteractor.getForecast(placesInteractor.getPlace().getPlaceId())
-                .compose(schedulers.getComputationToMainTransformerSingle())
-                .map(this::addSettings)
-                .doOnSuccess(this::checkIfEmpty)
-                .subscribe(hashMapSettingsPair -> {}, Throwable::printStackTrace);
-    }
-
-    private void checkIfEmpty(Pair<LinkedHashMap<WeatherModel, WeatherType[]>, Settings> hashMapSettingsPair) {
-        if (hashMapSettingsPair.first.keySet().size() == 0) fetchForecast();
+    @SuppressWarnings({"ResourceType"})
+    public void getWeather() {
+        placesInteractor.getUserLocationPlace()
+                .onErrorResumeNext(throwable -> placesInteractor.getCurrentLocation()
+                        .doOnSuccess(placesInteractor::savePlace)
+                        .doOnError(throwable1 -> getViewState().requestLocationPermissions(this::getWeather)))
+                .flatMap(weatherInteractor::getWeather)
+                .compose(schedulers.getIoToMainTransformerSingle())
+                .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
     }
 
     @NonNull
@@ -92,33 +101,34 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     }
 
     public void fetchWeather() {
-        weatherInteractor.updateWeather(placesInteractor.getPlace())
-                .compose(schedulers.getIoToMainTransformer())
-                .map(weatherModel -> weatherModel.setCorrectCity(placesInteractor.getPlace()))
-                .subscribe(this::chooseWeather, Throwable::printStackTrace);
+        placesInteractor.getUserLocationPlace()
+                .compose(schedulers.getIoToMainTransformerSingle())
+                .flatMap(weatherInteractor::updateWeather)
+                .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
     }
 
     public void fetchForecast() {
-        Place place = placesInteractor.getPlace();
-        weatherInteractor.updateForecast16(place)
-                .zipWith(weatherInteractor.updateForecast5(place), this::zipWithWeatherTypes)
+        placesInteractor.getUserLocationPlace()
                 .compose(schedulers.getIoToMainTransformerSingle())
-                .doOnSuccess(this::saveForecastToDb)
+                .flatMap(weatherInteractor::updateForecast16)
+                .zipWith(placesInteractor.getUserLocationPlace()
+                        .flatMap(weatherInteractor::updateForecast5), this::zipWithWeatherTypes)
                 .map(this::addSettings)
-                .subscribe(getViewState()::showForecast, Throwable::printStackTrace);
+                .doOnEvent((hashMapSettingsPair, throwable) -> getViewState().showForecast(hashMapSettingsPair))
+                .zipWith(placesInteractor.getUserLocationPlace(), Pair::new)
+                .map(pairOfPairAndPlace -> {
+                    Set<WeatherModel> weatherModelSet = pairOfPairAndPlace.first.first.keySet();
+                    for (WeatherModel weather : weatherModelSet) {
+                        weather.setPlaceId(pairOfPairAndPlace.second.getPlaceId());
+                    }
+                    return weatherModelSet;
+                })
+                .toObservable()
+                .flatMapIterable(weatherModels -> weatherModels)
+                .toList()
+                .flatMapCompletable(weatherInteractor::saveForecast)
+                .subscribe(() -> {}, Throwable::printStackTrace);
     }
-
-    private void saveForecastToDb(LinkedHashMap<WeatherModel, WeatherType[]> hashMap) {
-        String placeId = placesInteractor.getPlace().getPlaceId();
-        ArrayList<WeatherModel> forecast = new ArrayList<>(hashMap.keySet());
-        for (WeatherModel weather : forecast) {
-            weather.setPlaceId(placeId);
-        }
-        weatherInteractor.saveForecast(forecast)
-                .compose(schedulers.getIoToMainTransformerCompletable())
-                .subscribe();
-    }
-
 
     public boolean isCelsius() {
         return weatherInteractor.getTemperatureUnits() == ConvertersConfig.TEMPERATURE_CELSIUS;
@@ -132,11 +142,12 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
         return weatherInteractor.getPressureUnits() == ConvertersConfig.PRESSURE_MMHG;
     }
 
-    private void chooseWeather(@NonNull WeatherModel weather) {
+    private void chooseWeatherType(@NonNull WeatherModel weather) {
         for (WeatherType type : weatherTypes) {
-            if (!type.isApplicable(weather)) continue;
-            getViewState().setWeather(weather, type);
-            break;
+            if (type.isApplicable(weather)) {
+                getViewState().showWeather(weather, type);
+                break;
+            }
         }
 
         getViewState().stopRefreshing();

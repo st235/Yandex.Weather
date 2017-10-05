@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepositoryImpl;
+import sasd97.java_blog.xyz.yandexweather.data.location.LocationProvider;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
@@ -61,6 +63,7 @@ public class AppRepositoryTest {
     private AppRepository repo;
     private PlacesDao placesDao;
     private WeatherDao weatherDao;
+    private LocationProvider locationProvider;
 
     @Before
     public void setup() {
@@ -70,8 +73,10 @@ public class AppRepositoryTest {
         weatherDao = mock(WeatherDao.class);
         cacheStorage = mock(CacheStorage.class);
         prefsStorage = mock(PrefsStorage.class);
+        locationProvider = mock(LocationProvider.class);
         apiKeys = new Pair<>("weatherApiKey", "placesApiKey");
-        repo = new AppRepositoryImpl(placesDao,weatherDao, weatherApi, placesApi, apiKeys, cacheStorage, prefsStorage);
+        repo = new AppRepositoryImpl(placesDao, weatherDao, weatherApi, placesApi, apiKeys,
+                cacheStorage, prefsStorage, locationProvider);
     }
 
     @Test
@@ -116,7 +121,7 @@ public class AppRepositoryTest {
                 new Clouds(), 0, new SunsetAndSunrise(), "", 0);
 
         when(weatherApi.getWeather(place.getCoords().first, place.getCoords().second, apiKeys.first))
-                .thenReturn(Observable.just(responseWeather));
+                .thenReturn(Single.just(responseWeather));
         repo.getWeather(place)
                 .test()
                 .assertComplete();
@@ -127,7 +132,6 @@ public class AppRepositoryTest {
     public void getPlace() {
         Place place = new Place("ChIJybDUc_xKtUYRTM9XV8zWRD0", "Москва", new Pair<>(0.0, 0.0), (int) Instant.now().getEpochSecond());
         when(prefsStorage.getString(PLACE_PREFS_KEY, "")).thenReturn(place.toString());
-        Place repoPlace = repo.getPlace();
         String expected = "Москва *** 0.0 0.0 ChIJybDUc_xKtUYRTM9XV8zWRD0";
         Assert.assertEquals(expected, place.toString());
     }

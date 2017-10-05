@@ -1,17 +1,21 @@
 package sasd97.java_blog.xyz.yandexweather.data;
 
+import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
 
-import org.threeten.bp.Instant;
+import com.google.gson.Gson;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.internal.operators.completable.CompletableFromAction;
+import sasd97.java_blog.xyz.yandexweather.data.location.LocationProvider;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast5;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
@@ -40,6 +44,7 @@ public final class AppRepositoryImpl implements AppRepository {
     private Pair<String, String> apiKeys;
     private PlacesDao placesDao;
     private WeatherDao weatherDao;
+    private LocationProvider locationProvider;
 
     public AppRepositoryImpl(@NonNull PlacesDao placesDao,
                              @NonNull WeatherDao weatherDao,
@@ -47,7 +52,8 @@ public final class AppRepositoryImpl implements AppRepository {
                              @NonNull PlacesApi placesApi,
                              @NonNull Pair<String, String> apiKeys,
                              @NonNull Storage<String> cacheStorage,
-                             @NonNull Storage<String> prefsStorage) {
+                             @NonNull Storage<String> prefsStorage,
+                             @NonNull LocationProvider locationProvider) {
         this.weatherDao = weatherDao;
         this.placesDao = placesDao;
         this.weatherApi = weatherApi;
@@ -55,10 +61,11 @@ public final class AppRepositoryImpl implements AppRepository {
         this.apiKeys = apiKeys;
         this.cacheStorage = cacheStorage;
         this.prefsStorage = prefsStorage;
+        this.locationProvider = locationProvider;
     }
 
     @Override
-    public Observable<WeatherModel> getWeather(@NonNull Place place) {
+    public Single<WeatherModel> getWeather(@NonNull Place place) {
         return weatherApi
                 .getWeather(place.getCoords().first, place.getCoords().second, apiKeys.first)
                 .map(w -> new WeatherModel.Builder()
@@ -136,8 +143,8 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public void saveWeatherToCache(@NonNull Place place, @NonNull String json) {
-        cacheStorage.put(toFileName(place), json);
+    public Completable saveWeatherToCache(@NonNull Place place, @NonNull String json) {
+        return Completable.fromCallable(() -> cacheStorage.put(toFileName(place), json));
     }
 
     @Override
@@ -158,19 +165,14 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Place getPlace() {
-        String s = prefsStorage.getString(PLACE_PREFS_KEY, "");
-        String placeName = s.split("\\*\\*\\*")[0];
-        String[] objects = s.split(SPACE);
-        /*"some_city_coord1_coord2".split("_").length >= 3*/
-        if (objects.length < 3){
-            return new Place("ChIJybDUc_xKtUYRTM9XV8zWRD0", "Москва", new Pair<>(0.0, 0.0), (int) Instant.now().getEpochSecond());
-        }
-        String c1 = objects[objects.length - 3];
-        String c2 = objects[objects.length - 2];
-        String placeId = objects[objects.length - 1];
-        return new Place(placeId , placeName,
-                new Pair<>(Double.valueOf(c1), Double.valueOf(c2)), (int) Instant.now().getEpochSecond());
+    public Single<Place> getUserLocationPlace() {
+        return Single.fromCallable(() -> {
+            String placeJson = prefsStorage.getString(PLACE_PREFS_KEY, null);
+            if (placeJson == null) {
+                throw new NoSuchElementException(LOCATION_NOT_ADDED);
+            }
+            return new Gson().fromJson(placeJson, Place.class);
+        });
     }
 
     @Override
@@ -211,6 +213,13 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public int getSpeedUnits() {
         return prefsStorage.getInteger(UNITS_SPEED_PREFS_KEY, 0);
+    }
+
+    @Nullable
+    @Override
+    public Location getCurrentLocation() {
+        // noinspection MissingPermission
+        return locationProvider.getLastKnownLocation();
     }
 
     public static String toFileName(@NonNull Place place) {

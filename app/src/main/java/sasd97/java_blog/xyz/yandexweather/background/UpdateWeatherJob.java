@@ -1,6 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.background;
 
 import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
 import android.util.Log;
 
 import com.evernote.android.job.Job;
@@ -33,13 +34,12 @@ public class UpdateWeatherJob extends Job {
     protected Result onRunJob(Params params) {
         Log.i(TAG, "Update had been started");
 
-        repository
-                .getWeather(repository.getPlace())
-                .doOnError(Throwable::printStackTrace)
-                .subscribe(weather -> {
-                    Log.i(TAG, weather.toString());
-                    repository.saveWeatherToCache(repository.getPlace(), gson.toJson(weather));
-                }, Throwable::printStackTrace);
+        repository.getUserLocationPlace()
+                .flatMap(repository::getWeather)
+                .map(weatherModel -> gson.toJson(weatherModel))
+                .zipWith(repository.getUserLocationPlace(), Pair::new)
+                .map(pair -> repository.saveWeatherToCache(pair.second, pair.first))
+                .subscribe(completable -> {}, Throwable::printStackTrace);
 
         return Result.SUCCESS;
     }

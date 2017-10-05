@@ -48,7 +48,7 @@ public class MainPresenterTest {
         placesInteractor = mock(PlacesInteractor.class);
         settingsInteractor = mock(SettingsInteractor.class);
         placeId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
-        when(rxSchedulers.getIoToMainTransformer()).thenReturn(objectObservable -> objectObservable);
+        when(rxSchedulers.getIoToMainTransformerObservable()).thenReturn(objectObservable -> objectObservable);
 
         presenter = new MainPresenter(rxSchedulers, placesInteractor, settingsInteractor);
         presenter.setWeatherRouter(new AppFragmentRouter(R.id.fragment_container_weather, fragmentActivity));

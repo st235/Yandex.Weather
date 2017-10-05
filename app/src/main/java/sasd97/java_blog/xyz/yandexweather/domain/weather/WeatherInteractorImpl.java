@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
@@ -60,19 +59,26 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     }
 
     @Override
-    public Observable<WeatherModel> getWeather(@NonNull Place place) {
+    public Single<WeatherModel> getWeather(@NonNull Place place) {
         String cacheWeather = repository.getCachedWeather(place);
-        if (cacheWeather == null) return updateWeather(place);
-        return Observable.just(cacheWeather)
+        if (cacheWeather == null) {
+            return updateWeather(place);
+        }
+
+        return Single.just(cacheWeather)
                 .map(cache -> gson.fromJson(cache, WeatherModel.class))
-                .map(this::convertModel);
+                .map(this::convertModel)
+                .map(weatherModel -> weatherModel.setCorrectCity(place));
     }
 
     @Override
-    public Observable<WeatherModel> updateWeather(@NonNull Place place) {
+    public Single<WeatherModel> updateWeather(@NonNull Place place) {
         return repository.getWeather(place)
-                .doOnNext(w -> repository.saveWeatherToCache(place, gson.toJson(w)))
-                .map(this::convertModel);
+                .doOnEvent((weatherModel, throwable) ->
+                        repository.saveWeatherToCache(place, gson.toJson(weatherModel))
+                                .subscribe(() -> {}, Throwable::printStackTrace))
+                .map(this::convertModel)
+                .map(weatherModel -> weatherModel.setCorrectCity(place));
     }
 
     @Override
@@ -109,8 +115,8 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     }
 
     @Override
-    public Single<LinkedHashMap<WeatherModel, WeatherType[]>> getForecast(String placeId) {
-        return repository.getForecast(placeId)
+    public Single<LinkedHashMap<WeatherModel, WeatherType[]>> getForecast(Place place) {
+        return repository.getForecast(place.getPlaceId())
                 .toObservable()
                 .flatMapIterable(weatherModels -> weatherModels)
                 .map(this::addWeatherType)

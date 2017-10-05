@@ -11,6 +11,7 @@ import dagger.Module;
 import dagger.Provides;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepositoryImpl;
+import sasd97.java_blog.xyz.yandexweather.data.location.LocationProvider;
 import sasd97.java_blog.xyz.yandexweather.data.net.PlacesApi;
 import sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi;
 import sasd97.java_blog.xyz.yandexweather.data.storages.CacheStorage;
@@ -72,8 +73,9 @@ public class AppModule {
                                            PlacesApi placesApi,
                                            Pair<String, String> apiKeys,
                                            PrefsStorage prefsStorage,
-                                           CacheStorage cacheStorage) {
+                                           CacheStorage cacheStorage,
+                                           LocationProvider locationProvider) {
         return new AppRepositoryImpl(placesDao, weatherDao,
-                weatherApi, placesApi, apiKeys, cacheStorage, prefsStorage);
+                weatherApi, placesApi, apiKeys, cacheStorage, prefsStorage, locationProvider);
     }
 }

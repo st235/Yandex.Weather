@@ -109,7 +109,9 @@ dependencies {
     compile libraries.room
     compile libraries.roomRxJava
     annotationProcessor libraries.compiler
+
     compile 'com.facebook.stetho:stetho:1.5.0'
-    compile 'com.facebook.stetho:stetho-okhttp:1.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
+    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
     compile libraries.threeTenABP
 }

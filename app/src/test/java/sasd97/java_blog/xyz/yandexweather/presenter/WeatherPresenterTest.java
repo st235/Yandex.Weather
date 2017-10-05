@@ -11,7 +11,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.internal.operators.completable.CompletableFromAction;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
@@ -64,15 +63,15 @@ public class WeatherPresenterTest {
         String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
         place = new Place(placeName, coords);
         place.setPlaceId(testId);
-        when(placesInteractor.getPlace()).thenReturn(place);
+        when(placesInteractor.getUserLocationPlace()).thenReturn(Single.just(place));
         WeatherModel weatherModel = new WeatherModel.Builder().build();
-        when(weatherInteractor.getWeather(place)).thenReturn(Observable.just(weatherModel));
-        when(rxSchedulers.getIoToMainTransformer()).thenReturn(objectObservable -> objectObservable);
+        when(weatherInteractor.getWeather(place)).thenReturn(Single.just(weatherModel));
+        when(rxSchedulers.getIoToMainTransformerObservable()).thenReturn(objectObservable -> objectObservable);
         when(rxSchedulers.getIoToMainTransformerSingle()).thenReturn(objectObservable -> objectObservable);
         when(rxSchedulers.getComputationToMainTransformerSingle()).thenReturn(objectObservable -> objectObservable);
         when(rxSchedulers.getIoToMainTransformerCompletable()).thenReturn(objectObservable -> objectObservable);
-        when(placesInteractor.getPlace()).thenReturn(place);
-        when(weatherInteractor.getForecast(testId)).thenReturn(Single.fromCallable(LinkedHashMap::new));
+        when(placesInteractor.getUserLocationPlace()).thenReturn(Single.just(place));
+        when(weatherInteractor.getForecast(place)).thenReturn(Single.fromCallable(LinkedHashMap::new));
         when(weatherInteractor.updateForecast5(place)).thenReturn(Single.fromCallable(ArrayList::new));
         when(weatherInteractor.updateForecast16(place)).thenReturn(Single.fromCallable(LinkedHashMap::new));
         when(weatherInteractor.getPressureUnits()).thenReturn(ConvertersConfig.TEMPERATURE_CELSIUS);
@@ -94,10 +93,10 @@ public class WeatherPresenterTest {
         Place place = new Place(placeName, coords);
         WeatherModel weatherModel = new WeatherModel.Builder().build();
 
-        when(placesInteractor.getPlace()).thenReturn(place);
+        when(placesInteractor.getUserLocationPlace()).thenReturn(Single.just(place));
         String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
-        when(weatherInteractor.getForecast(testId)).thenReturn(Single.fromCallable(LinkedHashMap::new));
-        when(weatherInteractor.updateWeather(place)).thenReturn(Observable.just(weatherModel));
+        when(weatherInteractor.getForecast(place)).thenReturn(Single.fromCallable(LinkedHashMap::new));
+        when(weatherInteractor.updateWeather(place)).thenReturn(Single.just(weatherModel));
 
         presenter.fetchWeather();
         verify(view, times(2)).stopRefreshing();
@@ -129,7 +128,7 @@ public class WeatherPresenterTest {
         presenter.fetchForecast();
         verify(weatherInteractor, times(3)).getTemperatureUnits();
         verify(weatherInteractor, times(2)).updateForecast16(place);
-        verify(placesInteractor, times(6)).getPlace();
+        verify(placesInteractor, times(6)).getUserLocationPlace();
         verify(weatherInteractor, times(2)).saveForecast(forecast);
     }
 }

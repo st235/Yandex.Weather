@@ -15,7 +15,7 @@ public abstract class RxSchedulers {
     abstract public Scheduler getIoScheduler();
     abstract public Scheduler getComputationScheduler();
 
-    public <T> ObservableTransformer<T, T> getIoToMainTransformer()  {
+    public <T> ObservableTransformer<T, T> getIoToMainTransformerObservable()  {
         return objectObservable -> objectObservable
                 .subscribeOn(getIoScheduler())
                 .observeOn(getMainThreadScheduler());

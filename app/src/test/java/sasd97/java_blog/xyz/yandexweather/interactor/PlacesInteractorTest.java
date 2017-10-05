@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
@@ -69,10 +70,10 @@ public class PlacesInteractorTest {
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
 
-        when(repo.getPlace()).thenReturn(place);
+        when(repo.getUserLocationPlace()).thenReturn(Single.just(place));
 
-        placesInteractor.getPlace();
-        verify(repo, only()).getPlace();
+        placesInteractor.getUserLocationPlace();
+        verify(repo, only()).getUserLocationPlace();
     }
 
     @Test

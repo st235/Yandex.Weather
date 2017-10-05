@@ -117,7 +117,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     public Observable<String[]> search(String query) {
         return placesInteractor.getPlaces(query)
-                .compose(schedulers.getIoToMainTransformer())
+                .compose(schedulers.getIoToMainTransformerObservable())
                 .filter(PlacesResponse::isSuccess)
                 .doOnNext(this::setPlacesResponse)
                 .map(PlacesResponse::getPredictionStrings)
@@ -130,7 +130,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     public void saveNewPlace(int position, boolean addToFavorites) {
         placesInteractor.getPlaceDetails(placesResponse.getPlaceIdAt(position))
-                .compose(schedulers.getIoToMainTransformer())
+                .compose(schedulers.getIoToMainTransformerObservable())
                 .map(placeDetailsResponse -> new Place(
                         placesResponse.getPlaceIdAt(position),
                         placesResponse.getPlaceNameAt(position),
@@ -141,8 +141,8 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 })
                 .flatMapCompletable(place -> addToFavorites ? placesInteractor.savePlaceToFavorites(place)
                         .compose(schedulers.getIoToMainTransformerCompletable())
-                        .concatWith(settingsInteractor.savePlace(place)) :
-                        settingsInteractor.savePlace(place))
+                        .concatWith(placesInteractor.savePlace(place)) :
+                        placesInteractor.savePlace(place))
                 .doOnComplete(this::openWeatherFragment)
                 .subscribe(() -> {}, Throwable::printStackTrace);
     }
@@ -151,7 +151,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public void saveCurrentPlace(Place place, Place toReplace) {
         placesInteractor.savePlaceToFavorites(place)
                 .andThen(placesInteractor.savePlaceToFavorites(toReplace))
-                .andThen(settingsInteractor.savePlace(place))
+                .andThen(placesInteractor.savePlace(place))
                 .compose(schedulers.getIoToMainTransformerCompletable())
                 .delay(250, TimeUnit.MILLISECONDS)
                 .doOnComplete(this::openWeatherFragment)

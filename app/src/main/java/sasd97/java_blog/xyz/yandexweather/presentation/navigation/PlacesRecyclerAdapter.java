@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
-import sasd97.java_blog.xyz.yandexweather.utils.AndroidMath;
+import sasd97.java_blog.xyz.yandexweather.utils.AndroidUtils;
 import sasd97.java_blog.xyz.yandexweather.utils.FlipLayout;
 import sasd97.java_blog.xyz.yandexweather.utils.SerializableSparseArray;
 
@@ -116,7 +116,7 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
             assert holder.tvFirstLetter != null;
             holder.tvFirstLetter.setText(String.valueOf(places.get(position).getName().charAt(0)));
             int hashCode = places.get(position).getPlaceId().hashCode();
-            holder.ivColor.setColorFilter(holder.colors[AndroidMath.intToDigit(hashCode)]);
+            holder.ivColor.setColorFilter(holder.colors[AndroidUtils.intToDigit(hashCode)]);
             holder.tvPlaceName.setText(places.get(position).getName());
             if (selectedPlaces.get(position) != null) holder.flipLayout.setFlipped(true);
             else holder.flipLayout.setFlipped(false);
