@@ -5,6 +5,7 @@ import android.location.Location;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -42,7 +43,7 @@ public class PlacesInteractorImpl implements PlacesInteractor {
 
     @Override
     public Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@NonNull LatLng coords) {
-        return repository.getPlaceDetailsByCoords(coords)
+        return repository.getPlaceDetailsByCoords(coords, Locale.getDefault().getLanguage())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

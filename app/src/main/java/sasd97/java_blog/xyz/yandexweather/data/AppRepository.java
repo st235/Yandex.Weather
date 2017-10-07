@@ -41,7 +41,7 @@ public interface AppRepository {
     Observable<ResponseForecast16> getForecast16(@NonNull Place place);
     Observable<PlacesResponse> getPlaces(@NonNull String s);
     Observable<PlaceDetailsResponse> getPlaceDetailsById(@NonNull String placeId);
-    Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@NonNull LatLng latlng);
+    Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@NonNull LatLng latlng, @NonNull String lang);
 
     //db
     Single<List<Place>> getFavoritePlaces();

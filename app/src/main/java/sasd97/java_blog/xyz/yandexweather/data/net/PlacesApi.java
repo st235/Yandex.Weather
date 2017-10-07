@@ -15,11 +15,15 @@ public interface PlacesApi {
     String BASE_URL = "https://maps.googleapis.com/maps/api/";
 
     @GET("place/autocomplete/json")
-    Observable<PlacesResponse> getPlaces(@Query("input") String input, @Query("key") String apiKey);
+    Observable<PlacesResponse> getPlaces(@Query("input") String input,
+                                         @Query("key") String apiKey);
 
     @GET("place/details/json")
-    Observable<PlaceDetailsResponse> getPlaceDetailsById(@Query("placeid") String placeId, @Query("key") String apiKey);
+    Observable<PlaceDetailsResponse> getPlaceDetailsById(@Query("placeid") String placeId,
+                                                         @Query("key") String apiKey);
 
     @GET("geocode/json")
-    Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@Query("latlng") String latlng, @Query("key") String apiKey);
+    Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@Query("latlng") String latlng,
+                                                         @Query("language") String lang,
+                                                         @Query("key") String apiKey);
 }

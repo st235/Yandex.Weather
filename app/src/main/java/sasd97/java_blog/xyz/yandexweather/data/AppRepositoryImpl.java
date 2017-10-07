@@ -109,8 +109,9 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@NonNull LatLng latlng) {
-        return placesApi.getPlaceDetailsByCoords(latlng.toString(), apiKeys.second);
+    public Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@NonNull LatLng latlng,
+                                                                @NonNull String lang) {
+        return placesApi.getPlaceDetailsByCoords(latlng.toString(), lang, apiKeys.second);
     }
 
     @Override
