@@ -1,7 +1,5 @@
 package sasd97.java_blog.xyz.yandexweather.interactor;
 
-import android.support.v4.util.Pair;
-
 import com.google.gson.Gson;
 
 import org.junit.Before;
@@ -17,6 +15,7 @@ import java.util.Set;
 
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.modules.ConvertersModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.DataModule;
@@ -70,7 +69,7 @@ public class WeatherInteractorTest {
 
     @Test
     public void getCachedWeatherWhenExists() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
 
@@ -83,7 +82,7 @@ public class WeatherInteractorTest {
 
     @Test
     public void getCachedWeatherWhenNotExists() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
 
@@ -97,7 +96,7 @@ public class WeatherInteractorTest {
 
     @Test
     public void updateWeather() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
 

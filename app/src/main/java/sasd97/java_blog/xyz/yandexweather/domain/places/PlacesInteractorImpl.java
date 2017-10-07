@@ -3,14 +3,16 @@ package sasd97.java_blog.xyz.yandexweather.domain.places;
 import android.content.res.Resources;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.support.v4.util.Pair;
 
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
@@ -22,7 +24,6 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 public class PlacesInteractorImpl implements PlacesInteractor {
 
     private static final String GPS_IS_OFF = "Gps is off";
-    private static final String EMPTY_NAME = "";
     private AppRepository repository;
 
     public PlacesInteractorImpl(@NonNull AppRepository repository) {
@@ -35,8 +36,15 @@ public class PlacesInteractorImpl implements PlacesInteractor {
     }
 
     @Override
-    public Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId) {
-        return repository.getPlaceDetails(placeId);
+    public Observable<PlaceDetailsResponse> getPlaceDetailsById(@NonNull String placeId) {
+        return repository.getPlaceDetailsById(placeId);
+    }
+
+    @Override
+    public Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@NonNull LatLng coords) {
+        return repository.getPlaceDetailsByCoords(coords)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @NonNull
@@ -46,14 +54,14 @@ public class PlacesInteractorImpl implements PlacesInteractor {
     }
 
     @Override
-    public Single<Place> getCurrentLocation() {
+    @SuppressWarnings({"ResourceType"})
+    public Single<LatLng> getCurrentCoords() {
         return Single.fromCallable(() -> {
-            // noinspection MissingPermission
             Location location = repository.getCurrentLocation();
             if (location == null) {
                 throw new Resources.NotFoundException(GPS_IS_OFF);
             }
-            return new Place(EMPTY_NAME, new Pair<>(location.getLatitude(), location.getLongitude()));
+            return new LatLng(location.getLatitude(), location.getLongitude());
         });
     }
 
@@ -73,7 +81,7 @@ public class PlacesInteractorImpl implements PlacesInteractor {
     }
 
     @Override
-    public Completable savePlace(@NonNull Place place) {
-        return repository.savePlace(place);
+    public void savePlace(@NonNull Place place) {
+        repository.savePlace(place);
     }
 }

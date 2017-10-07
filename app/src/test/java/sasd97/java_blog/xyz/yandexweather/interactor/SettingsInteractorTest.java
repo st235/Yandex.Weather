@@ -1,7 +1,5 @@
 package sasd97.java_blog.xyz.yandexweather.interactor;
 
-import android.support.v4.util.Pair;
-
 import com.evernote.android.job.JobManager;
 
 import org.junit.Before;
@@ -12,6 +10,7 @@ import org.mockito.Mock;
 
 import io.reactivex.Completable;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.settings.SettingsInteractor;
@@ -78,18 +77,6 @@ public class SettingsInteractorTest {
 
         int intevalFromInteractor = settingsInteractor.getUpdateInterval();
         assertEquals(interval, intevalFromInteractor);
-    }
-
-    @Test
-    public void savePlace() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
-        String placeName = "Moscow";
-        Place place = new Place(placeName, coords);
-
-        when(repo.savePlace(place)).thenReturn(Completable.complete());
-
-        settingsInteractor.savePlace(place).test();
-        verify(repo, times(1)).savePlace(place);
     }
 
     @Test

@@ -217,7 +217,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                             //TODO implement action when permissions not granted
                             return;
                         }
-                        callingMethod.run();
+//                        callingMethod.run();
 //                        presenter.fetchForecast();
                     });
         } else {

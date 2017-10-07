@@ -1,7 +1,5 @@
 package sasd97.java_blog.xyz.yandexweather.interactor;
 
-import android.support.v4.util.Pair;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +11,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
@@ -45,11 +44,11 @@ public class PlacesInteractorTest {
         String placeId = "placeId";
         PlaceDetailsResponse response = new PlaceDetailsResponse();
 
-        when(repo.getPlaceDetails(placeId)).thenReturn(Observable.just(response));
+        when(repo.getPlaceDetailsById(placeId)).thenReturn(Observable.just(response));
 
-        placesInteractor.getPlaceDetails(placeId).test()
+        placesInteractor.getPlaceDetailsById(placeId).test()
                 .assertValue(response);
-        verify(repo, times(1)).getPlaceDetails(placeId);
+        verify(repo, times(1)).getPlaceDetailsById(placeId);
     }
 
     @Test
@@ -66,7 +65,7 @@ public class PlacesInteractorTest {
 
     @Test
     public void getPlace() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
 
@@ -78,7 +77,7 @@ public class PlacesInteractorTest {
 
     @Test
     public void savePlaceToFavorites() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
 
@@ -88,7 +87,7 @@ public class PlacesInteractorTest {
 
     @Test
     public void removePlacesFromFavorites() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
         List<Place> list = new ArrayList<>();

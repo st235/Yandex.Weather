@@ -11,4 +11,15 @@ class Result {
     @SerializedName("geometry")
     @Expose
     Geometry geometry;
+
+    @SerializedName("address_components")
+    @Expose
+    AddressComponent[] addressComponents;
+
+    @SerializedName("formatted_address")
+    @Expose
+    String formattedAddress;
+
+    @SerializedName("place_id")
+    String placeId;
 }

@@ -10,5 +10,5 @@ import com.google.gson.annotations.SerializedName;
 class Geometry {
     @SerializedName("location")
     @Expose
-    Location location;
+    LatLng location;
 }

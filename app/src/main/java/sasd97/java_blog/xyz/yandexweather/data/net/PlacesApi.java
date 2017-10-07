@@ -1,6 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.data.net;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
@@ -11,11 +12,14 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
  */
 
 public interface PlacesApi {
-    public static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/";
+    String BASE_URL = "https://maps.googleapis.com/maps/api/";
 
-    @GET("autocomplete/json")
+    @GET("place/autocomplete/json")
     Observable<PlacesResponse> getPlaces(@Query("input") String input, @Query("key") String apiKey);
 
-    @GET("details/json")
-    Observable<PlaceDetailsResponse> getPlaceDetails(@Query("placeid") String placeId, @Query("key") String apiKey);
+    @GET("place/details/json")
+    Observable<PlaceDetailsResponse> getPlaceDetailsById(@Query("placeid") String placeId, @Query("key") String apiKey);
+
+    @GET("geocode/json")
+    Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@Query("latlng") String latlng, @Query("key") String apiKey);
 }

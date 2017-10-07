@@ -18,6 +18,7 @@ import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepositoryImpl;
 import sasd97.java_blog.xyz.yandexweather.data.location.LocationProvider;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
@@ -81,12 +82,12 @@ public class AppRepositoryTest {
 
     @Test
     public void getCachedWeather() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
         repo.getCachedWeather(place);
         verify(cacheStorage, times(1)).getString(toFileName(place), null);
-        verify(weatherApi, never()).getWeather(coords.first, coords.second, apiKeys.first);
+        verify(weatherApi, never()).getWeather(coords.getLat(), coords.getLng(), apiKeys.first);
     }
 
     @Test
@@ -103,34 +104,34 @@ public class AppRepositoryTest {
     public void getPlaceDetails() {
         String placeId = "placeId";
         PlaceDetailsResponse placeDetailsResponse = new PlaceDetailsResponse();
-        when(placesApi.getPlaceDetails(placeId, apiKeys.second)).thenReturn(Observable.just(placeDetailsResponse));
-        repo.getPlaceDetails(placeId)
+        when(placesApi.getPlaceDetailsById(placeId, apiKeys.second)).thenReturn(Observable.just(placeDetailsResponse));
+        repo.getPlaceDetailsById(placeId)
                 .test()
                 .assertValue(placeDetailsResponse);
     }
 
     @Test
     public void getWeather() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Москва";
         Place place = new Place(placeName, coords);
         List<Weather> weathers = new ArrayList<>();
         weathers.add(new Weather());
         ResponseWeather responseWeather = new ResponseWeather(0,
-                new Coordinates(coords.first, coords.second), weathers, "", new WeatherInfo(), 0, new Wind(),
+                new Coordinates(coords.getLat(), coords.getLng()), weathers, "", new WeatherInfo(), 0, new Wind(),
                 new Clouds(), 0, new SunsetAndSunrise(), "", 0);
 
-        when(weatherApi.getWeather(place.getCoords().first, place.getCoords().second, apiKeys.first))
+        when(weatherApi.getWeather(place.getCoords().getLat(), place.getCoords().getLng(), apiKeys.first))
                 .thenReturn(Single.just(responseWeather));
         repo.getWeather(place)
                 .test()
                 .assertComplete();
-        verify(weatherApi, times(1)).getWeather(place.getCoords().first, place.getCoords().second, apiKeys.first);
+        verify(weatherApi, times(1)).getWeather(place.getCoords().getLat(), place.getCoords().getLng(), apiKeys.first);
     }
 
     @Test
     public void getPlace() {
-        Place place = new Place("ChIJybDUc_xKtUYRTM9XV8zWRD0", "Москва", new Pair<>(0.0, 0.0), (int) Instant.now().getEpochSecond());
+        Place place = new Place("ChIJybDUc_xKtUYRTM9XV8zWRD0", "Москва", new LatLng(0.0, 0.0), (int) Instant.now().getEpochSecond());
         when(prefsStorage.getString(PLACE_PREFS_KEY, "")).thenReturn(place.toString());
         String expected = "Москва *** 0.0 0.0 ChIJybDUc_xKtUYRTM9XV8zWRD0";
         Assert.assertEquals(expected, place.toString());
@@ -170,14 +171,6 @@ public class AppRepositoryTest {
     }
 
     @Test
-    public void savePlace() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
-        Place place = new Place("Москва", coords);
-        repo.savePlace(place).subscribe(() -> {}, Throwable::printStackTrace);
-        verify(prefsStorage, times(1)).put(PLACE_PREFS_KEY, place);
-    }
-
-    @Test
     public void savePressureUnits() {
         int pressureUnits = ConvertersConfig.PRESSURE_PASCAL;
         repo.savePressureUnits(pressureUnits);
@@ -200,12 +193,12 @@ public class AppRepositoryTest {
 
     @Test
     public void saveWeatherToCache() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         String json = "{ key: value }";
         Place place = new Place(placeName, coords);
         repo.saveWeatherToCache(place, json);
         verify(cacheStorage, times(1)).put(toFileName(place), json);
-        verify(weatherApi, never()).getWeather(coords.first, coords.second, apiKeys.first);
+        verify(weatherApi, never()).getWeather(coords.getLat(), coords.getLng(), apiKeys.first);
     }
 }

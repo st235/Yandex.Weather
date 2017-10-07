@@ -129,7 +129,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     public void saveNewPlace(int position, boolean addToFavorites) {
-        placesInteractor.getPlaceDetails(placesResponse.getPlaceIdAt(position))
+        placesInteractor.getPlaceDetailsById(placesResponse.getPlaceIdAt(position))
                 .compose(schedulers.getIoToMainTransformerObservable())
                 .map(placeDetailsResponse -> new Place(
                         placesResponse.getPlaceIdAt(position),
@@ -137,13 +137,14 @@ public class MainPresenter extends MvpPresenter<MainView> {
                         placeDetailsResponse.getCoords(),
                         (int) (new Date().getTime() / 1000)))
                 .doOnNext(place -> {
-                    if (addToFavorites) getViewState().showNewFavoritePlace(place);
+                    if (addToFavorites) {
+                        getViewState().showNewFavoritePlace(place);
+                    }
+                    placesInteractor.savePlace(place);
                 })
-                .flatMapCompletable(place -> addToFavorites ? placesInteractor.savePlaceToFavorites(place)
-                        .compose(schedulers.getIoToMainTransformerCompletable())
-                        .concatWith(placesInteractor.savePlace(place)) :
-                        placesInteractor.savePlace(place))
                 .doOnComplete(this::openWeatherFragment)
+                .filter(place -> addToFavorites)
+                .flatMapCompletable(placesInteractor::savePlaceToFavorites)
                 .subscribe(() -> {}, Throwable::printStackTrace);
     }
 
@@ -151,7 +152,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     public void saveCurrentPlace(Place place, Place toReplace) {
         placesInteractor.savePlaceToFavorites(place)
                 .andThen(placesInteractor.savePlaceToFavorites(toReplace))
-                .andThen(placesInteractor.savePlace(place))
+                .doOnComplete(() -> placesInteractor.savePlace(place))
                 .compose(schedulers.getIoToMainTransformerCompletable())
                 .delay(250, TimeUnit.MILLISECONDS)
                 .doOnComplete(this::openWeatherFragment)

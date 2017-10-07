@@ -4,7 +4,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
-import android.support.v4.util.Pair;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
@@ -36,15 +35,15 @@ public class Place {
 
     @SerializedName("coords")
     @Expose
-    private Pair<Double, Double> coords;
+    private LatLng coords;
 
     @Ignore
-    public Place(String name, Pair<Double, Double> coords) {
+    public Place(String name, LatLng coords) {
         this.name = name;
         this.coords = coords;
     }
 
-    public Place(String placeId, String name, Pair<Double, Double> coords, int time) {
+    public Place(String placeId, String name, LatLng coords, int time) {
         this.placeId = placeId;
         this.name = name;
         this.coords = coords;
@@ -52,7 +51,7 @@ public class Place {
     }
 
     @Ignore
-    public Place(String placeId, Pair<Double, Double> coords, int time) {
+    public Place(String placeId, LatLng coords, int time) {
         this.placeId = placeId;
         this.coords = coords;
         this.time = time;
@@ -74,7 +73,7 @@ public class Place {
         return name;
     }
 
-    public Pair<Double, Double> getCoords() {
+    public LatLng getCoords() {
         return coords;
     }
 

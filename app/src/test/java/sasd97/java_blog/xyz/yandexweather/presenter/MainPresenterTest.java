@@ -1,7 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.presenter;
 
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.util.Pair;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +9,7 @@ import org.threeten.bp.Instant;
 import io.reactivex.Observable;
 import io.reactivex.internal.operators.completable.CompletableFromAction;
 import sasd97.java_blog.xyz.yandexweather.R;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Predictions;
@@ -36,7 +36,6 @@ public class MainPresenterTest {
     private PlacesInteractor placesInteractor;
     private RxSchedulers rxSchedulers;
     private int settingsFragmentId;
-    private int weatherFragmentId;
     private SettingsInteractor settingsInteractor;
     private String placeId;
 
@@ -54,7 +53,6 @@ public class MainPresenterTest {
         presenter.setWeatherRouter(new AppFragmentRouter(R.id.fragment_container_weather, fragmentActivity));
         presenter.openWeatherFragment();
         settingsFragmentId = R.id.main_activity_navigation_settings;
-        weatherFragmentId = R.id.main_activity_navigation_weather;
         presenter.attachView(view);
     }
 
@@ -101,16 +99,14 @@ public class MainPresenterTest {
     @Test
     public void saveCurrentPlace() {
         Place place = new Place(placeId, "Москва",
-                new Pair<>(0.0, 0.0), (int) Instant.now().getEpochSecond());
+                new LatLng(0.0, 0.0), (int) Instant.now().getEpochSecond());
         Place toReplace = new Place("ChIJybDUc_xKtUYRTM9XV8zWRD0", "Москва",
-                new Pair<>(0.0, 0.0), (int) Instant.now().getEpochSecond());
+                new LatLng(0.0, 0.0), (int) Instant.now().getEpochSecond());
 
         when(rxSchedulers.getIoToMainTransformerCompletable()).thenReturn(t -> t);
         when(placesInteractor.savePlaceToFavorites(toReplace)).thenReturn(new CompletableFromAction(() -> {
         }));
         when(placesInteractor.savePlaceToFavorites(place)).thenReturn(new CompletableFromAction(() -> {
-        }));
-        when(settingsInteractor.savePlace(place)).thenReturn(new CompletableFromAction(() -> {
         }));
 
         presenter.saveCurrentPlace(place, toReplace);

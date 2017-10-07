@@ -18,6 +18,7 @@ import io.reactivex.internal.operators.completable.CompletableFromAction;
 import sasd97.java_blog.xyz.yandexweather.data.location.LocationProvider;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast5;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
@@ -67,7 +68,7 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public Single<WeatherModel> getWeather(@NonNull Place place) {
         return weatherApi
-                .getWeather(place.getCoords().first, place.getCoords().second, apiKeys.first)
+                .getWeather(place.getCoords().getLat(), place.getCoords().getLng(), apiKeys.first)
                 .map(w -> new WeatherModel.Builder()
                         .city(w.getName())
                         .weatherId(w.getWeather().get(0).getId())
@@ -88,13 +89,13 @@ public final class AppRepositoryImpl implements AppRepository {
     @Override
     public Observable<ResponseForecast5> getForecast5(@NonNull Place place) {
         return weatherApi.getForecast5(
-                place.getCoords().first, place.getCoords().second, apiKeys.first);
+                place.getCoords().getLat(), place.getCoords().getLng(), apiKeys.first);
     }
 
     @Override
     public Observable<ResponseForecast16> getForecast16(@NonNull Place place) {
         return weatherApi.getForecast16(
-                place.getCoords().first, place.getCoords().second, days, apiKeys.first);
+                place.getCoords().getLat(), place.getCoords().getLng(), days, apiKeys.first);
     }
 
     @Override
@@ -103,8 +104,13 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId) {
-        return placesApi.getPlaceDetails(placeId, apiKeys.second);
+    public Observable<PlaceDetailsResponse> getPlaceDetailsById(@NonNull String placeId) {
+        return placesApi.getPlaceDetailsById(placeId, apiKeys.second);
+    }
+
+    @Override
+    public Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@NonNull LatLng latlng) {
+        return placesApi.getPlaceDetailsByCoords(latlng.toString(), apiKeys.second);
     }
 
     @Override
@@ -160,8 +166,8 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Completable savePlace(@NonNull Place place) {
-        return new CompletableFromAction(() -> prefsStorage.put(PLACE_PREFS_KEY, place));
+    public void savePlace(@NonNull Place place) {
+        prefsStorage.put(PLACE_PREFS_KEY, place);
     }
 
     @Override

@@ -1,22 +1,28 @@
 package sasd97.java_blog.xyz.yandexweather.data.storages;
 
 import android.arch.persistence.room.TypeConverter;
-import android.support.v4.util.Pair;
 
-import static sasd97.java_blog.xyz.yandexweather.WeatherApp.SPACE;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
+
+import static sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng.COMMA;
 
 @SuppressWarnings("WeakerAccess") // for Room
 public class RoomTypeConverters {
     @TypeConverter
-    public static String pairToString(Pair<Double, Double> pair) {
-        if (pair == null) return null;
-        return String.valueOf(pair.first) + SPACE + String.valueOf(pair.second);
+    public static String LatLngToString(LatLng coords) {
+        if (coords == null) {
+            return null;
+        }
+        return coords.toString();
     }
 
     @TypeConverter
-    public static Pair<Double, Double> stringToPair(String s) {
-        if (s == null) return null;
-        String[] ss = s.split(SPACE);
-        return new Pair<>(Double.valueOf(ss[0]), Double.valueOf(ss[1]));
+    public static LatLng stringToLatLng(String latLngString) {
+        if (latLngString == null || !latLngString.contains(COMMA)) {
+            return null;
+        }
+        String[] latLngStringParts = latLngString.split(COMMA);
+        return new LatLng(Double.valueOf(latLngStringParts[0]),
+                Double.valueOf(latLngStringParts[1]));
     }
 }

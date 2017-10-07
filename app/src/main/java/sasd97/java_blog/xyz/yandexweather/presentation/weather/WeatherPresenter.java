@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
@@ -54,7 +55,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
 //         noinspection MissingPermission
 //        placesInteractor.getSavedLocationPlace()
 //                .compose(schedulers.getIoToMainTransformerSingle())
-//                .onErrorResumeNext(throwable -> placesInteractor.getCurrentLocation())
+//                .onErrorResumeNext(throwable -> placesInteractor.getCurrentCoords())
 //                .flatMap(weatherInteractor::getForecast)
 //                .compose(schedulers.getIoToMainTransformerSingle())
 //                .map(this::addSettings)
@@ -72,16 +73,15 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     @SuppressWarnings({"ResourceType"})
     public void getWeather() {
         placesInteractor.getSavedLocationPlace()
-                .onErrorResumeNext(locationNotAdded -> placesInteractor.getCurrentLocation()
+                .onErrorResumeNext(locationNotAdded -> placesInteractor.getCurrentCoords()
+                        .flatMap(placesInteractor::getPlaceDetailsByCoords)
+                        .map(placeDetails -> new Place(placeDetails.getCity(), placeDetails.getCoords()))
                         .doOnSuccess(placesInteractor::savePlace)
                         .doOnError(gpsDenied -> getViewState().requestLocationPermissions(this::getWeather))
                         .subscribeOn(AndroidSchedulers.mainThread()))
                 .flatMap(weatherInteractor::getWeather)
                 .compose(schedulers.getIoToMainTransformerSingle())
-                .subscribe(this::chooseWeatherType,
-                        throwable -> {
-
-                        });
+                .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
     }
 
     @NonNull

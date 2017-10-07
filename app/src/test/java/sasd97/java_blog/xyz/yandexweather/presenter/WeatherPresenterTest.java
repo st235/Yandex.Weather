@@ -1,7 +1,5 @@
 package sasd97.java_blog.xyz.yandexweather.presenter;
 
-import android.support.v4.util.Pair;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +11,7 @@ import java.util.Set;
 
 import io.reactivex.Single;
 import io.reactivex.internal.operators.completable.CompletableFromAction;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.modules.WeatherTypesModule;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
@@ -58,7 +57,7 @@ public class WeatherPresenterTest {
         types.add(weatherTypesModule.provideSnowy());
         types.add(weatherTypesModule.provideSunny());
         types.add(weatherTypesModule.provideThunder());
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
         place = new Place(placeName, coords);
@@ -88,7 +87,7 @@ public class WeatherPresenterTest {
 
     @Test
     public void fetchWeather() {
-        Pair<Double, Double> coords = new Pair<>(55.755826, 37.6173);
+        LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         Place place = new Place(placeName, coords);
         WeatherModel weatherModel = new WeatherModel.Builder().build();

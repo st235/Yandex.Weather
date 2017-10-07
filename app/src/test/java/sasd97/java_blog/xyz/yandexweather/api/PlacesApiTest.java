@@ -16,8 +16,6 @@
 
 package sasd97.java_blog.xyz.yandexweather.api;
 
-import android.support.v4.util.Pair;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +37,7 @@ import okio.Okio;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.net.PlacesApi;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -90,9 +89,9 @@ public class PlacesApiTest {
         enqueueResponse("places-details.json");
         String placeId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
         String apiKey = "apiKey";
-        placesApi.getPlaceDetails(placeId, apiKey).subscribe(detailsResponse -> {
+        placesApi.getPlaceDetailsById(placeId, apiKey).subscribe(detailsResponse -> {
             assertThat(detailsResponse, notNullValue());
-            assertThat(detailsResponse.getCoords(), is(new Pair<>(55.755826, 37.6173)));
+            assertThat(detailsResponse.getCoords(), is(new LatLng(55.755826, 37.6173)));
         });
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getPath(), is("/details/json?placeid=" + placeId + "&key=" + apiKey));

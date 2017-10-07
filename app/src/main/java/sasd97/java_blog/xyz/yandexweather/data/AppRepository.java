@@ -12,6 +12,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast5;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlaceDetailsResponse;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
@@ -39,7 +40,8 @@ public interface AppRepository {
     Observable<ResponseForecast5> getForecast5(@NonNull Place place);
     Observable<ResponseForecast16> getForecast16(@NonNull Place place);
     Observable<PlacesResponse> getPlaces(@NonNull String s);
-    Observable<PlaceDetailsResponse> getPlaceDetails(@NonNull String placeId);
+    Observable<PlaceDetailsResponse> getPlaceDetailsById(@NonNull String placeId);
+    Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@NonNull LatLng latlng);
 
     //db
     Single<List<Place>> getFavoritePlaces();
@@ -57,7 +59,7 @@ public interface AppRepository {
     boolean isBackgroundServiceEnabled();
     boolean switchBackgroundServiceState();
 
-    Completable savePlace(@NonNull Place place);
+    void savePlace(@NonNull Place place);
     Single<Place> getSavedLocationPlace();
 
     void saveWeatherUpdateInterval(int minutes);
