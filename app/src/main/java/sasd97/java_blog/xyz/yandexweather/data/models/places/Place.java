@@ -37,17 +37,20 @@ public class Place {
     @Expose
     private LatLng coords;
 
-    @Ignore
-    public Place(String name, LatLng coords) {
-        this.name = name;
-        this.coords = coords;
-    }
-
     public Place(String placeId, String name, LatLng coords, int time) {
         this.placeId = placeId;
         this.name = name;
         this.coords = coords;
         this.time = time;
+    }
+
+    @Ignore
+    public Place() {}
+
+    @Ignore
+    public Place(String name, LatLng coords) {
+        this.name = name;
+        this.coords = coords;
     }
 
     @Ignore

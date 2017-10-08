@@ -281,19 +281,25 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                 } catch (IntentSender.SendIntentException e) {
                     // Ignore the error.
                 }
+            } else {
+                runAllRunnables();
             }
         });
+    }
+
+    private void runAllRunnables() {
+        Runnable locationRunnable = locationRunnables.poll();
+        while (locationRunnable != null) {
+            locationRunnable.run();
+            locationRunnable = locationRunnables.poll();
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_LOCATION && locationRunnables != null && !locationRunnables.isEmpty()) {
-            Runnable locationRunnable = locationRunnables.poll();
-            while (locationRunnable != null) {
-                locationRunnable.run();
-                locationRunnable = locationRunnables.poll();
-            }
+        if (requestCode == REQUEST_LOCATION && locationRunnables != null) {
+            runAllRunnables();
         }
     }
 

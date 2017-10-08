@@ -24,6 +24,8 @@ import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 
+import static sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl.WEATHER_NOT_ADDED;
+
 /**
  * Created by alexander on 12/07/2017.
  */
@@ -58,19 +60,24 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     public void getWeather() {
         placesInteractor.getSavedLocationPlace()
                 .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::getWeather))
+                .onErrorReturn(throwable -> null)
+                .filter(place -> place != null)
+                .toSingle()
                 .flatMap(weatherInteractor::getWeather)
-                .onErrorResumeNext(weatherNotAdded -> updateWeather())
+                .onErrorResumeNext(weatherNotAdded -> weatherNotAdded.getLocalizedMessage().equals(WEATHER_NOT_ADDED) ? updateWeather() : null)
+                .filter(weatherModel -> weatherModel != null)
+                .toSingle()
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
     }
 
     private Single<WeatherModel> updateWeather() {
         return placesInteractor.getSavedLocationPlace()
-                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::updateWeather))
+                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::fetchWeather))
                 .flatMap(weatherInteractor::updateWeather);
     }
 
-     public void getForecast() {
+    public void getForecast() {
         placesInteractor.getSavedLocationPlace()
                 .onErrorResumeNext(throwable -> updateLocationPlace(this::getForecast))
                 .flatMap(weatherInteractor::getForecast)
@@ -119,7 +126,9 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     }
 
     public void fetchWeather() {
-        updateWeather().subscribe(this::chooseWeatherType, Throwable::printStackTrace);
+        updateWeather()
+                .compose(schedulers.getIoToMainTransformerSingle())
+                .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
     }
 
     public void fetchForecast() {
