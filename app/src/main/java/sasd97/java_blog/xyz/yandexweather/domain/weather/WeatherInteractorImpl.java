@@ -12,6 +12,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -39,6 +40,7 @@ import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersCon
 public class WeatherInteractorImpl implements WeatherInteractor {
 
     private static final String TAG = WeatherInteractorImpl.class.getCanonicalName();
+    public static final String WEATHER_NOT_ADDED = "Weather not added";
 
     private Gson gson;
     private AppRepository repository;
@@ -61,12 +63,14 @@ public class WeatherInteractorImpl implements WeatherInteractor {
 
     @Override
     public Single<WeatherModel> getWeather(@NonNull Place place) {
-        String cacheWeather = repository.getCachedWeather(place);
-        if (cacheWeather == null) {
-            return updateWeather(place);
-        }
-
-        return Single.just(cacheWeather)
+        return Single
+                .fromCallable(() -> {
+                    String cacheWeather = repository.getCachedWeather(place);
+                    if (cacheWeather == null) {
+                        throw new NoSuchElementException(WEATHER_NOT_ADDED);
+                    }
+                    return cacheWeather;
+                })
                 .map(cache -> gson.fromJson(cache, WeatherModel.class))
                 .map(this::convertModel)
                 .map(weatherModel -> weatherModel.setCorrectCity(place));
@@ -75,13 +79,8 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     @Override
     public Single<WeatherModel> updateWeather(@NonNull Place place) {
         return repository.getWeather(place)
-                .doOnEvent((weatherModel, throwable) ->
-                        repository.saveWeatherToCache(place, gson.toJson(weatherModel))
-                                .subscribe(() -> {
-
-                                }, throwable1 -> {
-
-                                }))
+                .doOnEvent((weatherModel, throwable) -> repository.saveWeatherToCache(
+                        place, gson.toJson(weatherModel)).subscribe())
                 .map(this::convertModel)
                 .map(weatherModel -> weatherModel.setCorrectCity(place))
                 .subscribeOn(Schedulers.io());

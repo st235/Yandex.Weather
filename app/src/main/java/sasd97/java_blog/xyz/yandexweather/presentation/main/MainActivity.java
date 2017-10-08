@@ -54,6 +54,7 @@ import sasd97.java_blog.xyz.yandexweather.utils.ViewPagerAction;
 import sasd97.java_blog.xyz.yandexweather.utils.YandexListAdapter;
 
 import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment.TAG_NAVIGATION;
+import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment.REQUEST_LOCATION;
 import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment.TAG_WEATHER;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView,
@@ -237,6 +238,17 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     public void showNewFavoritePlace(Place place) {
         ((PlacesActions) getSupportFragmentManager().findFragmentByTag(TAG_NAVIGATION))
                 .onPlaceAdded(place);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LOCATION) {
+            Fragment weatherFragment = getSupportFragmentManager().findFragmentByTag(TAG_WEATHER);
+            if (weatherFragment != null) {
+                weatherFragment.onActivityResult(requestCode, resultCode, data);
+            }
+        }
     }
 
     @Override

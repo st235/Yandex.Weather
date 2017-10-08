@@ -2,6 +2,7 @@ package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +26,22 @@ import android.widget.TextView;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 
 import butterknife.BindBool;
@@ -83,6 +95,9 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     private LinearLayoutManager layoutManager;
     private boolean appBarIsExpanded = true;
     private RecyclerPagerAdapter pagerAdapter;
+    public static final int REQUEST_LOCATION = 199;
+    private GoogleApiClient googleApiClient;
+    private Queue<Runnable> locationRunnables;
 
     @ProvidePresenter
     public WeatherPresenter providePresenter() {
@@ -208,21 +223,77 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     }
 
     @Override
-    public void requestLocationPermissions(Runnable callingMethod) {
+    public void requestEnablingGps(Runnable callingMethod) {
         if (AndroidUtils.isLocationPermissionsDenied(getContext())) {
-            RxPermissions rxPermissions = new RxPermissions(getActivity());
-            rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION)
+            new RxPermissions(getActivity())
+                    .request(Manifest.permission.ACCESS_FINE_LOCATION)
                     .subscribe(granted -> {
                         if (!granted) {
                             //TODO implement action when permissions not granted
                             return;
                         }
-//                        callingMethod.run();
-//                        presenter.fetchForecast();
+                        callingMethod.run();
                     });
-        } else {
-            String openLocationSettings = android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
-            startActivity(new Intent(openLocationSettings));
+            return;
+        }
+        if (locationRunnables == null) {
+            locationRunnables = new PriorityQueue<>();
+        }
+        locationRunnables.add(callingMethod);
+        showGpsSettingsDialog();
+    }
+
+    private void showGpsSettingsDialog() {
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(Bundle bundle) {
+                        // Ignore the connection.
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+                        googleApiClient.connect();
+                    }
+                })
+                .addOnConnectionFailedListener(connectionResult ->
+                        Log.d("Location error", "Location error " + connectionResult.getErrorCode())).build();
+        googleApiClient.connect();
+
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(30 * 1000L);
+        locationRequest.setFastestInterval(5 * 1000L);
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+
+        builder.setAlwaysShow(true);
+
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi
+                .checkLocationSettings(googleApiClient, builder.build());
+        result.setResultCallback(result1 -> {
+            final Status status = result1.getStatus();
+            if (status.getStatusCode() == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
+                try {
+                    status.startResolutionForResult(getActivity(), REQUEST_LOCATION);
+                    // check the result in onActivityResult().
+                } catch (IntentSender.SendIntentException e) {
+                    // Ignore the error.
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LOCATION && locationRunnables != null && !locationRunnables.isEmpty()) {
+            Runnable locationRunnable = locationRunnables.poll();
+            while (locationRunnable != null) {
+                locationRunnable.run();
+                locationRunnable = locationRunnables.poll();
+            }
         }
     }
 

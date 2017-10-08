@@ -26,5 +26,5 @@ public interface WeatherView extends MvpView {
     void stopRefreshing();
 
     @StateStrategyType(SkipStrategy.class)
-    void requestLocationPermissions(Runnable callingMethod);
+    void requestEnablingGps(Runnable callingMethod);
 }

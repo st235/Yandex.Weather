@@ -27,7 +27,7 @@ ext.versions = [
         rxbinding                    : '2.0.0',
 
         androidJob                   : '1.1.11',
-        googlePlayServices           : '11.0.2',
+        googlePlayServices           : '11.4.2',
 
         room                         : '1.0.0-alpha5',
 
