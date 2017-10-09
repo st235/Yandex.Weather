@@ -37,12 +37,11 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayDeque;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 
 import butterknife.BindBool;
@@ -56,6 +55,7 @@ import sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerFra
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerPagerAdapter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidUtils;
+import sasd97.java_blog.xyz.yandexweather.utils.HashRunnable;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 import sasd97.java_blog.xyz.yandexweather.utils.ViewPagerAction;
 
@@ -98,7 +98,8 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     private RecyclerPagerAdapter pagerAdapter;
     public static final int REQUEST_LOCATION = 199;
     private GoogleApiClient googleApiClient;
-    private Queue<Runnable> locationRunnables;
+    private Set<HashRunnable> runnables;
+    private boolean isGpsDialogShown;
 
     @ProvidePresenter
     public WeatherPresenter providePresenter() {
@@ -224,7 +225,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     }
 
     @Override
-    public void requestEnablingGps(Runnable callingMethod) {
+    public void requestEnablingGps(HashRunnable callingMethod) {
         if (AndroidUtils.isLocationPermissionsDenied(getContext())) {
             new RxPermissions(getActivity())
                     .request(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -237,11 +238,14 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                     });
             return;
         }
-        if (locationRunnables == null) {
-            locationRunnables = new ArrayDeque<>();
+        if (runnables == null) {
+            runnables = new LinkedHashSet<>();
         }
-        locationRunnables.add(callingMethod);
-        showGpsSettingsDialog();
+        runnables.add(callingMethod);
+        if (!isGpsDialogShown) {
+            showGpsSettingsDialog();
+            isGpsDialogShown = true;
+        }
     }
 
     private void showGpsSettingsDialog() {
@@ -283,24 +287,23 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                     // Ignore the error.
                 }
             } else {
-                runAllRunnables();
+                for (Runnable runnable : runnables) {
+                    runnable.run();
+                }
+                runnables.clear();
             }
         });
-    }
-
-    private void runAllRunnables() {
-        Runnable locationRunnable = locationRunnables.poll();
-        while (locationRunnable != null) {
-            locationRunnable.run();
-            locationRunnable = locationRunnables.poll();
-        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_LOCATION && locationRunnables != null) {
-            runAllRunnables();
+        if (requestCode == REQUEST_LOCATION && runnables != null) {
+            for (Runnable runnable : runnables) {
+                runnable.run();
+            }
+            runnables.clear();
+            isGpsDialogShown = false;
         }
     }
 

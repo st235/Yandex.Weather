@@ -22,6 +22,7 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.domain.places.PlacesInteractor;
 import sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractor;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
+import sasd97.java_blog.xyz.yandexweather.utils.HashRunnable;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 
@@ -61,48 +62,47 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
     public void getWeather() {
         placesInteractor.getSavedLocationPlace()
-                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::getWeather))
+                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(new HashRunnable(this::getWeather, "getWeather")))
                 .onErrorReturn(throwable -> null)
                 .filter(place -> place != null).toSingle()
                 .flatMap(weatherInteractor::getWeather)
                 .onErrorResumeNext(weatherNotAdded -> weatherNotAdded.getLocalizedMessage().equals(WEATHER_NOT_ADDED) ?
-                        updateWeather(this::getWeather) : null)
+                        updateWeather(new HashRunnable(this::getWeather, "getWeather")) : null)
                 .filter(weatherModel -> weatherModel != null).toSingle()
                 .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
     }
 
     private void getForecast() {
         placesInteractor.getSavedLocationPlace()
-                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::getForecast))
+                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(new HashRunnable(this::getForecast, "getForecast")))
                 .flatMap(weatherInteractor::getForecast)
                 .onErrorResumeNext(forecastNotAdded -> forecastNotAdded.getLocalizedMessage().equals(FORECAST_NOT_ADDED) ?
-                        updateForecast() : null)
+                        updateForecast(new HashRunnable(this::getForecast, "getForecast")) : null)
                 .map(this::addSettings)
                 .compose(schedulers.getIoToMainTransformerSingle())
-                .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair),
-                        throwable -> throwable.printStackTrace());
+                .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair), Throwable::printStackTrace);
     }
 
-    private Single<WeatherModel> updateWeather(Runnable callingMethod) {
+    private Single<WeatherModel> updateWeather(HashRunnable runnable) {
         return placesInteractor.getSavedLocationPlace()
-                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(callingMethod))
+                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(runnable))
                 .flatMap(weatherInteractor::updateWeather)
                 .compose(schedulers.getIoToMainTransformerSingle());
     }
 
-    private Single<Map<WeatherModel, WeatherType[]>> updateForecast() {
+    private Single<Map<WeatherModel, WeatherType[]>> updateForecast(HashRunnable runnable) {
         return placesInteractor.getSavedLocationPlace()
-                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::updateForecast))
+                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(runnable))
                 .flatMap(weatherInteractor::updateForecast16)
                 .zipWith(placesInteractor.getSavedLocationPlace()
-                        .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::updateForecast))
+                        .onErrorResumeNext(locationNotAdded -> updateLocationPlace(runnable))
                         .flatMap(weatherInteractor::updateForecast5), this::zipWithWeatherTypes)
                 .flatMap(weatherInteractor::saveForecast)
                 .compose(schedulers.getIoToMainTransformerSingle());
     }
 
     @SuppressWarnings({"ResourceType"})
-    private Single<Place> updateLocationPlace(Runnable callingMethod) {
+    private Single<Place> updateLocationPlace(HashRunnable callingMethod) {
         return placesInteractor.getCurrentCoords()
                 .flatMap(placesInteractor::getPlaceDetailsByCoords)
                 .map(placeDetails -> new Place(placeDetails.getCity(), placeDetails.getCoords()))
@@ -140,12 +140,12 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     }
 
     public void fetchWeather() {
-        updateWeather(this::fetchWeather)
+        updateWeather(new HashRunnable(this::fetchWeather, "fetchWeather"))
                 .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
     }
 
     public void fetchForecast() {
-        updateForecast()
+        updateForecast(new HashRunnable(this::fetchForecast, "fetchForecast"))
                 .map(this::addSettings)
                 .doOnEvent((hashMapSettingsPair, throwable) -> getViewState().showForecast(hashMapSettingsPair))
                 .zipWith(placesInteractor.getSavedLocationPlace(), Pair::new)
