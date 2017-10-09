@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import io.reactivex.Single;
 import io.reactivex.internal.operators.completable.CompletableFromAction;
+import io.reactivex.internal.operators.single.SingleFromCallable;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.modules.WeatherTypesModule;
@@ -77,9 +79,8 @@ public class WeatherPresenterTest {
         when(weatherInteractor.getTemperatureUnits()).thenReturn(ConvertersConfig.TEMPERATURE_CELSIUS);
         when(weatherInteractor.getSpeedUnits()).thenReturn(ConvertersConfig.SPEED_MS);
 
-        List<WeatherModel> weatherModels = new ArrayList<>();
-        when(weatherInteractor.saveForecast(weatherModels)).thenReturn(new CompletableFromAction(() -> {
-        }));
+        Map<WeatherModel, WeatherType[]> weatherModels = new LinkedHashMap<>();
+        when(weatherInteractor.saveForecast(weatherModels)).thenReturn(new SingleFromCallable<>(LinkedHashMap::new));
 
         presenter = new WeatherPresenter(rxSchedulers, types, placesInteractor, weatherInteractor);
         presenter.attachView(view);
@@ -122,7 +123,7 @@ public class WeatherPresenterTest {
 
     @Test
     public void fetchForecast() {
-        ArrayList<WeatherModel> forecast = new ArrayList<>();
+        Map<WeatherModel, WeatherType[]> forecast = new LinkedHashMap<>();
 
         presenter.fetchForecast();
         verify(weatherInteractor, times(3)).getTemperatureUnits();

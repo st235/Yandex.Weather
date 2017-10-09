@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.DrawerLayout;
@@ -81,7 +80,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
 
     public @InjectPresenter MainPresenter mainPresenter;
     private boolean isSearchOpenedFromClosedPanel;
-    MenuItemCompat.OnActionExpandListener actionExpandListener;
+    MenuItem.OnActionExpandListener actionExpandListener;
     private boolean isToolbarSelectedVisible;
 
     @ProvidePresenter
@@ -123,7 +122,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     }
 
     private void initSearchViewExpandListener() {
-        actionExpandListener = new MenuItemCompat.OnActionExpandListener() {
+        actionExpandListener = new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 notifyNavigationFragment(true);
@@ -139,6 +138,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 notifyNavigationFragment(false);
                 if (isSearchOpenedFromClosedPanel) {
+                    assert slidingPaneLayout != null;
                     slidingPaneLayout.closePane();
                     isSearchOpenedFromClosedPanel = false;
                 }
@@ -282,8 +282,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
         miSearch = menu.findItem(R.id.action_search);
-        MenuItemCompat.setOnActionExpandListener(miSearch, actionExpandListener);
-        searchView = (SearchView) MenuItemCompat.getActionView(miSearch);
+        miSearch.setOnActionExpandListener(actionExpandListener);
+        searchView = (SearchView) miSearch.getActionView();
         searchView.findViewById(android.support.v7.appcompat.R.id.search_plate)
                 .setBackgroundColor(Color.TRANSPARENT);
         searchView.setMaxWidth(Integer.MAX_VALUE);
@@ -310,7 +310,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
                 })
                 .map(CharSequence::toString)
                 .flatMap(s -> mainPresenter.search(s))
-                .subscribe(strings -> {}, Throwable::printStackTrace);
+                .subscribe(strings -> {/*ignore*/}, Throwable::printStackTrace);
     }
 
     @Override
@@ -390,7 +390,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     public void onPlaceAdd() {
         if (searchView.isIconified()) {
             addToFavorites = true;
-            MenuItemCompat.expandActionView(miSearch);
+            miSearch.expandActionView();
             if (slidingPaneLayout != null) {
                 isSearchOpenedFromClosedPanel = true;
                 slidingPaneLayout.openPane();
@@ -400,8 +400,9 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
 
     @Override
     public void onPlaceSelect(int size) {
-        if (size > 0 && toolbarSelected.getVisibility() == View.VISIBLE) return;
-        else showToolbarSelected(size != 0);
+        if (size <= 0 || toolbarSelected.getVisibility() != View.VISIBLE) {
+            showToolbarSelected(size != 0);
+        }
     }
 
     @Override

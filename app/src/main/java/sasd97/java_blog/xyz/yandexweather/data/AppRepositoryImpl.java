@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.internal.operators.completable.CompletableFromAction;
@@ -31,6 +32,7 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
 import static sasd97.java_blog.xyz.yandexweather.WeatherApp.SPACE;
 import static sasd97.java_blog.xyz.yandexweather.data.net.WeatherApi.days;
+import static sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl.FORECAST_NOT_ADDED;
 
 /**
  * Created by alexander on 12/07/2017.
@@ -130,8 +132,14 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Single<List<WeatherModel>> getForecast(String placeId) {
-        return weatherDao.getForecast(placeId);
+    public Maybe<List<WeatherModel>> getForecast(String placeId) {
+        return weatherDao.getForecast(placeId)
+                .filter(weatherModels -> {
+                    if (weatherModels.isEmpty()) {
+                        throw new NoSuchElementException(FORECAST_NOT_ADDED);
+                    }
+                    return true;
+                });
     }
 
     @Override

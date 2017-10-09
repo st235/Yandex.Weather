@@ -37,10 +37,11 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.PriorityQueue;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -193,7 +194,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     }
 
     @Override
-    public void showForecast(Pair<LinkedHashMap<WeatherModel, WeatherType[]>, Settings> pair) {
+    public void showForecast(Pair<Map<WeatherModel, WeatherType[]>, Settings> pair) {
         if (isTabletHorizontal) {
             RecyclerFragment recyclerFragment1 = (RecyclerFragment) getChildFragmentManager().findFragmentByTag(getTagFor(0));
             RecyclerFragment recyclerFragment2 = (RecyclerFragment) getChildFragmentManager().findFragmentByTag(getTagFor(1));
@@ -237,7 +238,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             return;
         }
         if (locationRunnables == null) {
-            locationRunnables = new PriorityQueue<>();
+            locationRunnables = new ArrayDeque<>();
         }
         locationRunnables.add(callingMethod);
         showGpsSettingsDialog();

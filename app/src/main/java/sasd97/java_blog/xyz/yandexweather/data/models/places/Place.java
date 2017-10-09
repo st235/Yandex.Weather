@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
+import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
@@ -23,6 +24,7 @@ public class Place {
     @PrimaryKey
     @SerializedName("place_id")
     @Expose
+    @NonNull
     private String placeId;
 
     @SerializedName("time")

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -23,8 +24,8 @@ public interface WeatherInteractor {
     Single<LinkedHashMap<WeatherModel, WeatherType[]>> updateForecast16(@NonNull Place place);
 
     //db
-    Single<LinkedHashMap<WeatherModel, WeatherType[]>> getForecast(Place place);
-    Completable saveForecast(List<WeatherModel> forecast);
+    Single<Map<WeatherModel, WeatherType[]>> getForecast(Place place);
+    Single<Map<WeatherModel, WeatherType[]>> saveForecast(Map<WeatherModel, WeatherType[]> map);
     Completable removeForecast(String placeId);
 
     int getTemperatureUnits();

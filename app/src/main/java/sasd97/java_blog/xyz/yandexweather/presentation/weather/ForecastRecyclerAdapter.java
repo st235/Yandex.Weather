@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,18 +27,18 @@ import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecyclerAdapter.RecyclerViewHolder> {
     public static final int TYPE_COLLAPSED = 0;
     public static final int TYPE_EXPANDED = 1;
-    private final LinkedHashMap<WeatherModel, WeatherType[]> forecasts;
+    private final Map<WeatherModel, WeatherType[]> forecasts;
     private final Settings settings;
     private final boolean isSecondary;
 
-    public ForecastRecyclerAdapter(LinkedHashMap<WeatherModel, WeatherType[]> forecasts,
+    public ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
                                    Settings settings) {
         this.forecasts = forecasts;
         this.settings = settings;
         this.isSecondary = false;
     }
 
-    public ForecastRecyclerAdapter(LinkedHashMap<WeatherModel, WeatherType[]> forecasts,
+    public ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
                                    Settings settings, boolean isSecondary) {
         this.forecasts = forecasts;
         this.settings = settings;

@@ -8,7 +8,7 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
@@ -20,7 +20,7 @@ import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface WeatherView extends MvpView {
     void showWeather(@NonNull WeatherModel weather, @NonNull WeatherType type);
-    void showForecast(Pair<LinkedHashMap<WeatherModel, WeatherType[]>, Settings> pair);
+    void showForecast(Pair<Map<WeatherModel, WeatherType[]>, Settings> pair);
 
     @StateStrategyType(SkipStrategy.class)
     void stopRefreshing();

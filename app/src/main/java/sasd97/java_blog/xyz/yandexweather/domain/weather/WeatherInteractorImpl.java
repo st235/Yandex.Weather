@@ -9,6 +9,7 @@ import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.TimeZone;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
@@ -41,6 +43,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
 
     private static final String TAG = WeatherInteractorImpl.class.getCanonicalName();
     public static final String WEATHER_NOT_ADDED = "Weather not added";
+    public static final String FORECAST_NOT_ADDED = "Forecast not added";
 
     private Gson gson;
     private AppRepository repository;
@@ -120,17 +123,19 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     }
 
     @Override
-    public Single<LinkedHashMap<WeatherModel, WeatherType[]>> getForecast(Place place) {
+    public Single<Map<WeatherModel, WeatherType[]>> getForecast(Place place) {
         return repository.getForecast(place.getPlaceId())
                 .toObservable()
                 .flatMapIterable(weatherModels -> weatherModels)
                 .map(this::addWeatherType)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .collectInto(new LinkedHashMap<>(), (map, pair) -> map.put(pair.first, pair.second));
     }
 
     @Override
-    public Completable saveForecast(List<WeatherModel> forecast) {
-        return repository.insertForecast(forecast);
+    public Single<Map<WeatherModel, WeatherType[]>> saveForecast(Map<WeatherModel, WeatherType[]> map) {
+        return repository.insertForecast(new ArrayList<>(map.keySet())).toSingleDefault(map);
     }
 
     @Override

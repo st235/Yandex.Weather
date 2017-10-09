@@ -8,6 +8,7 @@ import android.support.annotation.RequiresPermission;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
@@ -47,7 +48,7 @@ public interface AppRepository {
     Single<List<Place>> getFavoritePlaces();
     Completable insertPlace(Place place);
     Completable removePlaces(List<Place> places);
-    Single<List<WeatherModel>> getForecast(String placeId);
+    Maybe<List<WeatherModel>> getForecast(String placeId);
     Completable insertForecast(List<WeatherModel> forecast);
     Completable removeForecast(String placeId);
 

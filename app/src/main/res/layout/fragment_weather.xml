@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:background="@android:color/transparent"
                 android:layout_height="match_parent"
-                app:layout_scrollFlags="scroll|snap">
+                app:layout_scrollFlags="scroll">
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/fragment_weather_card"
