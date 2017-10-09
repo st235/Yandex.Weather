@@ -13,8 +13,10 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import io.reactivex.CompletableSource;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
@@ -41,6 +43,8 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     private final PlacesInteractor placesInteractor;
     private final WeatherInteractor weatherInteractor;
     private final Set<WeatherType> weatherTypes;
+    private Disposable d;
+    private CompletableSource cs;
 
     @Inject
     public WeatherPresenter(@NonNull RxSchedulers schedulers,
@@ -56,28 +60,33 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        getWeather();
-        getForecast();
+        initData();
     }
 
-    public void getWeather() {
+    private void initData() {
         placesInteractor.getSavedLocationPlace()
-                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(new HashRunnable(this::getWeather, "getWeather")))
-                .onErrorReturn(throwable -> null)
-                .filter(place -> place != null).toSingle()
-                .flatMap(weatherInteractor::getWeather)
+                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(new HashRunnable(this::initData, "initData")))
+                .doOnSuccess(this::onSuccessPlaceLoad)
+                .subscribe((place, throwable) -> {/*ignore*/});
+    }
+
+    private void onSuccessPlaceLoad(Place place) {
+        getWeather(place);
+        getForecast(place);
+    }
+
+    public void getWeather(Place place) {
+        weatherInteractor.getWeather(place)
                 .onErrorResumeNext(weatherNotAdded -> weatherNotAdded.getLocalizedMessage().equals(WEATHER_NOT_ADDED) ?
-                        updateWeather(new HashRunnable(this::getWeather, "getWeather")) : null)
+                        updateWeather(new HashRunnable(() -> this.getWeather(place), "getWeather")) : null)
                 .filter(weatherModel -> weatherModel != null).toSingle()
                 .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
     }
 
-    private void getForecast() {
-        placesInteractor.getSavedLocationPlace()
-                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(new HashRunnable(this::getForecast, "getForecast")))
-                .flatMap(weatherInteractor::getForecast)
+    private void getForecast(Place place) {
+        weatherInteractor.getForecast(place)
                 .onErrorResumeNext(forecastNotAdded -> forecastNotAdded.getLocalizedMessage().equals(FORECAST_NOT_ADDED) ?
-                        updateForecast(new HashRunnable(this::getForecast, "getForecast")) : null)
+                        updateForecast(new HashRunnable(() -> this.getForecast(place), "getForecast")) : null)
                 .map(this::addSettings)
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair), Throwable::printStackTrace);
@@ -105,6 +114,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     private Single<Place> updateLocationPlace(HashRunnable callingMethod) {
         return placesInteractor.getCurrentCoords()
                 .flatMap(placesInteractor::getPlaceDetailsByCoords)
+                .compose(schedulers.getIoToMainTransformerSingle())
                 .map(placeDetails -> new Place(placeDetails.getCity(), placeDetails.getCoords()))
                 .doOnSuccess(placesInteractor::savePlace)
                 .doOnError(gpsDenied -> getViewState().requestEnablingGps(callingMethod))
@@ -116,9 +126,8 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
      * 5 day forecast with interval 3 hour`s. Get for morning, day, evening, night.
      */
     @NonNull
-    private LinkedHashMap<WeatherModel, WeatherType[]> zipWithWeatherTypes(
-            LinkedHashMap<WeatherModel, WeatherType[]> weatherModelTypesHashMap,
-            List<WeatherType> weatherTypes) {
+    private LinkedHashMap<WeatherModel, WeatherType[]> zipWithWeatherTypes(LinkedHashMap<WeatherModel,
+            WeatherType[]> weatherModelTypesHashMap, List<WeatherType> weatherTypes) {
         int currentDay = 0;
         for (WeatherType[] types : weatherModelTypesHashMap.values()) {
             for (int j = 0; j < 8; j += 2) {

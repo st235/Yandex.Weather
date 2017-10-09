@@ -10,8 +10,6 @@ import java.util.Locale;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import sasd97.java_blog.xyz.yandexweather.data.AppRepository;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
@@ -43,9 +41,7 @@ public class PlacesInteractorImpl implements PlacesInteractor {
 
     @Override
     public Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@NonNull LatLng coords) {
-        return repository.getPlaceDetailsByCoords(coords, Locale.getDefault().getLanguage())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return repository.getPlaceDetailsByCoords(coords, Locale.getDefault().getLanguage());
     }
 
     @NonNull

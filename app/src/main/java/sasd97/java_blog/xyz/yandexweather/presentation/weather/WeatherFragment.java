@@ -199,12 +199,18 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         if (isTabletHorizontal) {
             RecyclerFragment recyclerFragment1 = (RecyclerFragment) getChildFragmentManager().findFragmentByTag(getTagFor(0));
             RecyclerFragment recyclerFragment2 = (RecyclerFragment) getChildFragmentManager().findFragmentByTag(getTagFor(1));
-            if (recyclerFragment1 == null || recyclerFragment2 == null) return;
+            if (recyclerFragment1 == null || recyclerFragment2 == null) {
+                return;
+            }
+
             LinkedHashMap<WeatherModel, WeatherType[]> rv1items;
             LinkedHashMap<WeatherModel, WeatherType[]> rv2items;
             rv1items = new LinkedHashMap<>(5);
             Set<WeatherModel> weatherModelSet = pair.first.keySet();
-            if (weatherModelSet.size() == 0) return;
+            if (weatherModelSet.isEmpty()) {
+                return;
+            }
+
             for (int i = 0; i < 5; i++) {
                 WeatherModel key = (WeatherModel) weatherModelSet.toArray()[i];
                 rv1items.put(key, pair.first.get(key));
