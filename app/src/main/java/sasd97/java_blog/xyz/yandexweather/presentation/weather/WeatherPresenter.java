@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import io.reactivex.CompletableSource;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -86,7 +87,8 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                         updateForecast(() -> this.getForecast(place)) : null)
                 .map(this::addSettings)
                 .compose(schedulers.getIoToMainTransformerSingle())
-                .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair), Throwable::printStackTrace);
+                .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair),
+                        throwable -> {});
     }
 
     private Single<WeatherModel> updateWeather(Runnable runnable) {
@@ -99,10 +101,14 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     private Single<Map<WeatherModel, WeatherType[]>> updateForecast(Runnable runnable) {
         return placesInteractor.getSavedLocationPlace()
                 .onErrorResumeNext(locationNotAdded -> updateLocationPlace(runnable))
-                .flatMap(weatherInteractor::updateForecast16)
-                .zipWith(placesInteractor.getSavedLocationPlace()
-                        .onErrorResumeNext(locationNotAdded -> updateLocationPlace(runnable))
-                        .flatMap(weatherInteractor::updateForecast5), this::zipWithWeatherTypes)
+                .flatMap(place -> weatherInteractor.updateForecast16(place)
+                        .zipWith(weatherInteractor.updateForecast5(place), this::zipWithWeatherTypes)
+                        .map(hashMap -> Pair.create(hashMap, place)))
+                .doOnSuccess(lhmPlacePair -> Observable.fromArray(lhmPlacePair.first.keySet()
+                        .toArray(new WeatherModel[lhmPlacePair.first.keySet().size()]))
+                        .doOnNext(weatherModel -> weatherModel.setPlaceId(lhmPlacePair.second.getPlaceId()))
+                        .subscribe())
+                .map(pairOfPairAndPlace -> pairOfPairAndPlace.first)
                 .flatMap(weatherInteractor::saveForecast)
                 .compose(schedulers.getIoToMainTransformerSingle());
     }
@@ -154,18 +160,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
         updateForecast(this::fetchForecast)
                 .map(this::addSettings)
                 .doOnEvent((hashMapSettingsPair, throwable) -> getViewState().showForecast(hashMapSettingsPair))
-                .zipWith(placesInteractor.getSavedLocationPlace(), Pair::new)
-                .map(pairOfPairAndPlace -> {
-                    Pair<Map<WeatherModel, WeatherType[]>, Settings> pairMapAndSettings = pairOfPairAndPlace.first;
-                    for (WeatherModel weatherModel : pairMapAndSettings.first.keySet()) {
-                        weatherModel.setPlaceId(pairOfPairAndPlace.second.getPlaceId());
-                    }
-                    return pairMapAndSettings.first.keySet();
-                })
-                .toObservable()
-                .flatMapIterable(weatherModels -> weatherModels)
-                .toList()
-                .subscribe(weatherModels -> {}, Throwable::printStackTrace);
+                .subscribe(weatherModels -> {}, throwable -> {});
     }
 
     public boolean isCelsius() {

@@ -23,11 +23,11 @@ import static sasd97.java_blog.xyz.yandexweather.WeatherApp.SPACE;
 
 @Entity(tableName = "Weather")
 public class WeatherModel {
-    public static final String WEATHER = "Weather";
+    public static final String WEATHER_TABEL = "Weather";
 
     @Expose
-    @PrimaryKey(autoGenerate = true)
-    private long uid;
+    @PrimaryKey
+    private int uid;
 
     @Expose
     private String placeId;
@@ -122,8 +122,8 @@ public class WeatherModel {
         this.morningTemperature = builder.morningTemperature;
     }
 
-    public void setUid(long uid) {
-        this.uid = uid;
+    public void generateUid(int pos) {
+        this.uid = placeId.hashCode() + pos;
     }
 
     public void setPlaceId(String placeId) {
@@ -218,8 +218,12 @@ public class WeatherModel {
         this.descriptionLocalized = descriptionLocalized;
     }
 
-    public long getUid() {
+    public int getUid() {
         return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 
     public String getPlaceId() {
@@ -293,7 +297,7 @@ public class WeatherModel {
             String[] strings = Instant.ofEpochSecond(updateTime)
                     .atZone(ZoneId.of(TimeZone.getDefault().getID()))
                     .format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)).split(SPACE);
-            readableDate = (strings[0] + SPACE + strings[1]).replace(",","");
+            readableDate = (strings[0] + SPACE + strings[1]).replace(",", "");
         }
         return readableDate;
     }

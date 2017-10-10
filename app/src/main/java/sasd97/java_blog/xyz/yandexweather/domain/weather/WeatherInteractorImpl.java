@@ -9,7 +9,6 @@ import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -135,7 +135,12 @@ public class WeatherInteractorImpl implements WeatherInteractor {
 
     @Override
     public Single<Map<WeatherModel, WeatherType[]>> saveForecast(Map<WeatherModel, WeatherType[]> map) {
-        return repository.insertForecast(new ArrayList<>(map.keySet())).toSingleDefault(map);
+        final int[] weatherPos = {0};
+        return Observable.fromArray(map.keySet().toArray(new WeatherModel[map.keySet().size()]))
+                .doOnNext(weatherModel -> weatherModel.generateUid(weatherPos[0]++))
+                .toList()
+                .flatMap(weatherModels -> repository.insertForecast(weatherModels)
+                        .toSingleDefault(map));
     }
 
     @Override

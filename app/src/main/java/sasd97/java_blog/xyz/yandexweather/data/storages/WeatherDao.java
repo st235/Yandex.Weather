@@ -10,16 +10,16 @@ import java.util.List;
 import io.reactivex.Single;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
-import static sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel.WEATHER;
+import static sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel.WEATHER_TABEL;
 
 @Dao
 public interface WeatherDao {
-    @Query("SELECT * FROM " + WEATHER + " WHERE placeId IN (:placeId) ORDER BY updateTime DESC")
+    @Query("SELECT * FROM " + WEATHER_TABEL + " WHERE placeId IN (:placeId) ORDER BY updateTime DESC")
     Single<List<WeatherModel>> getForecast(String placeId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertForecast(List<WeatherModel> forecast);
 
-    @Query("DELETE FROM " + WEATHER + " WHERE placeId = (:placeId)")
+    @Query("DELETE FROM " + WEATHER_TABEL + " WHERE placeId = (:placeId)")
     void removeForecast(String placeId);
 }
