@@ -55,7 +55,6 @@ import sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerFra
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerPagerAdapter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidUtils;
-import sasd97.java_blog.xyz.yandexweather.utils.HashRunnable;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 import sasd97.java_blog.xyz.yandexweather.utils.ViewPagerAction;
 
@@ -98,7 +97,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     private RecyclerPagerAdapter pagerAdapter;
     public static final int REQUEST_LOCATION = 199;
     private GoogleApiClient googleApiClient;
-    private Set<HashRunnable> runnables;
+    private Set<Runnable> runnables;
     private boolean isGpsDialogShown;
 
     @ProvidePresenter
@@ -231,7 +230,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     }
 
     @Override
-    public void requestEnablingGps(HashRunnable callingMethod) {
+    public void requestEnablingGps(Runnable callingMethod) {
         if (AndroidUtils.isLocationPermissionsDenied(getContext())) {
             new RxPermissions(getActivity())
                     .request(Manifest.permission.ACCESS_FINE_LOCATION)

@@ -25,6 +25,16 @@ public class PlaceDetailsResponse {
     @Expose
     private String status;
 
+    public String getPlaceId() {
+        if (result != null) {
+            return result.placeId;
+        } else if (resultArray != null) {
+            return resultArray[0].placeId;
+        } else {
+            throw new IllegalStateException(NULL_POINTER_ERROR);
+        }
+    }
+
     public LatLng getCoords() {
         if (result != null) {
             return new LatLng(result.geometry.location.lat, result.geometry.location.lng);

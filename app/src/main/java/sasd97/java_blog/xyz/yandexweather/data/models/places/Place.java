@@ -50,9 +50,10 @@ public class Place {
     public Place() {}
 
     @Ignore
-    public Place(String name, LatLng coords) {
+    public Place(String name, LatLng coords, String placeId) {
         this.name = name;
         this.coords = coords;
+        this.placeId = placeId;
     }
 
     @Ignore

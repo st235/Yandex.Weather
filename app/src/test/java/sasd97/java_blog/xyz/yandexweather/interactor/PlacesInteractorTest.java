@@ -67,7 +67,7 @@ public class PlacesInteractorTest {
     public void getPlace() {
         LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
-        Place place = new Place(placeName, coords);
+        Place place = new Place(placeName, coords, "");
 
         when(repo.getSavedLocationPlace()).thenReturn(Single.just(place));
 
@@ -79,7 +79,7 @@ public class PlacesInteractorTest {
     public void savePlaceToFavorites() {
         LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
-        Place place = new Place(placeName, coords);
+        Place place = new Place(placeName, coords, "");
 
         placesInteractor.savePlaceToFavorites(place);
         verify(repo, only()).insertPlace(place);
@@ -89,7 +89,7 @@ public class PlacesInteractorTest {
     public void removePlacesFromFavorites() {
         LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
-        Place place = new Place(placeName, coords);
+        Place place = new Place(placeName, coords, "");
         List<Place> list = new ArrayList<>();
         list.add(place);
         placesInteractor.removePlacesFromFavorites(list);

@@ -62,7 +62,7 @@ public class WeatherPresenterTest {
         LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
-        place = new Place(placeName, coords);
+        place = new Place(placeName, coords, "");
         place.setPlaceId(testId);
         when(placesInteractor.getSavedLocationPlace()).thenReturn(Single.just(place));
         WeatherModel weatherModel = new WeatherModel.Builder().build();
@@ -90,7 +90,7 @@ public class WeatherPresenterTest {
     public void fetchWeather() {
         LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
-        Place place = new Place(placeName, coords);
+        Place place = new Place(placeName, coords, "");
         WeatherModel weatherModel = new WeatherModel.Builder().build();
 
         when(placesInteractor.getSavedLocationPlace()).thenReturn(Single.just(place));

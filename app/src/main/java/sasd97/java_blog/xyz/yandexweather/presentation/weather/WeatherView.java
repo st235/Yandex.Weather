@@ -12,7 +12,6 @@ import java.util.Map;
 
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
-import sasd97.java_blog.xyz.yandexweather.utils.HashRunnable;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 
 /**
@@ -27,5 +26,5 @@ public interface WeatherView extends MvpView {
     void stopRefreshing();
 
     @StateStrategyType(SkipStrategy.class)
-    void requestEnablingGps(HashRunnable callingMethod);
+    void requestEnablingGps(Runnable callingMethod);
 }

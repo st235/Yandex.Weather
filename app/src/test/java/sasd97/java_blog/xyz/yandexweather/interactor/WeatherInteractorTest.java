@@ -71,7 +71,7 @@ public class WeatherInteractorTest {
     public void getCachedWeatherWhenExists() {
         LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
-        Place place = new Place(placeName, coords);
+        Place place = new Place(placeName, coords, "");
 
         when(repo.getCachedWeather(place)).thenReturn("{\"coord\":{\"lon\":37.62,\"lat\":55.76},\"weather\":[{\"id\":200,\"main\":\"Thunderstorm\",\"description\":\"гроза с мелким дождём\",\"icon\":\"11n\"}],\"base\":\"stations\",\"name\":\"Moskovskaya Oblast’\"}");
 
@@ -84,7 +84,7 @@ public class WeatherInteractorTest {
     public void getCachedWeatherWhenNotExists() {
         LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
-        Place place = new Place(placeName, coords);
+        Place place = new Place(placeName, coords, "");
 
         when(repo.getWeather(place)).thenReturn(Single.just(new WeatherModel.Builder().build()));
         when(repo.getCachedWeather(place)).thenReturn(null);
@@ -98,7 +98,7 @@ public class WeatherInteractorTest {
     public void updateWeather() {
         LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
-        Place place = new Place(placeName, coords);
+        Place place = new Place(placeName, coords, "");
 
         WeatherModel fromRemote = new WeatherModel.Builder().build();
 

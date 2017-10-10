@@ -84,7 +84,7 @@ public class AppRepositoryTest {
     public void getCachedWeather() {
         LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
-        Place place = new Place(placeName, coords);
+        Place place = new Place(placeName, coords, "");
         repo.getCachedWeather(place);
         verify(cacheStorage, times(1)).getString(toFileName(place), null);
         verify(weatherApi, never()).getWeather(coords.getLat(), coords.getLng(), apiKeys.first);
@@ -114,7 +114,7 @@ public class AppRepositoryTest {
     public void getWeather() {
         LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Москва";
-        Place place = new Place(placeName, coords);
+        Place place = new Place(placeName, coords, "");
         List<Weather> weathers = new ArrayList<>();
         weathers.add(new Weather());
         ResponseWeather responseWeather = new ResponseWeather(0,
@@ -196,7 +196,7 @@ public class AppRepositoryTest {
         LatLng coords = new LatLng(55.755826, 37.6173);
         String placeName = "Moscow";
         String json = "{ key: value }";
-        Place place = new Place(placeName, coords);
+        Place place = new Place(placeName, coords, "");
         repo.saveWeatherToCache(place, json);
         verify(cacheStorage, times(1)).put(toFileName(place), json);
         verify(weatherApi, never()).getWeather(coords.getLat(), coords.getLng(), apiKeys.first);
