@@ -43,4 +43,20 @@ public class AndroidUtils {
         return fineLocPerm == PackageManager.PERMISSION_DENIED ||
                 coarseLocPerm == PackageManager.PERMISSION_DENIED;
     }
+
+    public static int[] concatArrays(int[]... arrays) {
+        int length = 0;
+        for (int[] array : arrays) {
+            length += array.length;
+        }
+        int[] result = new int[length];
+        int pos = 0;
+        for (int[] array : arrays) {
+            for (int element : array) {
+                result[pos] = element;
+                pos++;
+            }
+        }
+        return result;
+    }
 }

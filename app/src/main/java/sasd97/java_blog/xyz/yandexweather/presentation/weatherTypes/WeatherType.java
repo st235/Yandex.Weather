@@ -10,10 +10,12 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
  */
 
 public interface WeatherType {
-    boolean isApplicable(WeatherModel weather);
+    boolean isWeatherApplicable(WeatherModel weather);
+    boolean isForecastIdApplicable(int forecastId);
 
     @StringRes int getIconRes();
     @StringRes int getTitleRes();
     @ColorRes int getCardColor();
     @ColorRes int getTextColor();
+    int getWeatherId();
 }

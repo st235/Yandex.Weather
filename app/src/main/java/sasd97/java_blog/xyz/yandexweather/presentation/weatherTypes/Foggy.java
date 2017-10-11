@@ -8,10 +8,16 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
  */
 
 public class Foggy implements WeatherType {
+    private static final int FOGGY_WEATHER_TYPE = 741;
 
     @Override
-    public boolean isApplicable(WeatherModel weather) {
+    public boolean isWeatherApplicable(WeatherModel weather) {
         return weather.getWeatherId() / 100 == 7;
+    }
+
+    @Override
+    public boolean isForecastIdApplicable(int forecastId) {
+        return forecastId / 100 == 7;
     }
 
     @Override
@@ -32,5 +38,10 @@ public class Foggy implements WeatherType {
     @Override
     public int getTextColor() {
         return R.color.colorFoggyText;
+    }
+
+    @Override
+    public int getWeatherId() {
+        return FOGGY_WEATHER_TYPE;
     }
 }

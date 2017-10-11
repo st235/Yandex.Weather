@@ -8,10 +8,16 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
  */
 
 public class Rainy implements WeatherType {
+    private static final int RAINY_WEATHER_TYPE = 500;
 
     @Override
-    public boolean isApplicable(WeatherModel weather) {
+    public boolean isWeatherApplicable(WeatherModel weather) {
         return weather.getWeatherId() / 100 == 5;
+    }
+
+    @Override
+    public boolean isForecastIdApplicable(int forecastId) {
+        return forecastId / 100 == 5;
     }
 
     @Override
@@ -32,5 +38,10 @@ public class Rainy implements WeatherType {
     @Override
     public int getTextColor() {
         return R.color.colorRainyText;
+    }
+
+    @Override
+    public int getWeatherId() {
+        return RAINY_WEATHER_TYPE;
     }
 }

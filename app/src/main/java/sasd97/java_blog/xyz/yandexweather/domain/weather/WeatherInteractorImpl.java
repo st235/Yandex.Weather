@@ -101,7 +101,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     }
 
     @Override
-    public Single<LinkedHashMap<WeatherModel, WeatherType[]>> updateForecast16(@NonNull Place place) {
+    public Single<Map<WeatherModel, WeatherType[]>> updateForecast16(@NonNull Place place) {
         return repository.getForecast16(place)
                 .map(ResponseForecast16::getForecasts)
                 .flatMapIterable(forecasts -> forecasts)
@@ -149,14 +149,30 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     }
 
     private Pair<WeatherModel, WeatherType[]> addWeatherType(@NonNull WeatherModel weather) {
+        boolean isDetailedForecast = weather.getForecastWeatherIds() != null &&
+                weather.getForecastWeatherIds().length == 4;
+        WeatherType[] currentWeatherTypes = new WeatherType[isDetailedForecast ? 5 : 1];
         for (WeatherType type : weatherTypes) {
-            if (type.isApplicable(weather)) {
-                WeatherType[] weatherTypes = new WeatherType[4];
-                weatherTypes[0] = type;
-                return new Pair<>(weather, weatherTypes);
+            if (type.isWeatherApplicable(weather)) {
+                currentWeatherTypes[0] = type;
+            }
+            if (!isDetailedForecast) {
+                continue;
+            }
+            if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[0])) {
+                currentWeatherTypes[1] = type;
+            }
+            if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[1])) {
+                currentWeatherTypes[2] = type;
+            }
+            if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[2])) {
+                currentWeatherTypes[3] = type;
+            }
+            if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[3])) {
+                currentWeatherTypes[4] = type;
             }
         }
-        throw new IllegalStateException("Should not get here");
+        return new Pair<>(weather, currentWeatherTypes);
     }
 
     private WeatherModel toWeatherModel(int weatherId) {
@@ -165,7 +181,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
 
     private WeatherType toWeatherType(WeatherModel weather) {
         for (WeatherType type : weatherTypes) {
-            if (type.isApplicable(weather)) {
+            if (type.isWeatherApplicable(weather)) {
                 return type;
             }
         }

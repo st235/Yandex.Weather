@@ -6,18 +6,15 @@ import android.support.v4.util.Pair;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
 
-import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
@@ -43,8 +40,6 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     private final PlacesInteractor placesInteractor;
     private final WeatherInteractor weatherInteractor;
     private final Set<WeatherType> weatherTypes;
-    private Disposable d;
-    private CompletableSource cs;
 
     @Inject
     public WeatherPresenter(@NonNull RxSchedulers schedulers,
@@ -89,6 +84,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair),
                         throwable -> {});
+
     }
 
     private Single<WeatherModel> updateWeather(Runnable runnable) {
@@ -125,22 +121,28 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     }
 
     /**
-     * Fills weatherModelTypesHashMap with values.
+     * Fills weatherModelTypesMap with values.
      * 5 day forecast with interval 3 hour`s. Get for morning, day, evening, night.
      */
     @NonNull
-    private LinkedHashMap<WeatherModel, WeatherType[]> zipWithWeatherTypes(LinkedHashMap<WeatherModel,
-            WeatherType[]> weatherModelTypesHashMap, List<WeatherType> weatherTypes) {
+    private Map<WeatherModel, WeatherType[]> zipWithWeatherTypes(Map<WeatherModel, WeatherType[]> weatherModelTypesMap,
+                                                                 List<WeatherType> weatherTypes) {
         int currentDay = 0;
-        for (WeatherType[] types : weatherModelTypesHashMap.values()) {
+        for (Map.Entry<WeatherModel, WeatherType[]> entry : weatherModelTypesMap.entrySet()) {
             for (int j = 0; j < 8; j += 2) {
                 int index = j + 8 * currentDay;
-                if (index >= weatherTypes.size()) break;
-                types[j / 2] = weatherTypes.get(index);
+                if (index >= weatherTypes.size()) {
+                    break;
+                }
+                entry.getValue()[j / 2] = weatherTypes.get(index);
+                if (entry.getKey().getForecastWeatherIds() == null) {
+                    entry.getKey().setForecastWeatherIds(new Integer[4]);
+                }
+                entry.getKey().getForecastWeatherIds()[j / 2] = weatherTypes.get(index).getWeatherId();
             }
             currentDay++;
         }
-        return weatherModelTypesHashMap;
+        return weatherModelTypesMap;
     }
 
     private Pair<Map<WeatherModel, WeatherType[]>, Settings> addSettings(
@@ -159,8 +161,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     public void fetchForecast() {
         updateForecast(this::fetchForecast)
                 .map(this::addSettings)
-                .doOnEvent((hashMapSettingsPair, throwable) -> getViewState().showForecast(hashMapSettingsPair))
-                .subscribe(weatherModels -> {}, throwable -> {});
+                .subscribe(weatherModels -> getViewState().showForecast(weatherModels), Throwable::printStackTrace);
     }
 
     public boolean isCelsius() {
@@ -177,7 +178,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
     private void chooseWeatherType(@NonNull WeatherModel weather) {
         for (WeatherType type : weatherTypes) {
-            if (type.isApplicable(weather)) {
+            if (type.isWeatherApplicable(weather)) {
                 getViewState().showWeather(weather, type);
                 break;
             }

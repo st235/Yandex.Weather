@@ -2,7 +2,6 @@ package sasd97.java_blog.xyz.yandexweather.domain.weather;
 
 import android.support.annotation.NonNull;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +20,7 @@ public interface WeatherInteractor {
     Single<WeatherModel> updateWeather(@NonNull Place place);
 
     Single<List<WeatherType>> updateForecast5(@NonNull Place place);
-    Single<LinkedHashMap<WeatherModel, WeatherType[]>> updateForecast16(@NonNull Place place);
+    Single<Map<WeatherModel, WeatherType[]>> updateForecast16(@NonNull Place place);
 
     //db
     Single<Map<WeatherModel, WeatherType[]>> getForecast(Place place);

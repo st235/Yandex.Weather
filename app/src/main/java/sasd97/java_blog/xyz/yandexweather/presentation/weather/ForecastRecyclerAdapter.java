@@ -89,7 +89,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         int iconMorning = forecasts.get(weather)[0].getIconRes();
         if (iconMorning == R.string.all_weather_clear_night_icon)
             iconMorning = R.string.all_weather_sunny_icon;
-        if (position > forecasts.get(weather).length || forecasts.get(weather)[1] == null) {
+        if (position > forecasts.get(weather).length || forecasts.get(weather).length == 1) {
             /*set icon morning because forecast16 response contains only 1 weather type for whole day*/
             /*and we put it in [0] position in array*/
             holder.iconMain.setText(iconMorning);
@@ -112,7 +112,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
     }
 
     private void setTheme(RecyclerViewHolder holder, WeatherModel weather) {
-        boolean isDetailed = forecasts.get(weather)[1] != null;
+        boolean isDetailed = forecasts.get(weather).length == 5;
         int cardColor = forecasts.get(weather)[isDetailed ? 1 : 0].getCardColor();
         int textColor = forecasts.get(weather)[isDetailed ? 1 : 0].getTextColor();
         if (cardColor == R.color.colorClearNightCard) cardColor = R.color.colorSunnyCard;

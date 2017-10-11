@@ -9,9 +9,16 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
 public class Drizzle implements WeatherType {
 
+    private static final int DRIZZLE_WEATHER_TYPE = 300;
+
     @Override
-    public boolean isApplicable(WeatherModel weather) {
+    public boolean isWeatherApplicable(WeatherModel weather) {
         return weather.getWeatherId() / 100 == 3;
+    }
+
+    @Override
+    public boolean isForecastIdApplicable(int forecastId) {
+        return forecastId / 100 == 3;
     }
 
     @Override
@@ -32,5 +39,10 @@ public class Drizzle implements WeatherType {
     @Override
     public int getTextColor() {
         return R.color.colorDrizzleText;
+    }
+
+    @Override
+    public int getWeatherId() {
+        return DRIZZLE_WEATHER_TYPE;
     }
 }

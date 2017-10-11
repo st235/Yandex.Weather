@@ -3,21 +3,17 @@ package sasd97.java_blog.xyz.yandexweather.data.models.places;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import sasd97.java_blog.xyz.yandexweather.data.storages.RoomTypeConverters;
-
 /**
  * Created by Maksim Sukhotski on 7/25/2017.
  */
 
 @Entity(tableName = Place.PLACES_TABLE)
-@TypeConverters(RoomTypeConverters.class)
 public class Place {
     public static final String PLACES_TABLE = "Places";
 

@@ -39,6 +39,9 @@ public class WeatherModel {
     private int weatherId;
 
     @Expose
+    private Integer[] forecastWeatherIds;
+
+    @Expose
     private String city;
 
     @Expose
@@ -136,6 +139,14 @@ public class WeatherModel {
 
     public void setWeatherId(int weatherId) {
         this.weatherId = weatherId;
+    }
+
+    public Integer[] getForecastWeatherIds() {
+        return forecastWeatherIds;
+    }
+
+    public void setForecastWeatherIds(Integer[] forecastWeatherIds) {
+        this.forecastWeatherIds = forecastWeatherIds;
     }
 
     public void setCity(String city) {

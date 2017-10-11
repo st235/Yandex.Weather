@@ -14,7 +14,7 @@ import static sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel.WEAT
 
 @Dao
 public interface WeatherDao {
-    @Query("SELECT * FROM " + WEATHER_TABEL + " WHERE placeId IN (:placeId) ORDER BY updateTime DESC")
+    @Query("SELECT * FROM " + WEATHER_TABEL + " WHERE placeId IN (:placeId) ORDER BY uid ASC")
     Single<List<WeatherModel>> getForecast(String placeId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
