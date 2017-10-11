@@ -108,7 +108,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
                 .filter(this::isForFuture)
                 .map(WeatherForecast::toWeatherModel)
                 .map(this::convertModel)
-                .map(this::addWeatherType)
+                .map(weatherModel -> addWeatherType(weatherModel, weatherTypes))
                 .collectInto(new LinkedHashMap<>(), (map, pair) -> map.put(pair.first, pair.second));
                 /*pair.first is weather, pair.second is weather type*/
     }
@@ -123,24 +123,22 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     }
 
     @Override
-    public Single<Map<WeatherModel, WeatherType[]>> getForecast(Place place) {
-        return repository.getForecast(place.getPlaceId())
-                .toObservable()
-                .flatMapIterable(weatherModels -> weatherModels)
-                .map(this::addWeatherType)
+    public Single<List<WeatherModel>> getForecast(Place place, boolean needUpdate) {
+        return repository.getForecast(place != null ? place.getPlaceId() : "", needUpdate)
+                .toSingle()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .collectInto(new LinkedHashMap<>(), (map, pair) -> map.put(pair.first, pair.second));
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Single<Map<WeatherModel, WeatherType[]>> saveForecast(Map<WeatherModel, WeatherType[]> map) {
+    public Single<List<WeatherModel>> saveForecast(List<WeatherModel> weatherModels) {
         final int[] weatherPos = {0};
-        return Observable.fromArray(map.keySet().toArray(new WeatherModel[map.keySet().size()]))
+        return Observable.fromCallable(() -> weatherModels)
+                .flatMapIterable(weatherModels1 -> weatherModels1)
                 .doOnNext(weatherModel -> weatherModel.generateUid(weatherPos[0]++))
                 .toList()
-                .flatMap(weatherModels -> repository.insertForecast(weatherModels)
-                        .toSingleDefault(map));
+                .flatMap(weathers -> repository.insertForecast(weathers)
+                        .toSingleDefault(weathers));
     }
 
     @Override
@@ -148,7 +146,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
         return repository.removeForecast(placeId);
     }
 
-    private Pair<WeatherModel, WeatherType[]> addWeatherType(@NonNull WeatherModel weather) {
+    public static Pair<WeatherModel, WeatherType[]> addWeatherType(@NonNull WeatherModel weather, Set<WeatherType> weatherTypes) {
         boolean isDetailedForecast = weather.getForecastWeatherIds() != null &&
                 weather.getForecastWeatherIds().length == 4;
         WeatherType[] currentWeatherTypes = new WeatherType[isDetailedForecast ? 5 : 1];
@@ -232,5 +230,9 @@ public class WeatherInteractorImpl implements WeatherInteractor {
             if (converter.isApplicable(mode)) return converter.convert(value);
         }
         return value;
+    }
+
+    public Set<WeatherType> getWeatherTypes() {
+        return weatherTypes;
     }
 }

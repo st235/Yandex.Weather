@@ -48,7 +48,7 @@ public interface AppRepository {
     Single<List<Place>> getFavoritePlaces();
     Completable insertPlace(Place place);
     Completable removePlaces(List<Place> places);
-    Maybe<List<WeatherModel>> getForecast(String placeId);
+    Maybe<List<WeatherModel>> getForecast(String placeId, boolean needUpdate);
     Completable insertForecast(List<WeatherModel> forecast);
     Completable removeForecast(String placeId);
 

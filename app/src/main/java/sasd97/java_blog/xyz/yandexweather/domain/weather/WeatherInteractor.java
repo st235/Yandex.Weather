@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -23,11 +24,13 @@ public interface WeatherInteractor {
     Single<Map<WeatherModel, WeatherType[]>> updateForecast16(@NonNull Place place);
 
     //db
-    Single<Map<WeatherModel, WeatherType[]>> getForecast(Place place);
-    Single<Map<WeatherModel, WeatherType[]>> saveForecast(Map<WeatherModel, WeatherType[]> map);
+    Single<List<WeatherModel>> getForecast(Place place, boolean needUpdate);
+    Single<List<WeatherModel>> saveForecast(List<WeatherModel> weatherModels);
     Completable removeForecast(String placeId);
 
     int getTemperatureUnits();
     int getPressureUnits();
     int getSpeedUnits();
+
+    Set<WeatherType> getWeatherTypes();
 }

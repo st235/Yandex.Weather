@@ -132,10 +132,13 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public Maybe<List<WeatherModel>> getForecast(String placeId) {
+    public Maybe<List<WeatherModel>> getForecast(String placeId, boolean needUpdate) {
         return weatherDao.getForecast(placeId)
+                .onErrorResumeNext(fileNotFound -> {
+                    throw new NoSuchElementException(FORECAST_NOT_ADDED);
+                })
                 .filter(weatherModels -> {
-                    if (weatherModels.isEmpty()) {
+                    if (weatherModels.isEmpty() || needUpdate) {
                         throw new NoSuchElementException(FORECAST_NOT_ADDED);
                     }
                     return true;

@@ -128,7 +128,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                 R.color.colorPrimaryDark, R.color.colorPrimary);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             presenter.fetchWeather();
-            presenter.fetchForecast();
+            presenter.getForecast(null, true);
         });
 
         int orientation = (isTabletHorizontal) ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL;
@@ -392,7 +392,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
     @Override
     public void onPagerFragmentAttached() {
-        presenter.fetchForecast();
+        presenter.getForecast(null, true);
     }
 
     @Override

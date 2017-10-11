@@ -6,6 +6,8 @@ import android.support.v4.util.Pair;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +29,7 @@ import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 
 import static sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl.FORECAST_NOT_ADDED;
 import static sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl.WEATHER_NOT_ADDED;
+import static sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl.addWeatherType;
 
 /**
  * Created by alexander on 12/07/2017.
@@ -63,7 +66,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::initData))
                 .doOnSuccess(place -> {
                     getWeather(place);
-                    getForecast(place);
+                    getForecast(place, false);
                 })
                 .subscribe((place, throwable) -> {/*ignore*/});
     }
@@ -76,10 +79,15 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
     }
 
-    private void getForecast(Place place) {
-        weatherInteractor.getForecast(place)
+    public void getForecast(Place place, boolean needUpdate) {
+        weatherInteractor.getForecast(place, needUpdate)
                 .onErrorResumeNext(forecastNotAdded -> forecastNotAdded.getLocalizedMessage().equals(FORECAST_NOT_ADDED) ?
-                        updateForecast(() -> this.getForecast(place)) : null)
+                        updateForecast(() -> this.getForecast(place, needUpdate))
+                                .compose(schedulers.getIoToMainTransformerSingle()) : null)
+                .toObservable()
+                .flatMapIterable(weatherModels -> weatherModels)
+                .map(weatherModel -> addWeatherType(weatherModel, weatherInteractor.getWeatherTypes()))
+                .collectInto(new LinkedHashMap<WeatherModel, WeatherType[]>(), (map, pair) -> map.put(pair.first, pair.second))
                 .map(this::addSettings)
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair),
@@ -94,19 +102,18 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .compose(schedulers.getIoToMainTransformerSingle());
     }
 
-    private Single<Map<WeatherModel, WeatherType[]>> updateForecast(Runnable runnable) {
+    private Single<List<WeatherModel>> updateForecast(Runnable runnable) {
         return placesInteractor.getSavedLocationPlace()
                 .onErrorResumeNext(locationNotAdded -> updateLocationPlace(runnable))
                 .flatMap(place -> weatherInteractor.updateForecast16(place)
                         .zipWith(weatherInteractor.updateForecast5(place), this::zipWithWeatherTypes)
-                        .map(hashMap -> Pair.create(hashMap, place)))
-                .doOnSuccess(lhmPlacePair -> Observable.fromArray(lhmPlacePair.first.keySet()
-                        .toArray(new WeatherModel[lhmPlacePair.first.keySet().size()]))
-                        .doOnNext(weatherModel -> weatherModel.setPlaceId(lhmPlacePair.second.getPlaceId()))
+                        .map(hashMap -> Pair.create(hashMap.keySet(), place)))
+                .doOnSuccess(setAndPlace -> Observable.fromArray(setAndPlace.first
+                        .toArray(new WeatherModel[setAndPlace.first.size()]))
+                        .doOnNext(weatherModel -> weatherModel.setPlaceId(setAndPlace.second.getPlaceId()))
                         .subscribe())
-                .map(pairOfPairAndPlace -> pairOfPairAndPlace.first)
-                .flatMap(weatherInteractor::saveForecast)
-                .compose(schedulers.getIoToMainTransformerSingle());
+                .map(pairOfMapAndPlace -> new ArrayList<>(pairOfMapAndPlace.first))
+                .flatMap(weatherInteractor::saveForecast);
     }
 
     @SuppressWarnings({"ResourceType"})
@@ -134,7 +141,13 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 if (index >= weatherTypes.size()) {
                     break;
                 }
-                entry.getValue()[j / 2] = weatherTypes.get(index);
+                WeatherType[] value = entry.getValue();
+                if (value.length - 1 < j / 2) {
+                    WeatherType weatherType0 = value[0];
+                    value = new WeatherType[5];
+                    value[0] = weatherType0;
+                }
+                value[j / 2] = weatherTypes.get(index);
                 if (entry.getKey().getForecastWeatherIds() == null) {
                     entry.getKey().setForecastWeatherIds(new Integer[4]);
                 }
@@ -156,12 +169,6 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     public void fetchWeather() {
         updateWeather(this::fetchWeather)
                 .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
-    }
-
-    public void fetchForecast() {
-        updateForecast(this::fetchForecast)
-                .map(this::addSettings)
-                .subscribe(weatherModels -> getViewState().showForecast(weatherModels), Throwable::printStackTrace);
     }
 
     public boolean isCelsius() {

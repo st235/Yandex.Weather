@@ -6,12 +6,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import io.reactivex.Single;
-import io.reactivex.internal.operators.completable.CompletableFromAction;
 import io.reactivex.internal.operators.single.SingleFromCallable;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
@@ -72,7 +70,7 @@ public class WeatherPresenterTest {
         when(rxSchedulers.getComputationToMainTransformerSingle()).thenReturn(objectObservable -> objectObservable);
         when(rxSchedulers.getIoToMainTransformerCompletable()).thenReturn(objectObservable -> objectObservable);
         when(placesInteractor.getSavedLocationPlace()).thenReturn(Single.just(place));
-        when(weatherInteractor.getForecast(place)).thenReturn(Single.fromCallable(LinkedHashMap::new));
+        when(weatherInteractor.getForecast(place, needUpdate)).thenReturn(Single.fromCallable(LinkedHashMap::new));
         when(weatherInteractor.updateForecast5(place)).thenReturn(Single.fromCallable(ArrayList::new));
         when(weatherInteractor.updateForecast16(place)).thenReturn(Single.fromCallable(LinkedHashMap::new));
         when(weatherInteractor.getPressureUnits()).thenReturn(ConvertersConfig.TEMPERATURE_CELSIUS);
@@ -95,7 +93,7 @@ public class WeatherPresenterTest {
 
         when(placesInteractor.getSavedLocationPlace()).thenReturn(Single.just(place));
         String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
-        when(weatherInteractor.getForecast(place)).thenReturn(Single.fromCallable(LinkedHashMap::new));
+        when(weatherInteractor.getForecast(place, needUpdate)).thenReturn(Single.fromCallable(LinkedHashMap::new));
         when(weatherInteractor.updateWeather(place)).thenReturn(Single.just(weatherModel));
 
         presenter.fetchWeather();
