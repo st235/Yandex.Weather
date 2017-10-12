@@ -26,7 +26,7 @@ public interface PlacesInteractor {
     Single<PlaceDetailsResponse> getPlaceDetailsByCoords(@NonNull LatLng coords);
 
     @NonNull
-    Single<Place> getSavedLocationPlace();
+    Single<Place> getCurrentPlace();
 
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     Single<LatLng> getCurrentCoords();
@@ -35,5 +35,5 @@ public interface PlacesInteractor {
     Completable savePlaceToFavorites(Place place);
     Completable removePlacesFromFavorites(List<Place> places);
 
-    void savePlace(@NonNull Place place);
+    void updateCurrentPlace(@NonNull Place place);
 }

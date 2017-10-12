@@ -150,8 +150,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             assert pager != null;
             pagerAdapter = new RecyclerPagerAdapter(getChildFragmentManager());
             pager.setAdapter(pagerAdapter);
-        } else {
-//            presenter.fetchForecast();
         }
     }
 
@@ -191,6 +189,11 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     public void stopRefreshing() {
         if (!swipeRefreshLayout.isRefreshing()) return;
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void updateContent() {
+        presenter.updateContent();
     }
 
     @Override
@@ -258,9 +261,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
-                    public void onConnected(Bundle bundle) {
-                        // Ignore the connection.
-                    }
+                    public void onConnected(Bundle bundle) {/*Ignore the connection.*/ }
 
                     @Override
                     public void onConnectionSuspended(int i) {
@@ -287,10 +288,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             if (status.getStatusCode() == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
                 try {
                     status.startResolutionForResult(getActivity(), REQUEST_LOCATION);
-                    // check the result in onActivityResult().
-                } catch (IntentSender.SendIntentException e) {
-                    // Ignore the error.
-                }
+                } catch (IntentSender.SendIntentException e) {/*Ignore the error.*/ }
             } else {
                 for (Runnable runnable : runnables) {
                     runnable.run();

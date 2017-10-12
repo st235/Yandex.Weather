@@ -62,14 +62,14 @@ public class WeatherPresenterTest {
         String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
         place = new Place(placeName, coords, "");
         place.setPlaceId(testId);
-        when(placesInteractor.getSavedLocationPlace()).thenReturn(Single.just(place));
+        when(placesInteractor.getCurrentPlace()).thenReturn(Single.just(place));
         WeatherModel weatherModel = new WeatherModel.Builder().build();
         when(weatherInteractor.getWeather(place)).thenReturn(Single.just(weatherModel));
         when(rxSchedulers.getIoToMainTransformerObservable()).thenReturn(objectObservable -> objectObservable);
         when(rxSchedulers.getIoToMainTransformerSingle()).thenReturn(objectObservable -> objectObservable);
         when(rxSchedulers.getComputationToMainTransformerSingle()).thenReturn(objectObservable -> objectObservable);
         when(rxSchedulers.getIoToMainTransformerCompletable()).thenReturn(objectObservable -> objectObservable);
-        when(placesInteractor.getSavedLocationPlace()).thenReturn(Single.just(place));
+        when(placesInteractor.getCurrentPlace()).thenReturn(Single.just(place));
         when(weatherInteractor.getForecast(place, needUpdate)).thenReturn(Single.fromCallable(LinkedHashMap::new));
         when(weatherInteractor.updateForecast5(place)).thenReturn(Single.fromCallable(ArrayList::new));
         when(weatherInteractor.updateForecast16(place)).thenReturn(Single.fromCallable(LinkedHashMap::new));
@@ -91,7 +91,7 @@ public class WeatherPresenterTest {
         Place place = new Place(placeName, coords, "");
         WeatherModel weatherModel = new WeatherModel.Builder().build();
 
-        when(placesInteractor.getSavedLocationPlace()).thenReturn(Single.just(place));
+        when(placesInteractor.getCurrentPlace()).thenReturn(Single.just(place));
         String testId = "ChIJybDUc_xKtUYRTM9XV8zWRD0";
         when(weatherInteractor.getForecast(place, needUpdate)).thenReturn(Single.fromCallable(LinkedHashMap::new));
         when(weatherInteractor.updateWeather(place)).thenReturn(Single.just(weatherModel));
@@ -126,7 +126,7 @@ public class WeatherPresenterTest {
         presenter.fetchForecast();
         verify(weatherInteractor, times(3)).getTemperatureUnits();
         verify(weatherInteractor, times(2)).updateForecast16(place);
-        verify(placesInteractor, times(6)).getSavedLocationPlace();
+        verify(placesInteractor, times(6)).getCurrentPlace();
         verify(weatherInteractor, times(2)).saveForecast(forecast);
     }
 }

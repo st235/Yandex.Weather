@@ -44,6 +44,7 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
 import sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
+import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherView;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidUtils;
 import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
@@ -300,17 +301,21 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     private void observeSearchInput(SearchView searchView) {
         RxSearchView.queryTextChanges(searchView)
                 .doOnNext(charSequence -> {
-                    if (TextUtils.isEmpty(charSequence)) showSuggestions(null);
+                    if (TextUtils.isEmpty(charSequence)) {
+                        showSuggestions(null);
+                    }
                 })
                 .throttleLast(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .debounce(100, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .filter(charSequence -> {
-                    if (TextUtils.isEmpty(charSequence)) showSuggestions(null);
+                    if (TextUtils.isEmpty(charSequence)) {
+                        showSuggestions(null);
+                    }
                     return !TextUtils.isEmpty(charSequence);
                 })
                 .map(CharSequence::toString)
-                .flatMap(s -> mainPresenter.search(s))
-                .subscribe(strings -> {/*ignore*/}, Throwable::printStackTrace);
+                .flatMapCompletable(query -> mainPresenter.search(query))
+                .subscribe(() -> {/*ignore*/}, Throwable::printStackTrace);
     }
 
     @Override
@@ -327,13 +332,24 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     }
 
     @Override
-    public void showSuggestions(String[] strings) {
+    public void showSuggestions(String[] suggests) {
         final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, CITY});
-        if (strings != null) for (int i = 0; i < strings.length; i++) {
-            c.addRow(new Object[]{i, strings[i]});
+        if (suggests != null) {
+            for (int i = 0; i < suggests.length; i++) {
+                c.addRow(new Object[]{i, suggests[i]});
+            }
         }
         cursorAdapter.changeCursor(c);
         cursorAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateWeatherContent() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_WEATHER);
+        if (fragment == null) {
+            return;
+        }
+        ((WeatherView) fragment).updateContent();
     }
 
     @Override
@@ -351,9 +367,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     @Override
     public boolean onSuggestionClick(int position) {
         toolbar.collapseActionView();
-        mainPresenter.saveNewPlace(position, addToFavorites);
-        if (!addToFavorites && drawer != null && drawer.isDrawerOpen(GravityCompat.START))
+        mainPresenter.updateCurrentPlace(position, addToFavorites);
+        if (!addToFavorites && drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             closeDrawer();
+        }
         addToFavorites = false;
         return true;
     }

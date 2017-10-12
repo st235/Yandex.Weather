@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
+import io.reactivex.Completable;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
@@ -89,7 +89,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     private boolean isSameFragmentAtTheTop(@IdRes int id) {
-        return menuItemsStack.size() > 0 && id == menuItemsStack.peek();
+        return !menuItemsStack.isEmpty() && id == menuItemsStack.peek();
     }
 
     public void replaceWeatherFragment(@IdRes int id) {
@@ -115,20 +115,20 @@ public class MainPresenter extends MvpPresenter<MainView> {
         getViewState().closeDrawer();
     }
 
-    public Observable<String[]> search(String query) {
+    public Completable search(String query) {
         return placesInteractor.getPlaces(query)
                 .compose(schedulers.getIoToMainTransformerObservable())
                 .filter(PlacesResponse::isSuccess)
                 .doOnNext(this::setPlacesResponse)
                 .map(PlacesResponse::getPredictionStrings)
-                .doOnNext(getViewState()::showSuggestions);
+                .flatMapCompletable(strings -> Completable.fromAction(() -> getViewState().showSuggestions(strings)));
     }
 
     private void setPlacesResponse(PlacesResponse placesResponse) {
         this.placesResponse = placesResponse;
     }
 
-    public void saveNewPlace(int position, boolean addToFavorites) {
+    void updateCurrentPlace(int position, boolean addToFavorites) {
         placesInteractor.getPlaceDetailsById(placesResponse.getPlaceIdAt(position))
                 .compose(schedulers.getIoToMainTransformerObservable())
                 .map(placeDetailsResponse -> new Place(
@@ -140,19 +140,18 @@ public class MainPresenter extends MvpPresenter<MainView> {
                     if (addToFavorites) {
                         getViewState().showNewFavoritePlace(place);
                     }
-                    placesInteractor.savePlace(place);
+                    placesInteractor.updateCurrentPlace(place);
                 })
-                .doOnComplete(this::openWeatherFragment)
+                .doOnComplete(() -> getViewState().updateWeatherContent())
                 .filter(place -> addToFavorites)
-                .flatMapCompletable(placesInteractor::savePlaceToFavorites)
-                .subscribe(() -> {}, Throwable::printStackTrace);
+                .subscribe(placesInteractor::savePlaceToFavorites, Throwable::printStackTrace);
     }
 
 
     public void saveCurrentPlace(Place place, Place toReplace) {
         placesInteractor.savePlaceToFavorites(place)
                 .andThen(placesInteractor.savePlaceToFavorites(toReplace))
-                .doOnComplete(() -> placesInteractor.savePlace(place))
+                .doOnComplete(() -> placesInteractor.updateCurrentPlace(place))
                 .compose(schedulers.getIoToMainTransformerCompletable())
                 .delay(250, TimeUnit.MILLISECONDS)
                 .doOnComplete(this::openWeatherFragment)

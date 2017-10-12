@@ -58,12 +58,12 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-        initData();
+        updateContent();
     }
 
-    private void initData() {
-        placesInteractor.getSavedLocationPlace()
-                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::initData))
+    public void updateContent() {
+        placesInteractor.getCurrentPlace()
+                .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::updateContent))
                 .doOnSuccess(place -> {
                     getWeather(place);
                     getForecast(place, false);
@@ -79,7 +79,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
     }
 
-    public void getForecast(Place place, boolean needUpdate) {
+    void getForecast(Place place, boolean needUpdate) {
         weatherInteractor.getForecast(place, needUpdate)
                 .onErrorResumeNext(forecastNotAdded -> forecastNotAdded.getLocalizedMessage().equals(FORECAST_NOT_ADDED) ?
                         updateForecast(() -> this.getForecast(place, needUpdate))
@@ -90,20 +90,18 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .collectInto(new LinkedHashMap<WeatherModel, WeatherType[]>(), (map, pair) -> map.put(pair.first, pair.second))
                 .map(this::addSettings)
                 .compose(schedulers.getIoToMainTransformerSingle())
-                .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair),
-                        throwable -> {});
-
+                .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair), Throwable::printStackTrace);
     }
 
     private Single<WeatherModel> updateWeather(Runnable runnable) {
-        return placesInteractor.getSavedLocationPlace()
+        return placesInteractor.getCurrentPlace()
                 .onErrorResumeNext(locationNotAdded -> updateLocationPlace(runnable))
                 .flatMap(weatherInteractor::updateWeather)
                 .compose(schedulers.getIoToMainTransformerSingle());
     }
 
     private Single<List<WeatherModel>> updateForecast(Runnable runnable) {
-        return placesInteractor.getSavedLocationPlace()
+        return placesInteractor.getCurrentPlace()
                 .onErrorResumeNext(locationNotAdded -> updateLocationPlace(runnable))
                 .flatMap(place -> weatherInteractor.updateForecast16(place)
                         .zipWith(weatherInteractor.updateForecast5(place), this::zipWithWeatherTypes)
@@ -122,7 +120,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .flatMap(placesInteractor::getPlaceDetailsByCoords)
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .map(placeDetails -> new Place(placeDetails.getCity(), placeDetails.getCoords(), placeDetails.getPlaceId()))
-                .doOnSuccess(placesInteractor::savePlace)
+                .doOnSuccess(placesInteractor::updateCurrentPlace)
                 .doOnError(gpsDenied -> getViewState().requestEnablingGps(callingMethod))
                 .subscribeOn(AndroidSchedulers.mainThread());
     }

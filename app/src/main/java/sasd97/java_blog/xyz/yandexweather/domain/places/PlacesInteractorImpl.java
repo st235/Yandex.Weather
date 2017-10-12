@@ -46,8 +46,8 @@ public class PlacesInteractorImpl implements PlacesInteractor {
 
     @NonNull
     @Override
-    public Single<Place> getSavedLocationPlace() {
-        return repository.getSavedLocationPlace();
+    public Single<Place> getCurrentPlace() {
+        return repository.getCurrentPlace();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class PlacesInteractorImpl implements PlacesInteractor {
     }
 
     @Override
-    public void savePlace(@NonNull Place place) {
-        repository.savePlace(place);
+    public void updateCurrentPlace(@NonNull Place place) {
+        repository.updateCurrentPlace(place);
     }
 }

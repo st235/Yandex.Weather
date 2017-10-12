@@ -60,8 +60,8 @@ public interface AppRepository {
     boolean isBackgroundServiceEnabled();
     boolean switchBackgroundServiceState();
 
-    void savePlace(@NonNull Place place);
-    Single<Place> getSavedLocationPlace();
+    void updateCurrentPlace(@NonNull Place place);
+    Single<Place> getCurrentPlace();
 
     void saveWeatherUpdateInterval(int minutes);
     int getWeatherUpdateInterval();

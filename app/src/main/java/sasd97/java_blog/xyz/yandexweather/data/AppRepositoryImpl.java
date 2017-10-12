@@ -178,12 +178,12 @@ public final class AppRepositoryImpl implements AppRepository {
     }
 
     @Override
-    public void savePlace(@NonNull Place place) {
+    public void updateCurrentPlace(@NonNull Place place) {
         prefsStorage.put(PLACE_PREFS_KEY, place);
     }
 
     @Override
-    public Single<Place> getSavedLocationPlace() {
+    public Single<Place> getCurrentPlace() {
         return Single.fromCallable(() -> {
             String placeJson = prefsStorage.getString(PLACE_PREFS_KEY, null);
             if (placeJson == null) {
