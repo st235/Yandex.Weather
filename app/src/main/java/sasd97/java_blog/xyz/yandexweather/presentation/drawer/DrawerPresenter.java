@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.presentation.navigation;
+package sasd97.java_blog.xyz.yandexweather.presentation.drawer;
 
 import android.support.annotation.NonNull;
 
@@ -20,13 +20,13 @@ import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 
 @MainScope
 @InjectViewState
-public class NavigationPresenter extends MvpPresenter<NavigationView> {
+public class DrawerPresenter extends MvpPresenter<DrawerView> {
     private RxSchedulers schedulers;
     private PlacesInteractor placesInteractor;
 
     @Inject
-    public NavigationPresenter(@NonNull RxSchedulers schedulers,
-                               @NonNull PlacesInteractor placesInteractor) {
+    public DrawerPresenter(@NonNull RxSchedulers schedulers,
+                           @NonNull PlacesInteractor placesInteractor) {
         this.placesInteractor = placesInteractor;
         this.schedulers = schedulers;
     }

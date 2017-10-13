@@ -42,7 +42,7 @@ import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.navigation.AppFragmentRouter;
-import sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment;
+import sasd97.java_blog.xyz.yandexweather.presentation.drawer.DrawerFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherView;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidUtils;
@@ -53,7 +53,7 @@ import sasd97.java_blog.xyz.yandexweather.utils.PlacesActions;
 import sasd97.java_blog.xyz.yandexweather.utils.ViewPagerAction;
 import sasd97.java_blog.xyz.yandexweather.utils.YandexListAdapter;
 
-import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment.TAG_NAVIGATION;
+import static sasd97.java_blog.xyz.yandexweather.presentation.drawer.DrawerFragment.TAG_NAVIGATION;
 import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment.REQUEST_LOCATION;
 import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment.TAG_WEATHER;
 
@@ -131,7 +131,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
             }
 
             private void notifyNavigationFragment(boolean isExpand) {
-                ((NavigationFragment) getSupportFragmentManager()
+                ((DrawerFragment) getSupportFragmentManager()
                         .findFragmentByTag(TAG_NAVIGATION)).onSearchViewExpand(isExpand);
             }
 
@@ -153,7 +153,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         slidingPaneLayout.setPanelSlideListener(new SlidingPaneLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                ((NavigationFragment) getSupportFragmentManager()
+                ((DrawerFragment) getSupportFragmentManager()
                         .findFragmentByTag(TAG_NAVIGATION)).makeNavigationView(slideOffset);
                 int baseWidth = getResources().getDimensionPixelSize(R.dimen.drawer_minus_panel_width);
                 toolbar.setTranslationX(-baseWidth * (1 - slideOffset));

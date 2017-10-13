@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.presentation.navigation;
+package sasd97.java_blog.xyz.yandexweather.presentation.drawer;
 
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +23,7 @@ import sasd97.java_blog.xyz.yandexweather.utils.SerializableSparseArray;
  * Created by Maksim Sukhotski on 4/22/2017.
  */
 
-public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAdapter.RecyclerViewHolder> {
+public class DrawerRecyclerAdapter extends RecyclerView.Adapter<DrawerRecyclerAdapter.RecyclerViewHolder> {
     public static final int TYPE_ADD_NEW_PLACE = 1;
     public static final int TYPE_PLACE = 0;
     private List<Place> places;
@@ -33,17 +33,17 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
     private OnPlaceClickListener onPlaceClickListener;
     private boolean slidingPanelOpen;
 
-    public PlacesRecyclerAdapter setOnAddPlaceListener(OnAddPlaceClickListener addPlaceClickListener) {
+    public DrawerRecyclerAdapter setOnAddPlaceListener(OnAddPlaceClickListener addPlaceClickListener) {
         this.onAddPlaceListener = addPlaceClickListener;
         return this;
     }
 
-    public PlacesRecyclerAdapter setOnPlaceClickListener(OnPlaceClickListener onPlaceClickListener) {
+    public DrawerRecyclerAdapter setOnPlaceClickListener(OnPlaceClickListener onPlaceClickListener) {
         this.onPlaceClickListener = onPlaceClickListener;
         return this;
     }
 
-    public PlacesRecyclerAdapter setOnPlaceSelectListener(OnPlaceSelectListener onPlaceSelectListener) {
+    public DrawerRecyclerAdapter setOnPlaceSelectListener(OnPlaceSelectListener onPlaceSelectListener) {
         this.onPlaceSelectListener = onPlaceSelectListener;
         if (selectedPlaces == null) this.selectedPlaces = new SerializableSparseArray<>();
         return this;
@@ -87,11 +87,11 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
         void onPlaceClick(Place selected, Place toReplace);
     }
 
-    public PlacesRecyclerAdapter(List<Place> places) {
+    public DrawerRecyclerAdapter(List<Place> places) {
         this.places = places;
     }
 
-    public PlacesRecyclerAdapter(SerializableSparseArray<Place> selectedPlaces) {
+    public DrawerRecyclerAdapter(SerializableSparseArray<Place> selectedPlaces) {
         this.selectedPlaces = selectedPlaces;
     }
 
@@ -107,7 +107,7 @@ public class PlacesRecyclerAdapter extends RecyclerView.Adapter<PlacesRecyclerAd
     }
 
     @Override
-    public void onBindViewHolder(PlacesRecyclerAdapter.RecyclerViewHolder holder, int position) {
+    public void onBindViewHolder(DrawerRecyclerAdapter.RecyclerViewHolder holder, int position) {
         if (position == getItemCount() - 1) {
             holder.tvPlaceName.setText(R.string.add_place);
             holder.itemView.setOnClickListener(view -> onAddPlaceListener.onAddPlaceClick());

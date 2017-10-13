@@ -23,12 +23,12 @@ import sasd97.java_blog.xyz.yandexweather.navigation.fragments.AddToBackStack;
 import sasd97.java_blog.xyz.yandexweather.navigation.fragments.FragmentCommand;
 import sasd97.java_blog.xyz.yandexweather.navigation.fragments.Replace;
 import sasd97.java_blog.xyz.yandexweather.presentation.about.AboutFragment;
-import sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment;
+import sasd97.java_blog.xyz.yandexweather.presentation.drawer.DrawerFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.settings.SettingsFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 
-import static sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationFragment.TAG_NAVIGATION;
+import static sasd97.java_blog.xyz.yandexweather.presentation.drawer.DrawerFragment.TAG_NAVIGATION;
 import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment.TAG_WEATHER;
 
 /**
@@ -68,7 +68,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
     }
 
     public void openNavigationFragment() {
-        navigationFragmentRouter.pushForward(new Replace(NavigationFragment.newInstance()), TAG_NAVIGATION);
+        navigationFragmentRouter.pushForward(new Replace(DrawerFragment.newInstance()), TAG_NAVIGATION);
     }
 
     public void onBackClicked() {

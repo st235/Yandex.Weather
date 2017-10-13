@@ -5,9 +5,9 @@ import sasd97.java_blog.xyz.yandexweather.di.modules.ConvertersModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.MainModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.WeatherTypesModule;
 import sasd97.java_blog.xyz.yandexweather.di.scopes.MainScope;
+import sasd97.java_blog.xyz.yandexweather.presentation.drawer.DrawerPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainPresenter;
-import sasd97.java_blog.xyz.yandexweather.presentation.navigation.NavigationPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.settings.SelectWeatherUpdateIntervalPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.settings.SettingsPresenter;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherPresenter;
@@ -25,7 +25,7 @@ public interface MainComponent {
 
     WeatherPresenter getWeatherPresenter();
 
-    NavigationPresenter getNavigationPresenter();
+    DrawerPresenter getNavigationPresenter();
 
     SettingsPresenter getSettingsPresenter();
 

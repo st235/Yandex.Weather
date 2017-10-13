@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.yandexweather.presentation.navigation;
+package sasd97.java_blog.xyz.yandexweather.presentation.drawer;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -40,7 +40,7 @@ import sasd97.java_blog.xyz.yandexweather.utils.SerializableSparseArray;
  * Created by alexander on 09/07/2017.
  */
 
-public class NavigationFragment extends MvpAppCompatFragment implements NavigationView,
+public class DrawerFragment extends MvpAppCompatFragment implements DrawerView,
         PlacesActions {
 
     public static final String TAG_NAVIGATION = "navigation";
@@ -54,23 +54,23 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     @BindBool(R.bool.is_tablet) boolean isTablet;
     @BindBool(R.bool.is_tablet_vertical) boolean isTabletVertical;
 
-    private PlacesRecyclerAdapter placesRecyclerAdapter;
+    private DrawerRecyclerAdapter drawerRecyclerAdapter;
     private RecyclerView.OnScrollListener onScrollListener;
     private LinearLayoutManager layoutManager;
     private int actionBarHeight;
 
-    @InjectPresenter NavigationPresenter presenter;
+    @InjectPresenter DrawerPresenter presenter;
 
     @ProvidePresenter
-    public NavigationPresenter providePresenter() {
+    public DrawerPresenter providePresenter() {
         return WeatherApp
                 .get(getContext())
                 .getMainComponent()
                 .getNavigationPresenter();
     }
 
-    public static NavigationFragment newInstance() {
-        return new NavigationFragment();
+    public static DrawerFragment newInstance() {
+        return new DrawerFragment();
     }
 
     @Nullable
@@ -139,7 +139,7 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
                         }
                     }
                     if (layoutManager.findLastCompletelyVisibleItemPosition() ==
-                            placesRecyclerAdapter.getItemCount() - 1) {
+                            drawerRecyclerAdapter.getItemCount() - 1) {
                         onNavigationViewElevation(navViewElevationBase);
                     }
                 }
@@ -168,40 +168,40 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
     @Override
     public void showPlaces(List<Place> places) {
         boolean panelOpen = ((NavigationFragmentAction) getActivity()).isSlidingPanelOpen();
-        if (placesRecyclerAdapter == null) {
-            placesRecyclerAdapter = new PlacesRecyclerAdapter(places);
+        if (drawerRecyclerAdapter == null) {
+            drawerRecyclerAdapter = new DrawerRecyclerAdapter(places);
         } else {
-            placesRecyclerAdapter.setPlaces(places);
-            placesRecyclerAdapter.notifyDataSetChanged();
+            drawerRecyclerAdapter.setPlaces(places);
+            drawerRecyclerAdapter.notifyDataSetChanged();
         }
         if (!isTabletVertical) {
-            placesRecyclerAdapter.setSlidingPanelOpen(true);
+            drawerRecyclerAdapter.setSlidingPanelOpen(true);
         } else {
-            placesRecyclerAdapter.setSlidingPanelOpen(!panelOpen);
+            drawerRecyclerAdapter.setSlidingPanelOpen(!panelOpen);
         }
-        placesRecyclerAdapter.setOnAddPlaceListener(() ->
+        drawerRecyclerAdapter.setOnAddPlaceListener(() ->
                 ((NavigationFragmentAction) getActivity()).onPlaceAdd());
-        placesRecyclerAdapter.setOnPlaceSelectListener(size ->
+        drawerRecyclerAdapter.setOnPlaceSelectListener(size ->
                 ((NavigationFragmentAction) getActivity()).onPlaceSelect(size));
-        placesRecyclerAdapter.setOnPlaceClickListener((selected, toReplace) ->
+        drawerRecyclerAdapter.setOnPlaceClickListener((selected, toReplace) ->
                 ((NavigationFragmentAction) getActivity()).onPlaceClick(selected, toReplace));
-        placesRecycler.setAdapter(placesRecyclerAdapter);
+        placesRecycler.setAdapter(drawerRecyclerAdapter);
     }
 
     @Override
     public void onPlaceAdded(Place place) {
-        placesRecyclerAdapter.insertPlace(place);
+        drawerRecyclerAdapter.insertPlace(place);
     }
 
     @Override
     public void removeSelectedPlaces() {
-        presenter.removeSelectedPlaces(AndroidUtils.asList(placesRecyclerAdapter.getSelectedPlaces()));
-        placesRecyclerAdapter.removeSelectedPlaces();
+        presenter.removeSelectedPlaces(AndroidUtils.asList(drawerRecyclerAdapter.getSelectedPlaces()));
+        drawerRecyclerAdapter.removeSelectedPlaces();
     }
 
     @Override
     public void cancelSelection() {
-        placesRecyclerAdapter.cancelSelection();
+        drawerRecyclerAdapter.cancelSelection();
         for (int i = layoutManager.findFirstVisibleItemPosition();
              i < layoutManager.findLastVisibleItemPosition(); i++) {
             FlipLayout flipLayout = (FlipLayout) layoutManager.findViewByPosition(i)
@@ -212,13 +212,13 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
 
     @Override
     public void setSlidingPanelOpen(boolean isOpen) {
-        placesRecyclerAdapter.setSlidingPanelOpen(isOpen);
+        drawerRecyclerAdapter.setSlidingPanelOpen(isOpen);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        if (null != placesRecyclerAdapter) {
-            outState.putSerializable(SPARSE_ARRAY_KEY, placesRecyclerAdapter.getSelectedPlaces());
+        if (null != drawerRecyclerAdapter) {
+            outState.putSerializable(SPARSE_ARRAY_KEY, drawerRecyclerAdapter.getSelectedPlaces());
         }
         super.onSaveInstanceState(outState);
     }
@@ -230,14 +230,14 @@ public class NavigationFragment extends MvpAppCompatFragment implements Navigati
         if (savedInstanceState != null) {
             Serializable hashMap = savedInstanceState.getSerializable(SPARSE_ARRAY_KEY);
             if (hashMap == null) return;
-            if (placesRecyclerAdapter == null) placesRecyclerAdapter =
-                    new PlacesRecyclerAdapter((SerializableSparseArray<Place>) hashMap);
-            else placesRecyclerAdapter.setSelectedPlaces((SerializableSparseArray<Place>) hashMap);
+            if (drawerRecyclerAdapter == null) drawerRecyclerAdapter =
+                    new DrawerRecyclerAdapter((SerializableSparseArray<Place>) hashMap);
+            else drawerRecyclerAdapter.setSelectedPlaces((SerializableSparseArray<Place>) hashMap);
         }
     }
 
     public void onSearchViewExpand(boolean isExpand) {
-        View view = layoutManager.findViewByPosition(placesRecyclerAdapter.getItemCount() - 1);
+        View view = layoutManager.findViewByPosition(drawerRecyclerAdapter.getItemCount() - 1);
         if (view == null) return;
         if (isExpand) {
             ViewCompat.animate(view).alpha(0).start();
