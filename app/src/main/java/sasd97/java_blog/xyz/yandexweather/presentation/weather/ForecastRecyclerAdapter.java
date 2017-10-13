@@ -73,6 +73,10 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         setData(holder, position, weather, resources);
     }
 
+    /**
+     * Set icon morning because forecast16 response contains only 1 weather type for whole day,
+     * and we put it in [0] position in array.
+     */
     private void setData(RecyclerViewHolder holder, int position, WeatherModel weather, Resources resources) {
         holder.date.setText(position == 0 && !isSecondary ? resources.getString(R.string.tomorrow) : weather.getReadableDate());
         holder.tempMain.setText(resources.getString(R.string.forecasts_temperature,
@@ -87,17 +91,20 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
                 weather.getNightTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
         holder.tempExtreme.setText(resources.getString(R.string.weather_fragment_current_temperature_extreme,
                 weather.getMaxTemperature(), weather.getMinTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
-        if (position > forecasts.get(weather).length || forecasts.get(weather).length == 1) {
-            /*set icon morning because forecast16 response contains only 1 weather type for whole day*/
-            /*and we put it in [0] position in array*/
-            holder.iconMain.setText(forecasts.get(weather)[0].getIconRes());
-        } else {
+        boolean isIconifiedForecast = forecasts.get(weather).length == 5;
+        int iconVisibility = isIconifiedForecast ? View.VISIBLE : View.GONE;
+        holder.iconMorning.setVisibility(iconVisibility);
+        holder.iconDay.setVisibility(iconVisibility);
+        holder.iconEvening.setVisibility(iconVisibility);
+        holder.iconNight.setVisibility(iconVisibility);
+        if (isIconifiedForecast) {
             holder.iconMain.setText(forecasts.get(weather)[0].getIconRes());
             holder.iconMorning.setText(forecasts.get(weather)[1].getIconRes());
             holder.iconDay.setText(forecasts.get(weather)[2].getIconRes());
             holder.iconEvening.setText(forecasts.get(weather)[3].getIconRes());
             holder.iconNight.setText(forecasts.get(weather)[4].getIconRes());
         }
+        holder.iconMain.setText(forecasts.get(weather)[0].getIconRes());
     }
 
     private void setTheme(RecyclerViewHolder holder, WeatherModel weather) {
