@@ -11,13 +11,17 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 
 public class ClearSky implements WeatherType {
 
-    static final int CLEAR_SKY_ID = 800;
+    /**
+     * Only for night.
+     */
+    public static final int CLEAR_SKY_ID = 800;
 
     @Override
     public boolean isWeatherApplicable(WeatherModel weather) {
         long currentTime = new Date().getTime();
-        boolean timeCondition =
-                currentTime < weather.getSunRiseTime() || currentTime >= weather.getSunSetTime();
+        boolean timeCondition = currentTime < weather.getSunRiseTime() ||
+                currentTime >= weather.getSunSetTime();
+
         return (timeCondition || weather.isForecast()) && weather.getWeatherId() == 800;
     }
 

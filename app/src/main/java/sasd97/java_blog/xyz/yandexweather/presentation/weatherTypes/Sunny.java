@@ -10,7 +10,7 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
  */
 
 public class Sunny implements WeatherType {
-    private static final int SUNNY_WEATHER_TYPE = 800;
+    public static final int SUNNY_WEATHER_TYPE = 800;
 
     @Override
     public boolean isWeatherApplicable(WeatherModel weather) {

@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,7 +113,7 @@ public class RecyclerFragment extends Fragment {
         }
     }
 
-    public void show(LinkedHashMap<WeatherModel, WeatherType[]> items, Settings settings) {
+    public void show(Map<WeatherModel, WeatherType[]> items, Settings settings) {
         boolean isSecondary = getArguments().getBoolean(PAGE_LAST_ARG);
         forecastRecyclerAdapter = new ForecastRecyclerAdapter(items, settings, isSecondary);
         forecastRecycler.setAdapter(forecastRecyclerAdapter);

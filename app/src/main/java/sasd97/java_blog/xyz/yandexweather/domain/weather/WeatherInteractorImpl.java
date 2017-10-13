@@ -29,6 +29,8 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.data.models.weather.ResponseWeather;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.Converter;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.ClearSky;
+import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.Sunny;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 
 import static sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig.PRESSURE_CONVERTERS_KEY;
@@ -167,7 +169,11 @@ public class WeatherInteractorImpl implements WeatherInteractor {
                 currentWeatherTypes[3] = type;
             }
             if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[3])) {
-                currentWeatherTypes[4] = type;
+                if (type instanceof Sunny) {
+                    currentWeatherTypes[4] = new ClearSky();
+                } else {
+                    currentWeatherTypes[4] = type;
+                }
             }
         }
         return new Pair<>(weather, currentWeatherTypes);

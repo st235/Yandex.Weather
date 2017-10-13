@@ -27,6 +27,7 @@ import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecyclerAdapter.RecyclerViewHolder> {
     public static final int TYPE_COLLAPSED = 0;
     public static final int TYPE_EXPANDED = 1;
+    public static final int DETAILED_DAY_COUNT = 5;
     private final Map<WeatherModel, WeatherType[]> forecasts;
     private final Settings settings;
     private final boolean isSecondary;
@@ -86,33 +87,21 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
                 weather.getNightTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
         holder.tempExtreme.setText(resources.getString(R.string.weather_fragment_current_temperature_extreme,
                 weather.getMaxTemperature(), weather.getMinTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
-        int iconMorning = forecasts.get(weather)[0].getIconRes();
-        if (iconMorning == R.string.all_weather_clear_night_icon)
-            iconMorning = R.string.all_weather_sunny_icon;
         if (position > forecasts.get(weather).length || forecasts.get(weather).length == 1) {
             /*set icon morning because forecast16 response contains only 1 weather type for whole day*/
             /*and we put it in [0] position in array*/
-            holder.iconMain.setText(iconMorning);
+            holder.iconMain.setText(forecasts.get(weather)[0].getIconRes());
         } else {
-            int iconDay = forecasts.get(weather)[1].getIconRes();
-            int iconEveninig = forecasts.get(weather)[2].getIconRes();
-            if (iconDay == R.string.all_weather_clear_night_icon)
-                iconDay = R.string.all_weather_sunny_icon;
-            if (iconEveninig == R.string.all_weather_clear_night_icon)
-                iconEveninig = R.string.all_weather_sunny_icon;
-            holder.iconMain.setText(iconDay);
-            holder.iconMorning.setText(iconMorning);
-            holder.iconDay.setText(iconDay);
-            holder.iconEvening.setText(iconEveninig);
-            if (forecasts.get(weather)[3] == null) {
-                forecasts.get(weather)[3] = forecasts.get(weather)[2];
-            }
-            holder.iconNight.setText(forecasts.get(weather)[3].getIconRes());
+            holder.iconMain.setText(forecasts.get(weather)[0].getIconRes());
+            holder.iconMorning.setText(forecasts.get(weather)[1].getIconRes());
+            holder.iconDay.setText(forecasts.get(weather)[2].getIconRes());
+            holder.iconEvening.setText(forecasts.get(weather)[3].getIconRes());
+            holder.iconNight.setText(forecasts.get(weather)[4].getIconRes());
         }
     }
 
     private void setTheme(RecyclerViewHolder holder, WeatherModel weather) {
-        boolean isDetailed = forecasts.get(weather).length == 5;
+        boolean isDetailed = forecasts.get(weather).length == DETAILED_DAY_COUNT;
         int cardColor = forecasts.get(weather)[isDetailed ? 1 : 0].getCardColor();
         int textColor = forecasts.get(weather)[isDetailed ? 1 : 0].getTextColor();
         if (cardColor == R.color.colorClearNightCard) cardColor = R.color.colorSunnyCard;
