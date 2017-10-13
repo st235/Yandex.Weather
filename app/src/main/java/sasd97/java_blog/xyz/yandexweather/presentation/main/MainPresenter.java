@@ -154,7 +154,7 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 .doOnComplete(() -> placesInteractor.updateCurrentPlace(place))
                 .compose(schedulers.getIoToMainTransformerCompletable())
                 .delay(250, TimeUnit.MILLISECONDS)
-                .doOnComplete(this::openWeatherFragment)
+                .doOnComplete(() -> getViewState().updateWeatherContent())
                 .subscribe(() -> {}, Throwable::printStackTrace);
     }
 }

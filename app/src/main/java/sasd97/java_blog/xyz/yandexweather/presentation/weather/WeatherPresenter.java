@@ -73,6 +73,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
     public void getWeather(Place place) {
         weatherInteractor.getWeather(place)
+                .compose(schedulers.getIoToMainTransformerSingle())
                 .onErrorResumeNext(weatherNotAdded -> weatherNotAdded.getLocalizedMessage().equals(WEATHER_NOT_ADDED) ?
                         updateWeather(() -> this.getWeather(place)) : null)
                 .filter(weatherModel -> weatherModel != null).toSingle()
