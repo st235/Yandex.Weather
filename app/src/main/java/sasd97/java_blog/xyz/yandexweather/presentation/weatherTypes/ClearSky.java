@@ -14,7 +14,7 @@ public class ClearSky implements WeatherType {
     /**
      * Only for night.
      */
-    public static final int CLEAR_SKY_ID = 800;
+    static final int CLEAR_SKY_ID = 800;
 
     @Override
     public boolean isWeatherApplicable(WeatherModel weather) {
@@ -22,7 +22,7 @@ public class ClearSky implements WeatherType {
         boolean timeCondition = currentTime < weather.getSunRiseTime() ||
                 currentTime >= weather.getSunSetTime();
 
-        return (timeCondition || weather.isForecast()) && weather.getWeatherId() == 800;
+        return (timeCondition || !weather.isForecast()) && weather.getWeatherId() == 800;
     }
 
     @Override

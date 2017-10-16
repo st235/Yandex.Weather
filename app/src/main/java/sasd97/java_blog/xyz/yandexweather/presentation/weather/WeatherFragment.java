@@ -227,7 +227,11 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             recyclerFragment2.show(rv2items, pair.second);
         } else {
             assert forecastRecycler != null;
-            forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second);
+            forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second)
+                    .setOnItemClickListener(view ->{
+//                        int clickedPos = layoutManager.getPosition(view);
+
+                    });
             forecastRecycler.setAdapter(forecastRecyclerAdapter);
         }
     }

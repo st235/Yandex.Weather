@@ -1,6 +1,7 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
 import android.content.res.Resources;
+import android.support.annotation.LayoutRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -25,18 +26,30 @@ import sasd97.java_blog.xyz.yandexweather.utils.Settings;
  */
 
 public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecyclerAdapter.RecyclerViewHolder> {
-    public static final int TYPE_COLLAPSED = 0;
-    public static final int TYPE_EXPANDED = 1;
-    public static final int DETAILED_DAY_COUNT = 5;
+    private static final int TYPE_EXPANDED = 1;
+    private static final int DETAILED_DAY_COUNT = 5;
     private final Map<WeatherModel, WeatherType[]> forecasts;
     private final Settings settings;
     private final boolean isSecondary;
 
-    public ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
-                                   Settings settings) {
+    private final View.OnClickListener onCategoryClickListener;
+    private OnItemClickListener onItemClickListener;
+
+    interface OnItemClickListener {
+        void onForecastClick(View view);
+    }
+
+    ForecastRecyclerAdapter setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+        return this;
+    }
+
+    ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
+                            Settings settings) {
         this.forecasts = forecasts;
         this.settings = settings;
         this.isSecondary = false;
+        onCategoryClickListener = view -> onItemClickListener.onForecastClick(view);
     }
 
     public ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
@@ -44,25 +57,28 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         this.forecasts = forecasts;
         this.settings = settings;
         this.isSecondary = isSecondary;
+        onCategoryClickListener = view -> onItemClickListener.onForecastClick(view);
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_COLLAPSED || isSecondary) {
-            return new RecyclerViewHolder(LayoutInflater.from(
-                    parent.getContext()).inflate(R.layout.item_forecast_collapsed, parent, false));
+        @LayoutRes int layoutRes;
+        if (isSecondary) {
+            layoutRes = R.layout.item_forecast_expanded;
         } else {
-            return new RecyclerViewHolder(LayoutInflater.from(
-                    parent.getContext()).inflate(R.layout.item_forecast_expanded, parent, false));
+            layoutRes = R.layout.item_forecast_collapsed;
         }
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(layoutRes, parent, false);
+        itemView.setOnClickListener(onCategoryClickListener);
+
+        return new RecyclerViewHolder(itemView);
 
     }
 
     @Override
     public int getItemViewType(int position) {
-        WeatherModel weather = (WeatherModel) forecasts.keySet().toArray()[position];
-        if (position > forecasts.get(weather).length) return TYPE_COLLAPSED;
-        else return TYPE_EXPANDED;
+        return TYPE_EXPANDED;
     }
 
     @Override

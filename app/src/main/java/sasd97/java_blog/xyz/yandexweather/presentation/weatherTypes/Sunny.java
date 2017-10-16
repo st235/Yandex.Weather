@@ -10,14 +10,14 @@ import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
  */
 
 public class Sunny implements WeatherType {
-    public static final int SUNNY_WEATHER_TYPE = 800;
+    public static final int SUNNY_WEATHER_TYPE = 801;
 
     @Override
     public boolean isWeatherApplicable(WeatherModel weather) {
         long currentTime = new Date().getTime();
 
-        boolean timeCondition =
-                currentTime >= weather.getSunRiseTime() && currentTime < weather.getSunSetTime();
+        boolean timeCondition = currentTime >= weather.getSunRiseTime() &&
+                currentTime < weather.getSunSetTime();
 
         return (timeCondition || weather.isForecast()) && weather.getWeatherId() == 800;
     }

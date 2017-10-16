@@ -88,7 +88,8 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .toObservable()
                 .flatMapIterable(weatherModels -> weatherModels)
                 .map(weatherModel -> addWeatherType(weatherModel, weatherInteractor.getWeatherTypes()))
-                .collectInto(new LinkedHashMap<WeatherModel, WeatherType[]>(), (map, pair) -> map.put(pair.first, pair.second))
+                .collectInto(new LinkedHashMap<WeatherModel, WeatherType[]>(), (map, pair) ->
+                        map.put(pair.first, pair.second))
                 .map(this::addSettings)
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair), Throwable::printStackTrace);
