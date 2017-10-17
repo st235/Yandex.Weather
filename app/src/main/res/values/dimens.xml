@@ -22,5 +22,7 @@
     <dimen name="nav_view_elevation_base">6dp</dimen>
     <dimen name="toolbar_elevation_base">1dp</dimen>
     <dimen name="toolbar_elevation">0dp</dimen>
+    <dimen name="forecast_collapsed_height">180dp</dimen>
+    <dimen name="forecast_expanded_height">240dp</dimen>
 
 </resources>

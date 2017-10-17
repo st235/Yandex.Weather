@@ -11,10 +11,19 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
+import com.transitionseverywhere.ChangeBounds;
+import com.transitionseverywhere.Explode;
+import com.transitionseverywhere.Fade;
+import com.transitionseverywhere.TransitionManager;
+import com.transitionseverywhere.TransitionSet;
+
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
@@ -32,24 +41,42 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
     private final Settings settings;
     private final boolean isSecondary;
 
-    private final View.OnClickListener onCategoryClickListener;
-    private OnItemClickListener onItemClickListener;
-
-    interface OnItemClickListener {
-        void onForecastClick(View view);
-    }
-
-    ForecastRecyclerAdapter setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-        return this;
-    }
+    private RecyclerView recyclerView;
 
     ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
                             Settings settings) {
         this.forecasts = forecasts;
         this.settings = settings;
         this.isSecondary = false;
-        onCategoryClickListener = view -> onItemClickListener.onForecastClick(view);
+    }
+
+    private void updateContentSize(View view) {
+        boolean newStateIsCollapsed = view.findViewById(R.id.content_forecast_tv_morning).getVisibility() == View.VISIBLE;
+        int visibility = newStateIsCollapsed ? View.GONE : View.VISIBLE;
+        view.findViewById(R.id.content_forecast_tv_morning).setVisibility(visibility);
+        view.findViewById(R.id.content_forecast_tv_day).setVisibility(visibility);
+        view.findViewById(R.id.content_forecast_tv_evening).setVisibility(visibility);
+        view.findViewById(R.id.content_forecast_tv_night).setVisibility(visibility);
+        view.findViewById(R.id.content_forecast_icon_morning).setVisibility(visibility);
+        view.findViewById(R.id.content_forecast_icon_day).setVisibility(visibility);
+        view.findViewById(R.id.content_forecast_icon_evening).setVisibility(visibility);
+        view.findViewById(R.id.content_forecast_icon_night).setVisibility(visibility);
+        view.findViewById(R.id.content_forecast_temp_morning).setVisibility(visibility);
+        view.findViewById(R.id.content_forecast_temp_day).setVisibility(visibility);
+        view.findViewById(R.id.content_forecast_temp_evening).setVisibility(visibility);
+        view.findViewById(R.id.content_forecast_temp_night).setVisibility(visibility);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        this.recyclerView = null;
     }
 
     public ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
@@ -57,20 +84,26 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         this.forecasts = forecasts;
         this.settings = settings;
         this.isSecondary = isSecondary;
-        onCategoryClickListener = view -> onItemClickListener.onForecastClick(view);
     }
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        @LayoutRes int layoutRes;
-        if (isSecondary) {
-            layoutRes = R.layout.item_forecast_expanded;
-        } else {
-            layoutRes = R.layout.item_forecast_collapsed;
-        }
+        @LayoutRes int layoutRes = isSecondary ?
+                R.layout.item_forecast_expanded : R.layout.item_forecast_collapsed;
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(layoutRes, parent, false);
-        itemView.setOnClickListener(onCategoryClickListener);
+//        itemView.setOnClickListener(view -> {
+//            boolean newStateIsExpanded = view.findViewById(R.id.content_forecast_tv_morning).getVisibility() == View.VISIBLE;
+//
+//            TransitionSet transition = new TransitionSet()
+//                    .addTransition(new ChangeBounds())
+//                    .addTransition(new Explode())
+//                    .addTransition((new Fade()).setDuration(newStateIsExpanded ? 75 : 400));
+//
+//            TransitionManager.beginDelayedTransition(recyclerView);
+//
+//            updateContentSize(view);
+//        });
 
         return new RecyclerViewHolder(itemView);
 
@@ -87,6 +120,16 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         Resources resources = holder.itemView.getResources();
         setTheme(holder, weather);
         setData(holder, position, weather, resources);
+
+        RxView.clicks(holder.itemView)
+                .throttleFirst(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .subscribe(ignore -> {
+                    TransitionManager.beginDelayedTransition(recyclerView, new TransitionSet()
+                            .addTransition(new ChangeBounds())
+                            .addTransition(new Fade())
+                            .addTransition(new Explode()));
+                    updateContentSize(holder.itemView);
+                }, Throwable::printStackTrace);
     }
 
     /**
