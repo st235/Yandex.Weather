@@ -18,6 +18,9 @@ import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.TransitionManager;
 import com.transitionseverywhere.TransitionSet;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +40,8 @@ import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecyclerAdapter.RecyclerViewHolder> {
     private static final int TYPE_EXPANDED = 1;
     private static final int DETAILED_DAY_COUNT = 5;
-    private final Map<WeatherModel, WeatherType[]> forecasts;
+    private final List<WeatherModel> weatherModels;
+    private final List<WeatherType[]> weatherTypes;
     private final Settings settings;
     private final boolean isSecondary;
 
@@ -45,13 +49,15 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
 
     ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
                             Settings settings) {
-        this.forecasts = forecasts;
         this.settings = settings;
         this.isSecondary = false;
+        WeatherModel[] weatherModelArray = forecasts.keySet().toArray(new WeatherModel[0]);
+        WeatherType[][] weatherTypesArray = forecasts.values().toArray(new WeatherType[0][]);
+        this.weatherModels = new ArrayList<>(Arrays.asList(weatherModelArray));
+        this.weatherTypes = new ArrayList<>(Arrays.asList(weatherTypesArray));
     }
 
-    private void updateContentSize(View view) {
-        boolean newStateIsCollapsed = view.findViewById(R.id.content_forecast_tv_morning).getVisibility() == View.VISIBLE;
+    private void updateContentSize(View view, boolean newStateIsCollapsed) {
         int visibility = newStateIsCollapsed ? View.GONE : View.VISIBLE;
         view.findViewById(R.id.content_forecast_tv_morning).setVisibility(visibility);
         view.findViewById(R.id.content_forecast_tv_day).setVisibility(visibility);
@@ -81,7 +87,10 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
 
     public ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
                                    Settings settings, boolean isSecondary) {
-        this.forecasts = forecasts;
+        WeatherModel[] weatherModelArray = forecasts.keySet().toArray(new WeatherModel[0]);
+        WeatherType[][] weatherTypesArray = forecasts.values().toArray(new WeatherType[0][]);
+        this.weatherModels = new ArrayList<>(Arrays.asList(weatherModelArray));
+        this.weatherTypes = new ArrayList<>(Arrays.asList(weatherTypesArray));
         this.settings = settings;
         this.isSecondary = isSecondary;
     }
@@ -92,18 +101,6 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
                 R.layout.item_forecast_expanded : R.layout.item_forecast_collapsed;
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(layoutRes, parent, false);
-//        itemView.setOnClickListener(view -> {
-//            boolean newStateIsExpanded = view.findViewById(R.id.content_forecast_tv_morning).getVisibility() == View.VISIBLE;
-//
-//            TransitionSet transition = new TransitionSet()
-//                    .addTransition(new ChangeBounds())
-//                    .addTransition(new Explode())
-//                    .addTransition((new Fade()).setDuration(newStateIsExpanded ? 75 : 400));
-//
-//            TransitionManager.beginDelayedTransition(recyclerView);
-//
-//            updateContentSize(view);
-//        });
 
         return new RecyclerViewHolder(itemView);
 
@@ -116,19 +113,23 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
 
     @Override
     public void onBindViewHolder(ForecastRecyclerAdapter.RecyclerViewHolder holder, int position) {
-        WeatherModel weather = (WeatherModel) forecasts.keySet().toArray()[position];
+        WeatherModel weather = weatherModels.get(position);
         Resources resources = holder.itemView.getResources();
-        setTheme(holder, weather);
+        setTheme(holder, position, weather);
         setData(holder, position, weather, resources);
 
         RxView.clicks(holder.itemView)
                 .throttleFirst(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .subscribe(ignore -> {
+                    boolean needCollapsing = holder.itemView
+                            .findViewById(R.id.content_forecast_tv_morning)
+                            .getVisibility() == View.VISIBLE;
+
                     TransitionManager.beginDelayedTransition(recyclerView, new TransitionSet()
                             .addTransition(new ChangeBounds())
-                            .addTransition(new Fade())
-                            .addTransition(new Explode()));
-                    updateContentSize(holder.itemView);
+                            .addTransition(new Explode())
+                            .addTransition(new Fade().setDuration(needCollapsing ? 100 : 400)));
+                    updateContentSize(holder.itemView, needCollapsing);
                 }, Throwable::printStackTrace);
     }
 
@@ -150,26 +151,26 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
                 weather.getNightTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
         holder.tempExtreme.setText(resources.getString(R.string.weather_fragment_current_temperature_extreme,
                 weather.getMaxTemperature(), weather.getMinTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
-        boolean isIconifiedForecast = forecasts.get(weather).length == 5;
+        boolean isIconifiedForecast = weatherTypes.get(position).length == 5;
         int iconVisibility = isIconifiedForecast ? View.VISIBLE : View.GONE;
         holder.iconMorning.setVisibility(iconVisibility);
         holder.iconDay.setVisibility(iconVisibility);
         holder.iconEvening.setVisibility(iconVisibility);
         holder.iconNight.setVisibility(iconVisibility);
         if (isIconifiedForecast) {
-            holder.iconMain.setText(forecasts.get(weather)[0].getIconRes());
-            holder.iconMorning.setText(forecasts.get(weather)[1].getIconRes());
-            holder.iconDay.setText(forecasts.get(weather)[2].getIconRes());
-            holder.iconEvening.setText(forecasts.get(weather)[3].getIconRes());
-            holder.iconNight.setText(forecasts.get(weather)[4].getIconRes());
+            holder.iconMain.setText(weatherTypes.get(position)[0].getIconRes());
+            holder.iconMorning.setText(weatherTypes.get(position)[1].getIconRes());
+            holder.iconDay.setText(weatherTypes.get(position)[2].getIconRes());
+            holder.iconEvening.setText(weatherTypes.get(position)[3].getIconRes());
+            holder.iconNight.setText(weatherTypes.get(position)[4].getIconRes());
         }
-        holder.iconMain.setText(forecasts.get(weather)[0].getIconRes());
+        holder.iconMain.setText(weatherTypes.get(position)[0].getIconRes());
     }
 
-    private void setTheme(RecyclerViewHolder holder, WeatherModel weather) {
-        boolean isDetailed = forecasts.get(weather).length == DETAILED_DAY_COUNT;
-        int cardColor = forecasts.get(weather)[isDetailed ? 1 : 0].getCardColor();
-        int textColor = forecasts.get(weather)[isDetailed ? 1 : 0].getTextColor();
+    private void setTheme(RecyclerViewHolder holder, int position, WeatherModel weather) {
+        boolean isDetailed = weatherTypes.get(position).length == DETAILED_DAY_COUNT;
+        int cardColor = weatherTypes.get(position)[isDetailed ? 1 : 0].getCardColor();
+        int textColor = weatherTypes.get(position)[isDetailed ? 1 : 0].getTextColor();
         if (cardColor == R.color.colorClearNightCard) cardColor = R.color.colorSunnyCard;
         if (textColor == R.color.colorClearNightText) textColor = R.color.colorSunnyText;
         cardColor = ContextCompat.getColor(holder.itemView.getContext(), cardColor);
@@ -201,7 +202,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
 
     @Override
     public int getItemCount() {
-        return forecasts.size();
+        return weatherModels.size();
     }
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
