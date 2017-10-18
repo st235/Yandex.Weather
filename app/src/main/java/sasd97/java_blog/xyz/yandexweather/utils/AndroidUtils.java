@@ -17,6 +17,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
  */
 
 public class AndroidUtils {
+
     public static int dp2px(int dp, Resources r) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
     }

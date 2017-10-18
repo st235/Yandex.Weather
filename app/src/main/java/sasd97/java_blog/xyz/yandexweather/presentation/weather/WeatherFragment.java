@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -99,6 +100,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     private GoogleApiClient googleApiClient;
     private Set<Runnable> runnables;
     private boolean isGpsDialogShown;
+    private boolean canScrollRecycler = true;
 
     @ProvidePresenter
     public WeatherPresenter providePresenter() {
@@ -132,7 +134,12 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         });
 
         int orientation = (isTabletHorizontal) ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL;
-        layoutManager = new LinearLayoutManager(getActivity(), orientation, false);
+        layoutManager = new LinearLayoutManager(getActivity(), orientation, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return canScrollRecycler;
+            }
+        };
         if (forecastRecycler != null) {
             forecastRecycler.setLayoutManager(layoutManager);
             forecastRecycler.setHasFixedSize(true);
@@ -227,7 +234,18 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             recyclerFragment2.show(rv2items, pair.second);
         } else {
             assert forecastRecycler != null;
-            forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second);
+            forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second, false)
+                    .setOnDisableScrollListener(disableScroll -> {
+                        this.canScrollRecycler = disableScroll;
+
+                        if (!disableScroll) {
+                            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        } else {
+                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        }
+                    });
+            forecastRecyclerAdapter.setHasStableIds(true);
             forecastRecycler.setAdapter(forecastRecyclerAdapter);
         }
     }

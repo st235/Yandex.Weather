@@ -69,6 +69,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     private MenuItem miSearch;
     private SearchView searchView;
     private boolean addToFavorites;
+    private ActionBarDrawerToggle toggle;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.navigation_layout) @Nullable RelativeLayout navigationLayout;
@@ -189,7 +190,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
             assert getSupportActionBar() != null;
             if (drawer.isDrawerOpen(GravityCompat.START))
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+            toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                     R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
             toggle.syncState();

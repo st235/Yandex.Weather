@@ -116,6 +116,7 @@ public class RecyclerFragment extends Fragment {
     public void show(Map<WeatherModel, WeatherType[]> items, Settings settings) {
         boolean isSecondary = getArguments().getBoolean(PAGE_LAST_ARG);
         forecastRecyclerAdapter = new ForecastRecyclerAdapter(items, settings, isSecondary);
+        forecastRecyclerAdapter.setHasStableIds(true);
         forecastRecycler.setAdapter(forecastRecyclerAdapter);
         if (isSecondary) {
             forecastRecycler.setLayoutManager(gridLayoutManager);
