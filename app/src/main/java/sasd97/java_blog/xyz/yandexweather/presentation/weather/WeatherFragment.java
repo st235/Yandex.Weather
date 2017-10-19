@@ -247,6 +247,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                     });
             forecastRecyclerAdapter.setHasStableIds(true);
             forecastRecycler.setAdapter(forecastRecyclerAdapter);
+            forecastRecycler.scrollTo(0,0);
         }
     }
 

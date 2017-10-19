@@ -34,7 +34,6 @@ import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.domain.converters.ConvertersConfig;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
-import sasd97.java_blog.xyz.yandexweather.utils.RecyclerViewDisabler;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 
 /**
@@ -43,7 +42,6 @@ import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 
 public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecyclerAdapter.RecyclerViewHolder> {
     private static final int TYPE_EXPANDED = 1;
-    private static final int DETAILED_DAY_COUNT = 5;
     private final List<WeatherModel> weatherModels;
     private final List<WeatherType[]> weatherTypes;
     private final boolean[] expandedPositions = new boolean[5];
@@ -51,7 +49,6 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
     private final boolean isSecondary;
 
     private RecyclerView recyclerView;
-    RecyclerView.OnItemTouchListener disabler = new RecyclerViewDisabler();
 
     private OnDisableScrollListener onDisableScrollListener;
 
@@ -113,7 +110,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         setTheme(holder, position);
         setData(holder, position, resources);
         boolean isExpandable = position < 4;
-        updateContentSize(holder, !(isExpandable && expandedPositions[position]));
+        updateContentSize(holder, !(isExpandable && expandedPositions[position]), isExpandable);
 
         RxView.clicks(holder.itemView)
                 .filter(o -> isExpandable)
@@ -141,7 +138,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
                                     onDisableScrollListener.onDisableScroll(true);
                                 }
                             }));
-                    updateContentSize(holder, needCollapsing);
+                    updateContentSize(holder, needCollapsing, isExpandable);
                     expandedPositions[position] = !needCollapsing;
                 }, Throwable::printStackTrace);
     }
@@ -210,7 +207,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         holder.tvMorning.setTextColor(textColor);
     }
 
-    private void updateContentSize(RecyclerViewHolder holder, boolean newStateIsCollapsed) {
+    private void updateContentSize(RecyclerViewHolder holder, boolean newStateIsCollapsed, boolean isExpandable) {
         int visibility = newStateIsCollapsed ? View.GONE : View.VISIBLE;
         holder.tvMorning.setVisibility(visibility);
         holder.tvDay.setVisibility(visibility);
@@ -224,6 +221,11 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         holder.tempDay.setVisibility(visibility);
         holder.tempEvening.setVisibility(visibility);
         holder.tempNight.setVisibility(visibility);
+        if (!newStateIsCollapsed) {
+            holder.expandIv.setVisibility(View.GONE);
+        } else {
+            holder.expandIv.setVisibility(isExpandable ? View.VISIBLE : View.GONE);
+        }
     }
 
     private String obtainTemperatureTitle(Resources resources, int tempUnits) {
