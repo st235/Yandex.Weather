@@ -47,19 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/padding_fab"
             android:paddingTop="8dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fragment_weather_fab"
-            android:layout_width="@dimen/fab_size"
-            android:layout_height="@dimen/fab_size"
-            android:layout_gravity="bottom|center"
-            android:layout_margin="16dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_action_down"
-            app:backgroundTint="@color/magenta2"
-            app:useCompatPadding="true"/>
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -1,7 +1,6 @@
 package sasd97.java_blog.xyz.yandexweather.presentation.weather;
 
 import android.content.res.Resources;
-import android.graphics.PorterDuff;
 import android.support.annotation.LayoutRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -9,13 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.transitionseverywhere.ChangeBounds;
-import com.transitionseverywhere.Explode;
 import com.transitionseverywhere.Fade;
 import com.transitionseverywhere.Transition;
 import com.transitionseverywhere.TransitionManager;
@@ -122,7 +119,6 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
 
                     TransitionManager.beginDelayedTransition(recyclerView, new TransitionSet()
                             .addTransition(new ChangeBounds())
-                            .addTransition(new Explode())
                             .addTransition(new Fade().setDuration(needCollapsing ? 100 : 400))
                             .setDuration(200)
                             .addListener(new Transition.TransitionListenerAdapter() {
@@ -187,7 +183,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         cardColor = ContextCompat.getColor(holder.itemView.getContext(), cardColor);
         textColor = ContextCompat.getColor(holder.itemView.getContext(), textColor);
         ((CardView) ((LinearLayout) holder.itemView).getChildAt(0)).setCardBackgroundColor(cardColor);
-        holder.expandIv.setColorFilter(textColor, PorterDuff.Mode.SRC_ATOP);
+        holder.expandTv.setTextColor(textColor);
         holder.iconDay.setTextColor(textColor);
         holder.iconEvening.setTextColor(textColor);
         holder.iconMorning.setTextColor(textColor);
@@ -222,9 +218,9 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         holder.tempEvening.setVisibility(visibility);
         holder.tempNight.setVisibility(visibility);
         if (!newStateIsCollapsed) {
-            holder.expandIv.setVisibility(View.GONE);
+            holder.expandTv.setVisibility(View.GONE);
         } else {
-            holder.expandIv.setVisibility(isExpandable ? View.VISIBLE : View.GONE);
+            holder.expandTv.setVisibility(isExpandable ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -239,7 +235,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
     }
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.content_forecast_expand) ImageView expandIv;
+        @BindView(R.id.content_forecast_expand) TextView expandTv;
         @BindView(R.id.content_forecast_date) TextView date;
         @BindView(R.id.content_forecast_temp_night) TextView tempNight;
         @BindView(R.id.content_forecast_temp_morning) TextView tempMorning;

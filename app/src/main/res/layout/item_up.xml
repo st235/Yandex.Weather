@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.FloatingActionButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_weather_fab"
+    android:layout_width="@dimen/fab_size"
+    android:layout_height="@dimen/fab_size"
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="16dp"
+    android:scaleType="center"
+    android:src="@drawable/ic_action_down"
+    app:backgroundTint="@color/magenta2"
+    app:useCompatPadding="true"/>

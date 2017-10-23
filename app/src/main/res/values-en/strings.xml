@@ -53,6 +53,9 @@
     <string name="weather_fragment_humidity">&#xf04e; %1$.0f %%</string>
     <!-- Endregion -->
 
+    <!-- Forecasts -->
+    <string name="forecast_more">More</string>
+    <!-- Endregion -->
 
     <!-- Settings fragment -->
     <string name="settings_fragment_base_group">Units</string>

@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
@@ -84,7 +83,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_temperature_extreme) TextView weatherTemperatureExtreme;
     @BindView(R.id.fragment_weather_recycler_forecast) @Nullable RecyclerView forecastRecycler;
     @BindView(R.id.fragment_weather_appbarlayout) @Nullable AppBarLayout appBarLayout;
-    @BindView(R.id.fragment_weather_fab) @Nullable FloatingActionButton fab;
     @BindView(R.id.fragment_weather_view_pager) @Nullable ViewPager pager;
     @BindBool(R.bool.is_tablet_horizontal) boolean isTabletHorizontal;
     @BindBool(R.bool.is_horizontal) boolean isHorizontal;
@@ -145,45 +143,13 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             forecastRecycler.setHasFixedSize(true);
         }
 
-        if (fab != null && appBarLayout != null) fab.setOnClickListener(v -> {
-            layoutManager.scrollToPositionWithOffset(0, 0);
+//            layoutManager.scrollToPositionWithOffset(0, 0);
 
-            appBarLayout.setExpanded(!appBarIsExpanded);
-            fab.setImageResource(appBarIsExpanded ? R.drawable.ic_action_up : R.drawable.ic_action_down);
-        });
-
-        if (!isHorizontal) onVerticalMode();
         if (isTabletHorizontal) {
             assert pager != null;
             pagerAdapter = new RecyclerPagerAdapter(getChildFragmentManager());
             pager.setAdapter(pagerAdapter);
         }
-    }
-
-    private void onVerticalMode() {
-        assert fab != null;
-        onScrollListener = new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (fab.isShown() && layoutManager.findFirstCompletelyVisibleItemPosition() != 0 &&
-                        layoutManager.findLastCompletelyVisibleItemPosition() !=
-                                forecastRecyclerAdapter.getItemCount() - 1) {
-                    fab.hide();
-                }
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE &&
-                        (layoutManager.findFirstCompletelyVisibleItemPosition() == 0 ||
-                                layoutManager.findLastCompletelyVisibleItemPosition() ==
-                                        forecastRecyclerAdapter.getItemCount() - 1)) {
-                    fab.show();
-                }
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        };
-        forecastRecycler.addOnScrollListener(onScrollListener);
     }
 
     @Override
@@ -393,11 +359,8 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     /*For correct work of swipeRefreshLayout in conjunction with appBarLayout*/
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        assert fab != null;
         swipeRefreshLayout.setEnabled(verticalOffset == 0);
         appBarIsExpanded = verticalOffset == 0;
-        if (verticalOffset == 0) fab.show();
-        fab.setImageResource(verticalOffset == 0 ? R.drawable.ic_action_down : R.drawable.ic_action_up);
     }
 
     @Override
