@@ -56,12 +56,12 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     }
 
     @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
+    public void attachView(WeatherView view) {
+        super.attachView(view);
         updateContent();
     }
 
-    public void updateContent() {
+    void updateContent() {
         placesInteractor.getCurrentPlace()
                 .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::updateContent))
                 .doOnSuccess(place -> {

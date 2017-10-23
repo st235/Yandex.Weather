@@ -90,7 +90,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @InjectPresenter WeatherPresenter presenter;
 
     private ForecastRecyclerAdapter forecastRecyclerAdapter;
-    private RecyclerView.OnScrollListener onScrollListener;
     private LinearLayoutManager layoutManager;
     private boolean appBarIsExpanded = true;
     private RecyclerPagerAdapter pagerAdapter;
@@ -354,6 +353,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         super.onResume();
         if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
         ((MainActivity) getActivity()).changeSearchIconVisibility(this);
+        appBarLayout.setExpanded(appBarIsExpanded);
     }
 
     /*For correct work of swipeRefreshLayout in conjunction with appBarLayout*/
@@ -367,7 +367,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     public void onPause() {
         super.onPause();
         if (appBarLayout != null) appBarLayout.removeOnOffsetChangedListener(this);
-        if (onScrollListener != null) forecastRecycler.removeOnScrollListener(onScrollListener);
     }
 
     @Override
