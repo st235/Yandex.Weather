@@ -81,6 +81,8 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_pressure) TextView weatherPressure;
     @BindView(R.id.fragment_weather_temperature) TextView weatherTemperature;
     @BindView(R.id.fragment_weather_last_refresh) TextView weatherLastRefresh;
+    @BindView(R.id.fragment_weather_min) TextView weatherMin;
+    @BindView(R.id.fragment_weather_max) TextView weatherMax;
     @BindView(R.id.fragment_weather_vertical_delimiter) View weatherVerticalDelimiter;
     @BindView(R.id.fragment_weather_swipe_to_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.fragment_weather_view_group) ViewGroup viewGroup;
@@ -348,6 +350,8 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         weatherPressure.setTextColor(textColor);
         weatherTemperature.setTextColor(textColor);
         weatherLastRefresh.setTextColor(textColor);
+        weatherMin.setTextColor(textColor);
+        weatherMax.setTextColor(textColor);
         weatherTemperatureExtreme.setTextColor(textColor);
         weatherVerticalDelimiter.setBackgroundColor(textColor);
     }

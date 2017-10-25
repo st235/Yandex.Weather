@@ -26,9 +26,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="0dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="-9dp"
         android:gravity="center"
         android:textColor="@color/colorGreyMd600"
         android:textSize="90sp"
@@ -43,9 +41,6 @@
         android:id="@+id/fragment_weather_wind_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
         android:gravity="end"
         android:textSize="18sp"
         app:fontAsset="weather_icons.ttf"
@@ -60,7 +55,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="0dp"
         android:gravity="center"
         android:textSize="18sp"
         app:fontAsset="weather_icons.ttf"
@@ -73,7 +67,6 @@
         android:id="@+id/fragment_weather_humidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
         android:layout_marginTop="8dp"
         android:textSize="18sp"
         app:fontAsset="weather_icons.ttf"
@@ -86,16 +79,14 @@
         android:id="@+id/fragment_weather_temperature_extreme"
         android:layout_width="wrap_content"
         android:layout_height="64dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="14dp"
         android:gravity="left|center"
         android:textSize="20sp"
         app:fontAsset="weather_icons.ttf"
-        app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+        tools:text="27 °C\n27 °C"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_weather_type"
-        tools:text="27 °C\n27 °C"/>
+        app:layout_constraintTop_toTopOf="@+id/fragment_weather_vertical_delimiter"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintLeft_toRightOf="@+id/fragment_weather_max"/>
 
     <sasd97.java_blog.xyz.richtextview.RichTextView
         android:id="@+id/fragment_weather_temperature"
@@ -103,25 +94,23 @@
         android:layout_height="64dp"
         android:layout_marginEnd="24dp"
         android:layout_marginLeft="24dp"
-        android:layout_marginRight="0dp"
+        android:layout_marginRight="24dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="0dp"
         android:gravity="right|center"
         android:textColor="@color/colorGreyMd600"
         android:textSize="30sp"
         app:fontAsset="weather_icons.ttf"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/guideline2"
+        app:layout_constraintRight_toLeftOf="@+id/fragment_weather_vertical_delimiter"
         app:layout_constraintTop_toTopOf="@+id/fragment_weather_vertical_delimiter"
-        tools:text="27 °C"/>
+        tools:text="27 °C"
+        />
 
     <View
         android:id="@+id/fragment_weather_vertical_delimiter"
         android:layout_width="1dp"
         android:layout_height="64dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@+id/guideline2"
@@ -146,6 +135,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5"/>
+        app:layout_constraintGuide_percent="0.5"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="164dp"/>
+
+    <TextView
+        android:id="@+id/fragment_weather_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="min"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_weather_temperature_extreme"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_weather_max"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/fragment_weather_max"/>
+
+    <TextView
+        android:id="@+id/fragment_weather_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:text="max"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_weather_min"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toRightOf="@+id/fragment_weather_vertical_delimiter"
+        app:layout_constraintRight_toLeftOf="@+id/fragment_weather_temperature_extreme"
+        app:layout_constraintTop_toTopOf="@+id/fragment_weather_temperature_extreme"/>
 
 </android.support.constraint.ConstraintLayout>

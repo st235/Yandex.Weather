@@ -147,7 +147,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         WeatherModel weather = weatherModels.get(position);
 
         holder.date.setText(position == 0 && !isSecondary ? resources.getString(R.string.tomorrow) : weather.getReadableDate());
-        holder.tempMain.setText(resources.getString(R.string.forecasts_temperature,
+        holder.tempMain.setText(resources.getString(R.string.forecasts_temperature_iconyfied,
                 weather.getDayTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
         holder.tempMorning.setText(resources.getString(R.string.forecasts_temperature,
                 weather.getMorningTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
@@ -201,6 +201,8 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         holder.tvEvening.setTextColor(textColor);
         holder.tvNight.setTextColor(textColor);
         holder.tvMorning.setTextColor(textColor);
+        holder.tvMin.setTextColor(textColor);
+        holder.tvMax.setTextColor(textColor);
     }
 
     private void updateContentSize(RecyclerViewHolder holder, boolean newStateIsCollapsed, boolean isExpandable) {
@@ -252,6 +254,8 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         @BindView(R.id.content_forecast_tv_evening) TextView tvEvening;
         @BindView(R.id.content_forecast_tv_morning) TextView tvMorning;
         @BindView(R.id.content_forecast_tv_night) TextView tvNight;
+        @BindView(R.id.content_forecast_max) TextView tvMax;
+        @BindView(R.id.content_forecast_min) TextView tvMin;
 
         RecyclerViewHolder(View itemView) {
             super(itemView);

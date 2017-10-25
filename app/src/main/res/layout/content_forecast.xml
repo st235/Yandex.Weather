@@ -13,21 +13,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25"/>
+        app:layout_constraintGuide_percent="0.25"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="82dp"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50"/>
+        app:layout_constraintGuide_percent="0.5"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="164dp"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75"/>
+        app:layout_constraintGuide_percent="0.75"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="246dp"/>
 
     <TextView
         android:id="@+id/content_forecast_date"
@@ -64,7 +70,6 @@
         android:id="@+id/content_forecast_icon_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
         android:gravity="center"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
@@ -87,18 +92,16 @@
         android:textSize="18sp"
         app:fontAsset="weather_icons.ttf"
         app:layout_constraintBottom_toBottomOf="@+id/content_forecast_icon_main"
-        app:layout_constraintLeft_toRightOf="@+id/content_forecast_icon_main"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/content_forecast_icon_main"
-        tools:text="27 °C\n27 °C"/>
+        tools:text="27 °C\n27 °C"
+        app:layout_constraintLeft_toRightOf="@+id/content_forecast_max"
+        />
 
     <TextView
         android:id="@+id/content_forecast_tv_morning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
         android:text="@string/morning"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/guideline4"
@@ -109,10 +112,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="83dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
+        android:layout_marginLeft="83dp"
+        android:layout_marginRight="83dp"
         android:layout_marginStart="83dp"
-        android:layout_marginTop="0dp"
         android:text="@string/daytime"
 
         app:layout_constraintLeft_toLeftOf="@+id/guideline4"
@@ -127,10 +129,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="99dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
+        android:layout_marginLeft="99dp"
+        android:layout_marginRight="99dp"
         android:layout_marginStart="99dp"
-        android:layout_marginTop="0dp"
         android:text="@string/evening"
         app:layout_constraintLeft_toLeftOf="@+id/guideline5"
         app:layout_constraintRight_toLeftOf="@+id/guideline6"
@@ -142,8 +143,6 @@
         android:id="@+id/content_forecast_tv_night"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
         android:text="@string/night"
         app:layout_constraintLeft_toLeftOf="@+id/guideline6"
         app:layout_constraintRight_toRightOf="parent"
@@ -154,8 +153,6 @@
         android:id="@+id/content_forecast_icon_morning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:textColor="@color/colorGreyMd600"
@@ -172,8 +169,6 @@
         android:id="@+id/content_forecast_icon_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:textColor="@color/colorGreyMd600"
@@ -191,8 +186,6 @@
         android:id="@+id/content_forecast_icon_evening"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:textColor="@color/colorGreyMd600"
@@ -210,8 +203,6 @@
         android:id="@+id/content_forecast_icon_night"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:textColor="@color/colorGreyMd600"
@@ -229,8 +220,6 @@
         android:id="@+id/content_forecast_temp_morning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:layout_marginTop="16dp"
         android:text="27 °C"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -243,8 +232,6 @@
         android:id="@+id/content_forecast_temp_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:layout_marginTop="16dp"
         android:text="27 °C"
         app:layout_constraintLeft_toLeftOf="@+id/guideline4"
@@ -257,8 +244,6 @@
         android:id="@+id/content_forecast_temp_evening"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:text="27 °C"
         app:layout_constraintLeft_toLeftOf="@+id/guideline5"
         app:layout_constraintRight_toLeftOf="@+id/guideline6"
@@ -271,8 +256,6 @@
         android:id="@+id/content_forecast_temp_night"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:text="27 °C"
         app:layout_constraintLeft_toLeftOf="@+id/guideline6"
         app:layout_constraintRight_toRightOf="parent"
@@ -291,13 +274,34 @@
         android:textSize="14sp"
         android:text="@string/forecast_more"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/guideline5"
         app:layout_constraintRight_toLeftOf="@+id/guideline5"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
         app:layout_constraintTop_toBottomOf="@+id/content_forecast_temp_extreme"/>
+
+    <TextView
+        android:id="@+id/content_forecast_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:text="min"
+        app:layout_constraintBottom_toBottomOf="@+id/content_forecast_temp_extreme"
+        app:layout_constraintLeft_toLeftOf="@+id/content_forecast_max"
+        app:layout_constraintTop_toBottomOf="@+id/content_forecast_max"/>
+
+    <TextView
+        android:id="@+id/content_forecast_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:text="max"
+        app:layout_constraintBottom_toTopOf="@+id/content_forecast_min"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toRightOf="@+id/content_forecast_icon_main"
+        app:layout_constraintRight_toLeftOf="@+id/content_forecast_temp_extreme"
+        app:layout_constraintTop_toTopOf="@+id/content_forecast_temp_extreme"
+        app:layout_constraintVertical_chainStyle="spread"/>
 
 </android.support.constraint.ConstraintLayout>
     
