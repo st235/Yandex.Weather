@@ -41,7 +41,7 @@
 
     <!-- About fragment -->
     <string name="about_fragment_description">Application for the weather monitor.
-        Mobilization was carried out within the framework of the project.</string>
+        Data provided by OpenWeatherMap.</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>
     <!-- Endregion -->
 

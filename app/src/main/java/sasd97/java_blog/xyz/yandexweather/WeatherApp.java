@@ -20,6 +20,7 @@ import sasd97.java_blog.xyz.yandexweather.di.MainComponent;
 import sasd97.java_blog.xyz.yandexweather.di.modules.AppModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.MainModule;
 import sasd97.java_blog.xyz.yandexweather.di.modules.NavigationModule;
+import timber.log.Timber;
 
 /**
  * Created by alexander on 07/07/2017.
@@ -54,6 +55,7 @@ public class WeatherApp extends Application {
         FontProvider.init(getAssets());
         AndroidThreeTen.init(this);
         onScheduleJob();
+        Timber.plant(new Timber.DebugTree());
         Stetho.initializeWithDefaults(this);
     }
 

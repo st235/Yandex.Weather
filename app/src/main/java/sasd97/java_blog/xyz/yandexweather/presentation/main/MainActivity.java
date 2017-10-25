@@ -46,12 +46,11 @@ import sasd97.java_blog.xyz.yandexweather.presentation.drawer.DrawerFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherView;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidUtils;
-import sasd97.java_blog.xyz.yandexweather.utils.DrawerStateListener;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
 import sasd97.java_blog.xyz.yandexweather.utils.NavigationFragmentAction;
 import sasd97.java_blog.xyz.yandexweather.utils.PlacesActions;
 import sasd97.java_blog.xyz.yandexweather.utils.ViewPagerAction;
-import sasd97.java_blog.xyz.yandexweather.utils.YandexListAdapter;
+import sasd97.java_blog.xyz.yandexweather.utils.GoogleListAdapter;
 
 import static sasd97.java_blog.xyz.yandexweather.presentation.drawer.DrawerFragment.TAG_NAVIGATION;
 import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment.REQUEST_LOCATION;
@@ -59,7 +58,7 @@ import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFra
 
 public class MainActivity extends MvpAppCompatActivity implements MainView,
         SearchView.OnSuggestionListener, View.OnFocusChangeListener,
-        ElevationScrollListener, NavigationFragmentAction, ViewPagerAction {
+        ElevationScrollListener, NavigationFragmentAction, ViewPagerAction, DrawerLayout.DrawerListener {
 
     private static final String CITY = "city";
     public static final String TOOLBAR_VISIBILITY_KEY = "toolbar_visibility";
@@ -194,18 +193,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
                     R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
-            drawer.addDrawerListener(new DrawerStateListener() {
-                @Override
-                public void onDrawerClosed(View drawerView) {
-                    super.onDrawerClosed(drawerView);
-                    if (isToolbarSelectedVisible) cancelPlacesSelection();
-                }
-
-                @Override
-                public void onDrawerStateChanged(int newState) {
-                    if (toolbar.hasExpandedActionView()) toolbar.collapseActionView();
-                }
-            });
+            drawer.addDrawerListener(this);
         }
 
     }
@@ -213,7 +201,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     private void initSearchSuggestsAdapter() {
         final String[] from = new String[]{CITY};
         final int[] to = new int[]{android.R.id.text1};
-        cursorAdapter = new YandexListAdapter(this, R.layout.item_search_suggest,
+        cursorAdapter = new GoogleListAdapter(this, R.layout.item_search_suggest,
                 null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
     }
 
@@ -336,7 +324,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     public void showSuggestions(String[] suggests) {
         final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, CITY});
         if (suggests != null) {
-            for (int i = 0; i < suggests.length; i++) {
+            for (int i = 0; i < (suggests.length > 4 ? 4 : suggests.length) ; i++) {
                 c.addRow(new Object[]{i, suggests[i]});
             }
         }
@@ -482,5 +470,29 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
 
     public boolean isSlidingPanelOpen() {
         return slidingPaneLayout == null || slidingPaneLayout.isOpen();
+    }
+
+    @Override
+    public void onDrawerClosed(View drawerView) {
+        if (isToolbarSelectedVisible) cancelPlacesSelection();
+        miSearch.setVisible(true);
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+        if (toolbar.hasExpandedActionView()) toolbar.collapseActionView();
+    }
+
+    @Override
+    public void onDrawerSlide(View drawerView, float slideOffset) {
+        if (!miSearch.isVisible()) {
+            miSearch.setVisible(true);
+        }
+        miSearch.getIcon().setAlpha((int) ((1 - slideOffset) * 255));
+    }
+
+    @Override
+    public void onDrawerOpened(View drawerView) {
+        miSearch.setVisible(false);
     }
 }

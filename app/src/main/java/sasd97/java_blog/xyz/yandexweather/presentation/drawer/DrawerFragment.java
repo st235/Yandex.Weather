@@ -239,10 +239,6 @@ public class DrawerFragment extends MvpAppCompatFragment implements DrawerView,
     public void onSearchViewExpand(boolean isExpand) {
         View view = layoutManager.findViewByPosition(drawerRecyclerAdapter.getItemCount() - 1);
         if (view == null) return;
-        if (isExpand) {
-            ViewCompat.animate(view).alpha(0).start();
-        } else {
-            view.setAlpha(1);
-        }
+        view.setVisibility(isExpand ? View.INVISIBLE : View.VISIBLE);
     }
 }

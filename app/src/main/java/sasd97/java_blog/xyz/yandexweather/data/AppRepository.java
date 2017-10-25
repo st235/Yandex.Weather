@@ -11,6 +11,7 @@ import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast5;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.LatLng;
@@ -77,5 +78,5 @@ public interface AppRepository {
 
     @Nullable
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
-    Location getCurrentLocation();
+    Location getCurrentLocation(SingleEmitter<LatLng> emitter);
 }

@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
+import android.support.transition.Fade;
+import android.support.transition.TransitionManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
@@ -23,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -80,10 +83,12 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_last_refresh) TextView weatherLastRefresh;
     @BindView(R.id.fragment_weather_vertical_delimiter) View weatherVerticalDelimiter;
     @BindView(R.id.fragment_weather_swipe_to_refresh) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.fragment_weather_view_group) ViewGroup viewGroup;
     @BindView(R.id.fragment_weather_temperature_extreme) TextView weatherTemperatureExtreme;
     @BindView(R.id.fragment_weather_recycler_forecast) @Nullable RecyclerView forecastRecycler;
     @BindView(R.id.fragment_weather_appbarlayout) @Nullable AppBarLayout appBarLayout;
     @BindView(R.id.fragment_weather_view_pager) @Nullable ViewPager pager;
+    @BindView(R.id.fragment_weather_gps_animation) LottieAnimationView gpsAnimationView;
     @BindBool(R.bool.is_tablet_horizontal) boolean isTabletHorizontal;
     @BindBool(R.bool.is_horizontal) boolean isHorizontal;
 
@@ -238,6 +243,22 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             showGpsSettingsDialog();
             isGpsDialogShown = true;
         }
+    }
+
+    @Override
+    public void playGpsAnimation() {
+        TransitionManager.beginDelayedTransition(viewGroup, new Fade());
+        gpsAnimationView.setVisibility(View.VISIBLE);
+        gpsAnimationView.playAnimation();
+        weatherCard.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void stopGpsAnimation() {
+        TransitionManager.beginDelayedTransition(viewGroup, new Fade());
+        gpsAnimationView.setVisibility(View.INVISIBLE);
+        gpsAnimationView.cancelAnimation();
+        weatherCard.setVisibility(View.VISIBLE);
     }
 
     private void showGpsSettingsDialog() {

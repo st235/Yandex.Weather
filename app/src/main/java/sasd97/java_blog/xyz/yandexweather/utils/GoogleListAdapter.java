@@ -3,7 +3,6 @@ package sasd97.java_blog.xyz.yandexweather.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +14,11 @@ import sasd97.java_blog.xyz.yandexweather.R;
  * Created by Maksim Sukhotski on 8/13/2017.
  */
 
-public class YandexListAdapter extends SimpleCursorAdapter {
+public class GoogleListAdapter extends SimpleCursorAdapter {
     private final Context context;
-    private LayoutInflater inflater;
 
-    public YandexListAdapter(Context context, int layout, Cursor cursor, String[] from, int[] to, int flags) {
+    public GoogleListAdapter(Context context, int layout, Cursor cursor, String[] from, int[] to, int flags) {
         super(context, layout, cursor, from, to, flags);
-        inflater = LayoutInflater.from(context);
         this.context = context;
     }
 
@@ -37,7 +34,7 @@ public class YandexListAdapter extends SimpleCursorAdapter {
         } else {
             row = inflater.inflate(R.layout.item_search_suggest, parent, false);
         }
-        TextView sender = (TextView) row.findViewById(R.id.text1);
+        TextView sender = row.findViewById(R.id.text1);
         sender.setText(cityString);
         return row;
     }

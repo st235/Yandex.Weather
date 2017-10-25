@@ -1,7 +1,5 @@
 package sasd97.java_blog.xyz.yandexweather.domain.places;
 
-import android.content.res.Resources;
-import android.location.Location;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -22,7 +20,6 @@ import sasd97.java_blog.xyz.yandexweather.data.models.places.PlacesResponse;
 
 public class PlacesInteractorImpl implements PlacesInteractor {
 
-    private static final String GPS_IS_OFF = "Gps is off";
     private AppRepository repository;
 
     public PlacesInteractorImpl(@NonNull AppRepository repository) {
@@ -53,13 +50,7 @@ public class PlacesInteractorImpl implements PlacesInteractor {
     @Override
     @SuppressWarnings({"ResourceType"})
     public Single<LatLng> getCurrentCoords() {
-        return Single.fromCallable(() -> {
-            Location location = repository.getCurrentLocation();
-            if (location == null) {
-                throw new Resources.NotFoundException(GPS_IS_OFF);
-            }
-            return new LatLng(location.getLatitude(), location.getLongitude());
-        });
+        return Single.create(emitter -> repository.getCurrentLocation(emitter));
     }
 
     @Override

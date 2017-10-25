@@ -41,7 +41,7 @@
     <string name="night">Ночь</string>
     <!--Endregion-->
     <!-- About fragment -->
-    <string name="about_fragment_description">Погодное приложение. Сделано в рамках проекта "Мобилизация".</string>
+    <string name="about_fragment_description">Погодное приложение. Данные предоставлены сервисом OpenWeatherMap.</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>
     <!-- Endregion -->
 

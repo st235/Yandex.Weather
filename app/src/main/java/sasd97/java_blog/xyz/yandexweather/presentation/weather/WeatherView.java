@@ -17,17 +17,16 @@ import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 /**
  * Created by alexander on 12/07/2017.
  */
-@StateStrategyType(AddToEndSingleStrategy.class)
+@StateStrategyType(SkipStrategy.class)
 public interface WeatherView extends MvpView {
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void showWeather(@NonNull WeatherModel weather, @NonNull WeatherType type);
+    @StateStrategyType(AddToEndSingleStrategy.class)
     void showForecast(Pair<Map<WeatherModel, WeatherType[]>, Settings> pair);
 
-    @StateStrategyType(SkipStrategy.class)
     void stopRefreshing();
-
-    @StateStrategyType(SkipStrategy.class)
     void updateContent();
-
-    @StateStrategyType(SkipStrategy.class)
     void requestEnablingGps(Runnable callingMethod);
+    void playGpsAnimation();
+    void stopGpsAnimation();
 }

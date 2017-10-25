@@ -27,6 +27,7 @@ import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.utils.RxSchedulers;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
 
+import static sasd97.java_blog.xyz.yandexweather.data.location.LocationProvider.GPS_DISABLED;
 import static sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl.FORECAST_NOT_ADDED;
 import static sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl.WEATHER_NOT_ADDED;
 import static sasd97.java_blog.xyz.yandexweather.domain.weather.WeatherInteractorImpl.addWeatherType;
@@ -77,7 +78,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .onErrorResumeNext(weatherNotAdded -> weatherNotAdded.getLocalizedMessage().equals(WEATHER_NOT_ADDED) ?
                         updateWeather(() -> this.getWeather(place)) : null)
                 .filter(weatherModel -> weatherModel != null).toSingle()
-                .subscribe(this::chooseWeatherType, Throwable::printStackTrace);
+                .subscribe(this::chooseWeatherType, throwable -> getViewState().stopRefreshing());
     }
 
     void getForecast(Place place, boolean needUpdate) {
@@ -92,7 +93,11 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                         map.put(pair.first, pair.second))
                 .map(this::addSettings)
                 .compose(schedulers.getIoToMainTransformerSingle())
-                .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair), Throwable::printStackTrace);
+                .subscribe(hashMapSettingsPair -> getViewState().showForecast(hashMapSettingsPair),
+                        throwable -> {
+                            throwable.printStackTrace();
+                            getViewState().stopRefreshing();
+                        });
     }
 
     private Single<WeatherModel> updateWeather(Runnable runnable) {
@@ -119,11 +124,18 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     @SuppressWarnings({"ResourceType"})
     private Single<Place> updateLocationPlace(Runnable callingMethod) {
         return placesInteractor.getCurrentCoords()
+                .doOnSubscribe(ignore -> getViewState().playGpsAnimation())
+                .compose(schedulers.getMainToIoTransformerSingle())
                 .flatMap(placesInteractor::getPlaceDetailsByCoords)
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .map(placeDetails -> new Place(placeDetails.getCity(), placeDetails.getCoords(), placeDetails.getPlaceId()))
                 .doOnSuccess(placesInteractor::updateCurrentPlace)
-                .doOnError(gpsDenied -> getViewState().requestEnablingGps(callingMethod))
+                .doOnSuccess(ignore -> getViewState().stopGpsAnimation())
+                .doOnError(gpsDisabled -> {
+                    if (gpsDisabled.getLocalizedMessage().equals(GPS_DISABLED)) {
+                        getViewState().requestEnablingGps(callingMethod);
+                    }
+                })
                 .subscribeOn(AndroidSchedulers.mainThread());
     }
 

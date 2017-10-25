@@ -8,6 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:id="@+id/fragment_weather_view_group"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:orientation="horizontal">

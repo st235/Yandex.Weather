@@ -8,6 +8,7 @@
     android:layout_height="wrap_content">
 
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/fragment_weather_view_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -21,8 +22,8 @@
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
-                android:background="@android:color/transparent"
                 android:layout_height="match_parent"
+                android:background="@android:color/transparent"
                 app:layout_scrollFlags="scroll">
 
                 <android.support.v7.widget.CardView
@@ -50,5 +51,12 @@
             android:paddingTop="8dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/fragment_weather_gps_animation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="56dp"
+            android:visibility="invisible"
+            app:lottie_fileName="PinJump.json"/>
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -11,9 +11,9 @@ import io.reactivex.SingleTransformer;
 
 public abstract class RxSchedulers {
 
-    abstract public Scheduler getMainThreadScheduler();
-    abstract public Scheduler getIoScheduler();
-    abstract public Scheduler getComputationScheduler();
+    abstract Scheduler getMainThreadScheduler();
+    abstract Scheduler getIoScheduler();
+    abstract Scheduler getComputationScheduler();
 
     public <T> ObservableTransformer<T, T> getIoToMainTransformerObservable()  {
         return objectObservable -> objectObservable
@@ -31,6 +31,12 @@ public abstract class RxSchedulers {
         return objectObservable -> objectObservable
                 .subscribeOn(getIoScheduler())
                 .observeOn(getMainThreadScheduler());
+    }
+
+    public <T> SingleTransformer<T, T> getMainToIoTransformerSingle()  {
+        return objectObservable -> objectObservable
+                .subscribeOn(getMainThreadScheduler())
+                .observeOn(getIoScheduler());
     }
 
     public <T> ObservableTransformer<T, T> getComputationToMainTransformer()  {

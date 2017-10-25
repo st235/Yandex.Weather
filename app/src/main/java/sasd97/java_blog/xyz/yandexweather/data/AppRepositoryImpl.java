@@ -15,6 +15,7 @@ import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
 import io.reactivex.internal.operators.completable.CompletableFromAction;
 import sasd97.java_blog.xyz.yandexweather.data.location.LocationProvider;
 import sasd97.java_blog.xyz.yandexweather.data.models.forecast.ResponseForecast16;
@@ -235,9 +236,9 @@ public final class AppRepositoryImpl implements AppRepository {
 
     @Nullable
     @Override
-    public Location getCurrentLocation() {
+    public Location getCurrentLocation(SingleEmitter<LatLng> emitter) {
         // noinspection MissingPermission
-        return locationProvider.getLastKnownLocation();
+        return locationProvider.getLastKnownLocation(emitter);
     }
 
     public static String toFileName(@NonNull Place place) {
