@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
+import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -98,6 +99,7 @@ public class SettingsFragment extends MvpAppCompatFragment
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        ((MainActivity)getActivity()).unsyncDrawer();
     }
 
     @Override

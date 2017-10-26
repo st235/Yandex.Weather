@@ -205,17 +205,28 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
             drawer.addDrawerListener(toggle);
             toggle.syncState();
             drawer.addDrawerListener(this);
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
-
     }
 
     public void unsyncDrawer() {
         if (drawer != null) {
             assert getSupportActionBar() != null;
-            if (drawer.isDrawerOpen(GravityCompat.START))
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+            }
             drawer.removeDrawerListener(toggle);
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void initSearchSuggestsAdapter() {

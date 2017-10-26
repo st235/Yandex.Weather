@@ -41,11 +41,15 @@ public class AboutFragment extends MvpAppCompatFragment {
 
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).unsyncDrawer();
         setHasOptionsMenu(true);
-
+        ((MainActivity)getActivity()).unsyncDrawer();
         ((AppCompatActivity) getActivity())
                 .getSupportActionBar()
                 .setTitle(R.string.main_activity_navigation_about);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }
