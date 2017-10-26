@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -240,7 +241,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                     .request(Manifest.permission.ACCESS_FINE_LOCATION)
                     .subscribe(granted -> {
                         if (!granted) {
-                            //TODO implement action when permissions not granted
+                            Toast.makeText(getContext(), R.string.on_gps_need_off, Toast.LENGTH_SHORT).show();
                             return;
                         }
                         callingMethod.run();

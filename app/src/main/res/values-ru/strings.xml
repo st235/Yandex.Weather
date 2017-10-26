@@ -73,6 +73,7 @@
     <!--Navigation fragment-->
     <string name="navigation_fragment_settings">Настройки</string>
     <string name="main_activity_action_search_place">Поиск места&#8230;</string>
+    <string name="on_gps_need_off">Вы всегда можете самостоятельно найти нужное вам место, нажав на 🔍</string>
 
     <string-array name="settings_fragment_available_interval_titles">
         <item>15 минут</item>

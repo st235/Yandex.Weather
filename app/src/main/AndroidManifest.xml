@@ -40,5 +40,8 @@
         <meta-data
             android:name="PLACES_API_KEY"
             android:value="AIzaSyAyERQ5bFC9b7d9w57x0p5dgA6M0lLOlu8"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="f779c23c3f096ce55675eb5a228961f2811e8fa2" />
     </application>
 </manifest>

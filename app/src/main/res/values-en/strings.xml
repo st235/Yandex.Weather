@@ -71,6 +71,7 @@
     <string name="add_place">Add place</string>
     <string name="today_card">Today,&#160;</string>
     <string name="main_activity_action_search_place">Location update...</string>
+    <string name="on_gps_need_off">You can always find the place you need by clicking on 🔍</string>
 
     <string-array name="settings_fragment_available_interval_titles">
         <item>15 minutes</item>

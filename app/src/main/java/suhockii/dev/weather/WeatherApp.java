@@ -5,10 +5,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDelegate;
 
+import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
 import com.facebook.stetho.Stetho;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
+import io.fabric.sdk.android.Fabric;
 import javax.inject.Inject;
 
 import suhockii.dev.xyz.richtextview.FontProvider;
@@ -46,6 +48,7 @@ public class WeatherApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         appComponent = buildAppComponent();
         getAppComponent().inject(this);
         onInit();
