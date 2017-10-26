@@ -143,13 +143,14 @@
         android:id="@+id/fragment_weather_min"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
         android:text="min"
+        android:textColor="@color/cardview_light_background"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/fragment_weather_temperature_extreme"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_weather_max"
-        android:layout_marginLeft="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/fragment_weather_max"/>
+        app:layout_constraintLeft_toLeftOf="@+id/fragment_weather_max"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_weather_max"/>
 
     <TextView
         android:id="@+id/fragment_weather_max"
@@ -157,11 +158,13 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
         android:text="max"
+        android:textColor="@color/cardview_light_background"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/fragment_weather_min"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintLeft_toRightOf="@+id/fragment_weather_vertical_delimiter"
         app:layout_constraintRight_toLeftOf="@+id/fragment_weather_temperature_extreme"
-        app:layout_constraintTop_toTopOf="@+id/fragment_weather_temperature_extreme"/>
+        app:layout_constraintTop_toTopOf="@+id/fragment_weather_temperature_extreme"
+        />
 
 </android.support.constraint.ConstraintLayout>

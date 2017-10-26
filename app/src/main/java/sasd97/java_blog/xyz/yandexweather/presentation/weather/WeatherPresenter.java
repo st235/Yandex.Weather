@@ -124,7 +124,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     @SuppressWarnings({"ResourceType"})
     private Single<Place> updateLocationPlace(Runnable callingMethod) {
         return placesInteractor.getCurrentCoords()
-                .doOnSubscribe(ignore -> getViewState().playGpsAnimation())
+                .doOnSubscribe(ignore -> getViewState().showGpsSearch())
                 .compose(schedulers.getMainToIoTransformerSingle())
                 .flatMap(placesInteractor::getPlaceDetailsByCoords)
                 .compose(schedulers.getIoToMainTransformerSingle())
@@ -132,7 +132,8 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .doOnSuccess(placesInteractor::updateCurrentPlace)
                 .doOnSuccess(place -> getViewState().stopGpsAnimation(place))
                 .doOnError(gpsDisabled -> {
-                    if (gpsDisabled.getLocalizedMessage().equals(GPS_DISABLED)) {
+                    if (gpsDisabled.getMessage().contains("ACCESS_COARSE_LOCATION") ||
+                            gpsDisabled.getLocalizedMessage().equals(GPS_DISABLED)) {
                         getViewState().requestEnablingGps(callingMethod);
                     }
                 })
@@ -208,8 +209,6 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
     void updateByGps() {
         updateLocationPlace(this::updateByGps)
-                .doOnSubscribe(ignore -> getViewState().playGpsAnimation())
-                .doOnEvent((place, throwable) -> getViewState().stopGpsAnimation(place))
                 .subscribe(place -> updateContent(), Throwable::printStackTrace);
     }
 }

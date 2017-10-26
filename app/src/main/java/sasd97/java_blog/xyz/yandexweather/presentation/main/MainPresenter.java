@@ -130,12 +130,12 @@ public class MainPresenter extends MvpPresenter<MainView> {
 
     void updateCurrentPlace(int position, boolean addToFavorites) {
         placesInteractor.getPlaceDetailsById(placesResponse.getPlaceIdAt(position))
-                .compose(schedulers.getIoToMainTransformerObservable())
                 .map(placeDetailsResponse -> new Place(
                         placesResponse.getPlaceIdAt(position),
                         placesResponse.getPlaceNameAt(position),
                         placeDetailsResponse.getCoords(),
                         (int) (new Date().getTime() / 1000)))
+                .compose(schedulers.getIoToMainTransformerObservable())
                 .doOnNext(place -> {
                     if (addToFavorites) {
                         getViewState().showNewFavoritePlace(place);
@@ -144,7 +144,10 @@ public class MainPresenter extends MvpPresenter<MainView> {
                 })
                 .doOnComplete(() -> getViewState().updateWeatherContent())
                 .filter(place -> addToFavorites)
-                .subscribe(placesInteractor::savePlaceToFavorites, Throwable::printStackTrace);
+                .subscribe(place -> placesInteractor.savePlaceToFavorites(place)
+                                .compose(schedulers.getIoToMainTransformerCompletable())
+                                .subscribe(),
+                        Throwable::printStackTrace);
     }
 
 

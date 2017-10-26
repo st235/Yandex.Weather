@@ -159,6 +159,12 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
     @Override
     public void showWeather(@NonNull WeatherModel weather, @NonNull WeatherType type) {
+        TransitionManager.beginDelayedTransition(viewGroup, new Fade());
+        gpsAnimationView.setVisibility(View.INVISIBLE);
+        forecastRecycler.setVisibility(View.VISIBLE);
+        weatherCard.setVisibility(View.VISIBLE);
+        gpsAnimationView.cancelAnimation();
+
         updateWeatherTheme(type.getCardColor(), type.getTextColor());
         updateWeather(weather, type.getIconRes(), type.getTitleRes());
     }
@@ -247,22 +253,17 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     }
 
     @Override
-    public void playGpsAnimation() {
+    public void showGpsSearch() {
         TransitionManager.beginDelayedTransition(viewGroup, new Fade());
         gpsAnimationView.setVisibility(View.VISIBLE);
         weatherCard.setVisibility(View.INVISIBLE);
         forecastRecycler.setVisibility(View.INVISIBLE);
         gpsAnimationView.playAnimation();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(R.string.main_activity_action_search_place);
     }
 
     @Override
     public void stopGpsAnimation(Place place) {
-        TransitionManager.beginDelayedTransition(viewGroup, new Fade());
-        gpsAnimationView.setVisibility(View.INVISIBLE);
-        forecastRecycler.setVisibility(View.VISIBLE);
-        weatherCard.setVisibility(View.VISIBLE);
-        gpsAnimationView.cancelAnimation();
-
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(place.getName());
     }
 

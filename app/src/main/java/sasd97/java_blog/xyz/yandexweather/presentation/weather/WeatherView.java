@@ -28,7 +28,7 @@ public interface WeatherView extends MvpView {
     void stopRefreshing();
     void updateContent();
     void requestEnablingGps(Runnable callingMethod);
-    void playGpsAnimation();
+    void showGpsSearch();
     void stopGpsAnimation(Place place);
     void updateWeatherByGps();
 }
