@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Я.Погода</string>
+    <string name="app_name">Погода</string>
 
     <!-- Navigation drawer region -->
     <string name="main_activity_navigation_weather">Погода</string>

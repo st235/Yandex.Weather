@@ -4,10 +4,7 @@
     <item
         android:drawable="@color/colorPrimary"/>
 
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/splash_screen_logo"/>
-    </item>
-
+    <item
+        android:drawable="@drawable/cloudy"
+        android:gravity="center"/>
 </layer-list>
