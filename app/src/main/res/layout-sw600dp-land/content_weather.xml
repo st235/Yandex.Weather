@@ -24,7 +24,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fragment_weather_icon"
         tools:text="A"/>
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/fragment_weather_icon"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fragment_weather_last_refresh"
         tools:text="W"/>
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/fragment_weather_wind_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="1 mPa"/>
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/fragment_weather_pressure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/fragment_weather_wind_speed"
         tools:text="15 m/s"/>
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/fragment_weather_humidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fragment_weather_wind_speed"
         tools:text="21%"/>
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/fragment_weather_temperature_extreme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fragment_weather_temperature"
         tools:text="27 °C\n27 °C"/>
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/fragment_weather_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

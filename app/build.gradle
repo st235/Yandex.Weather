@@ -10,7 +10,7 @@ android {
     buildToolsVersion "26.0.2"
 
     defaultConfig {
-        applicationId "sasd97.java_blog.xyz.yandexweather"
+        applicationId "suhockii.dev.weather"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode versions.code

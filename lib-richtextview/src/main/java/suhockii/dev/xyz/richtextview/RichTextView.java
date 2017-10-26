@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.richtextview;
+package suhockii.dev.xyz.richtextview;
 
 import android.content.Context;
 import android.content.res.TypedArray;

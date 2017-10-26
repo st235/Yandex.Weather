@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity">
+    tools:context="suhockii.dev.weather.presentation.main.MainActivity">
 
     <android.support.v4.widget.SlidingPaneLayout
         android:id="@+id/sliding_panel_layout"

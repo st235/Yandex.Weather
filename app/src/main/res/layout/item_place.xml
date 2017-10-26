@@ -20,7 +20,7 @@
         android:text="City 17"
         android:textSize="18sp"/>
 
-    <sasd97.java_blog.xyz.yandexweather.utils.FlipLayout
+    <suhockii.dev.weather.utils.FlipLayout
         android:id="@+id/item_place_flip_layout"
         android:layout_width="80dp"
         android:layout_height="@dimen/select_height"
@@ -30,5 +30,5 @@
         <include layout="@layout/part_item_place"/>
 
         <include layout="@layout/part_item_place_selected"/>
-    </sasd97.java_blog.xyz.yandexweather.utils.FlipLayout>
+    </suhockii.dev.weather.utils.FlipLayout>
 </RelativeLayout>

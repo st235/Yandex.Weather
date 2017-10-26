@@ -23,7 +23,7 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"/>
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/content_forecast_icon_morning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         tools:text="W"
         android:layout_marginTop="8dp"/>
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/content_forecast_icon_evening"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
         tools:text="W"
         />
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/content_forecast_icon_night"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
         tools:layout_constraintRight_creator="1"
         tools:text="W"/>
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/content_forecast_icon_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
         app:layout_constraintTop_toBottomOf="@+id/content_forecast_tv_day"
         />
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/content_forecast_icon_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
         tools:layout_constraintRight_creator="1"
         tools:text="W"/>
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/content_forecast_temp_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
         tools:layout_constraintTop_creator="1"
         tools:text="27 °C"/>
 
-    <sasd97.java_blog.xyz.richtextview.RichTextView
+    <suhockii.dev.xyz.richtextview.RichTextView
         android:id="@+id/content_forecast_temp_extreme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

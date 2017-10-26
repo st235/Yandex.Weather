@@ -1,4 +1,4 @@
-package sasd97.java_blog.xyz.richtextview;
+package suhockii.dev.xyz.richtextview;
 
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
