@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
+import android.support.transition.Explode;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
 import android.support.v4.content.ContextCompat;
@@ -182,6 +183,9 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
     @Override
     public void showForecast(Pair<Map<WeatherModel, WeatherType[]>, Settings> pair) {
+        forecastRecycler.setVisibility(View.INVISIBLE);
+        TransitionManager.beginDelayedTransition(viewGroup, new Explode());
+
         if (isTabletHorizontal) {
             RecyclerFragment recyclerFragment1 = (RecyclerFragment) getChildFragmentManager().findFragmentByTag(getTagFor(0));
             RecyclerFragment recyclerFragment2 = (RecyclerFragment) getChildFragmentManager().findFragmentByTag(getTagFor(1));
@@ -223,6 +227,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                         }
                     });
             forecastRecyclerAdapter.setHasStableIds(true);
+            forecastRecycler.setVisibility(View.VISIBLE);
             forecastRecycler.setAdapter(forecastRecyclerAdapter);
             forecastRecycler.scrollTo(0,0);
         }

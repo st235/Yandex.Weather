@@ -135,7 +135,6 @@ public class DrawerRecyclerAdapter extends RecyclerView.Adapter<DrawerRecyclerAd
     }
 
     private void swap(int position) {
-        if (position == 0) return;
         Place selected = places.get(position);
         int oldSelectedTime = selected.getTime();
         selected.setTime(places.get(0).getTime());
