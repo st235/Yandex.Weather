@@ -14,7 +14,6 @@ import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,7 +42,6 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -57,21 +55,16 @@ import suhockii.dev.weather.WeatherApp;
 import suhockii.dev.weather.data.models.places.Place;
 import suhockii.dev.weather.domain.models.WeatherModel;
 import suhockii.dev.weather.presentation.main.MainActivity;
-import suhockii.dev.weather.presentation.weather.pager.RecyclerFragment;
-import suhockii.dev.weather.presentation.weather.pager.RecyclerPagerAdapter;
 import suhockii.dev.weather.presentation.weatherTypes.WeatherType;
 import suhockii.dev.weather.utils.AndroidUtils;
 import suhockii.dev.weather.utils.Settings;
-import suhockii.dev.weather.utils.ViewPagerAction;
-
-import static suhockii.dev.weather.presentation.weather.pager.RecyclerPagerAdapter.getTagFor;
 
 /**
  * Created by alexander on 09/07/2017.
  */
 
 public class WeatherFragment extends MvpAppCompatFragment implements WeatherView,
-        AppBarLayout.OnOffsetChangedListener, ViewPagerAction {
+        AppBarLayout.OnOffsetChangedListener {
 
     public static final String TAG_WEATHER = "TAG_WEATHER";
     private SimpleDateFormat fmt = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -92,7 +85,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_temperature_extreme) TextView weatherTemperatureExtreme;
     @BindView(R.id.fragment_weather_recycler_forecast) @Nullable RecyclerView forecastRecycler;
     @BindView(R.id.fragment_weather_appbarlayout) @Nullable AppBarLayout appBarLayout;
-    @BindView(R.id.fragment_weather_view_pager) @Nullable ViewPager pager;
     @BindView(R.id.fragment_weather_gps_animation) LottieAnimationView gpsAnimationView;
     @BindBool(R.bool.is_tablet_horizontal) boolean isTabletHorizontal;
     @BindBool(R.bool.is_horizontal) boolean isHorizontal;
@@ -102,7 +94,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     private ForecastRecyclerAdapter forecastRecyclerAdapter;
     private LinearLayoutManager layoutManager;
     private boolean appBarIsExpanded = true;
-    private RecyclerPagerAdapter pagerAdapter;
     public static final int REQUEST_LOCATION = 199;
     private GoogleApiClient googleApiClient;
     private Set<Runnable> runnables;
@@ -152,11 +143,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             forecastRecycler.setHasFixedSize(true);
         }
 
-        if (isTabletHorizontal) {
-            assert pager != null;
-            pagerAdapter = new RecyclerPagerAdapter(getChildFragmentManager());
-            pager.setAdapter(pagerAdapter);
-        }
     }
 
     @Override
@@ -187,51 +173,22 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         forecastRecycler.setVisibility(View.INVISIBLE);
         TransitionManager.beginDelayedTransition(viewGroup, new AutoTransition());
 
-        if (isTabletHorizontal) {
-            RecyclerFragment recyclerFragment1 = (RecyclerFragment) getChildFragmentManager().findFragmentByTag(getTagFor(0));
-            RecyclerFragment recyclerFragment2 = (RecyclerFragment) getChildFragmentManager().findFragmentByTag(getTagFor(1));
-            if (recyclerFragment1 == null || recyclerFragment2 == null) {
-                return;
-            }
+        assert forecastRecycler != null;
+        forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second, false)
+                .setOnDisableScrollListener(disableScroll -> {
+                    this.canScrollRecycler = disableScroll;
 
-            LinkedHashMap<WeatherModel, WeatherType[]> rv1items;
-            LinkedHashMap<WeatherModel, WeatherType[]> rv2items;
-            rv1items = new LinkedHashMap<>(5);
-            Set<WeatherModel> weatherModelSet = pair.first.keySet();
-            if (weatherModelSet.isEmpty()) {
-                return;
-            }
-
-            for (int i = 0; i < 5; i++) {
-                WeatherModel key = (WeatherModel) weatherModelSet.toArray()[i];
-                rv1items.put(key, pair.first.get(key));
-            }
-
-            rv2items = new LinkedHashMap<>(11);
-            for (int i = 5; i < 16; i++) {
-                WeatherModel key = (WeatherModel) pair.first.keySet().toArray()[i];
-                rv2items.put(key, pair.first.get(key));
-            }
-            recyclerFragment1.show(rv1items, pair.second);
-            recyclerFragment2.show(rv2items, pair.second);
-        } else {
-            assert forecastRecycler != null;
-            forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second, false)
-                    .setOnDisableScrollListener(disableScroll -> {
-                        this.canScrollRecycler = disableScroll;
-
-                        if (!disableScroll) {
-                            getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        } else {
-                            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        }
-                    });
-            forecastRecyclerAdapter.setHasStableIds(true);
-            forecastRecycler.setVisibility(View.VISIBLE);
-            forecastRecycler.setAdapter(forecastRecyclerAdapter);
-            forecastRecycler.scrollTo(0, 0);
-        }
+                    if (!disableScroll) {
+                        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    } else {
+                        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    }
+                });
+        forecastRecyclerAdapter.setHasStableIds(true);
+        forecastRecycler.setVisibility(View.VISIBLE);
+        forecastRecycler.setAdapter(forecastRecyclerAdapter);
+        forecastRecycler.scrollTo(0, 0);
     }
 
     @Override
@@ -409,22 +366,5 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     public void onPause() {
         super.onPause();
         if (appBarLayout != null) appBarLayout.removeOnOffsetChangedListener(this);
-    }
-
-    @Override
-    public void onPagerFragmentAttached() {
-        presenter.getForecast(null, true);
-    }
-
-    @Override
-    public void onNextFabClick() {
-        assert pager != null;
-        pager.setCurrentItem(1, true);
-    }
-
-    @Override
-    public void onPrevFabClick() {
-        assert pager != null;
-        pager.setCurrentItem(0, true);
     }
 }

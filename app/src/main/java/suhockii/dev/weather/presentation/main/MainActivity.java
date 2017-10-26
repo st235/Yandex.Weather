@@ -52,7 +52,6 @@ import suhockii.dev.weather.utils.ElevationScrollListener;
 import suhockii.dev.weather.utils.GoogleListAdapter;
 import suhockii.dev.weather.utils.NavigationFragmentAction;
 import suhockii.dev.weather.utils.PlacesActions;
-import suhockii.dev.weather.utils.ViewPagerAction;
 
 import static suhockii.dev.weather.presentation.drawer.DrawerFragment.TAG_NAVIGATION;
 import static suhockii.dev.weather.presentation.weather.WeatherFragment.REQUEST_LOCATION;
@@ -60,7 +59,7 @@ import static suhockii.dev.weather.presentation.weather.WeatherFragment.TAG_WEAT
 
 public class MainActivity extends MvpAppCompatActivity implements MainView,
         SearchView.OnSuggestionListener, View.OnFocusChangeListener,
-        ElevationScrollListener, NavigationFragmentAction, ViewPagerAction, DrawerLayout.DrawerListener {
+        ElevationScrollListener, NavigationFragmentAction, DrawerLayout.DrawerListener {
 
     private static final String CITY = "city";
     public static final String TOOLBAR_VISIBILITY_KEY = "toolbar_visibility";
@@ -488,24 +487,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         isToolbarSelectedVisible = savedInstanceState.getBoolean(TOOLBAR_VISIBILITY_KEY);
-    }
-
-    @Override
-    public void onPagerFragmentAttached() {
-        ((ViewPagerAction) getSupportFragmentManager()
-                .findFragmentByTag(TAG_WEATHER)).onPagerFragmentAttached();
-    }
-
-    @Override
-    public void onNextFabClick() {
-        ((ViewPagerAction) getSupportFragmentManager()
-                .findFragmentByTag(TAG_WEATHER)).onNextFabClick();
-    }
-
-    @Override
-    public void onPrevFabClick() {
-        ((ViewPagerAction) getSupportFragmentManager()
-                .findFragmentByTag(TAG_WEATHER)).onPrevFabClick();
     }
 
     public boolean isSlidingPanelOpen() {
