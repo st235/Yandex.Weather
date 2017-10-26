@@ -3,6 +3,11 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/action_gps"
+            android:icon="@drawable/ic_gps"
+            android:title="@string/main_activity_action_gps"
+            app:showAsAction="ifRoom|collapseActionView" />
+        <item
             android:id="@+id/action_search"
             android:icon="@drawable/ic_action_search"
             android:title="@string/main_activity_action_search"

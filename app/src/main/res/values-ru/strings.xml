@@ -12,6 +12,7 @@
 
     <!-- Actionbar region -->
     <string name="main_activity_action_search">Поиск</string>
+    <string name="main_activity_action_gps">Загрузить погоду в текущем местоположении</string>
     <string name="main_activity_action_search_hint">Укажите место</string>
     <string name="main_activity_action_search_settings_description">Список городов</string>
     <!-- Endregion -->
@@ -41,7 +42,7 @@
     <string name="night">Ночь</string>
     <!--Endregion-->
     <!-- About fragment -->
-    <string name="about_fragment_description">Погодное приложение. Данные предоставлены сервисом OpenWeatherMap.</string>
+    <string name="about_fragment_description">Погодное приложение.\n\nДанные предоставлены сервисом OpenWeatherMap.</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>
     <!-- Endregion -->
 

@@ -55,6 +55,7 @@
             android:id="@+id/fragment_weather_gps_animation"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:lottie_loop="true"
             android:layout_marginBottom="56dp"
             android:visibility="invisible"
             app:lottie_fileName="PinJump.json"/>

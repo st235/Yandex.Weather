@@ -130,7 +130,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .map(placeDetails -> new Place(placeDetails.getCity(), placeDetails.getCoords(), placeDetails.getPlaceId()))
                 .doOnSuccess(placesInteractor::updateCurrentPlace)
-                .doOnSuccess(ignore -> getViewState().stopGpsAnimation())
+                .doOnSuccess(place -> getViewState().stopGpsAnimation(place))
                 .doOnError(gpsDisabled -> {
                     if (gpsDisabled.getLocalizedMessage().equals(GPS_DISABLED)) {
                         getViewState().requestEnablingGps(callingMethod);
@@ -204,5 +204,12 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
         }
 
         getViewState().stopRefreshing();
+    }
+
+    void updateByGps() {
+        updateLocationPlace(this::updateByGps)
+                .doOnSubscribe(ignore -> getViewState().playGpsAnimation())
+                .doOnEvent((place, throwable) -> getViewState().stopGpsAnimation(place))
+                .subscribe(place -> updateContent(), Throwable::printStackTrace);
     }
 }

@@ -18,6 +18,7 @@
 
     <!-- Actionbar region -->
     <string name="main_activity_action_search">Search</string>
+    <string name="main_activity_action_gps">Load weather at current location</string>
     <string name="main_activity_action_search_hint">Specify place</string>
     <string name="main_activity_action_search_settings_description">City list</string>
     <string name="main_activity_action_search_label" translatable="false">@string/app_name</string>

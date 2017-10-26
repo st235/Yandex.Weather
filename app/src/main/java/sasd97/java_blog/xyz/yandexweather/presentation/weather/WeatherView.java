@@ -10,6 +10,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.Map;
 
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.presentation.weatherTypes.WeatherType;
 import sasd97.java_blog.xyz.yandexweather.utils.Settings;
@@ -28,5 +29,6 @@ public interface WeatherView extends MvpView {
     void updateContent();
     void requestEnablingGps(Runnable callingMethod);
     void playGpsAnimation();
-    void stopGpsAnimation();
+    void stopGpsAnimation(Place place);
+    void updateWeatherByGps();
 }

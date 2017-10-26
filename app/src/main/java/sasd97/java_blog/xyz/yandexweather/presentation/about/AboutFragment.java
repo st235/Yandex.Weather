@@ -4,12 +4,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
 
 import sasd97.java_blog.xyz.yandexweather.R;
+import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 
 /**
  * Created by alexander on 09/07/2017.
@@ -28,8 +31,18 @@ public class AboutFragment extends MvpAppCompatFragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem search = menu.findItem(R.id.action_search);
+        MenuItem miGps = menu.findItem(R.id.action_gps);
+
+        search.setVisible(false);
+        miGps.setVisible(false);
+    }
+
     public void onResume() {
         super.onResume();
+        ((MainActivity)getActivity()).unsyncDrawer();
+        setHasOptionsMenu(true);
 
         ((AppCompatActivity) getActivity())
                 .getSupportActionBar()

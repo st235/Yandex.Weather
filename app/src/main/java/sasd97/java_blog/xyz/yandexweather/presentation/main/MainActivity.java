@@ -38,6 +38,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
 import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
@@ -47,10 +49,10 @@ import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherView;
 import sasd97.java_blog.xyz.yandexweather.utils.AndroidUtils;
 import sasd97.java_blog.xyz.yandexweather.utils.ElevationScrollListener;
+import sasd97.java_blog.xyz.yandexweather.utils.GoogleListAdapter;
 import sasd97.java_blog.xyz.yandexweather.utils.NavigationFragmentAction;
 import sasd97.java_blog.xyz.yandexweather.utils.PlacesActions;
 import sasd97.java_blog.xyz.yandexweather.utils.ViewPagerAction;
-import sasd97.java_blog.xyz.yandexweather.utils.GoogleListAdapter;
 
 import static sasd97.java_blog.xyz.yandexweather.presentation.drawer.DrawerFragment.TAG_NAVIGATION;
 import static sasd97.java_blog.xyz.yandexweather.presentation.weather.WeatherFragment.REQUEST_LOCATION;
@@ -66,6 +68,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     private Unbinder unbinder;
     private SimpleCursorAdapter cursorAdapter;
     private MenuItem miSearch;
+    private MenuItem miGps;
     private SearchView searchView;
     private boolean addToFavorites;
     private ActionBarDrawerToggle toggle;
@@ -83,6 +86,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     private boolean isSearchOpenedFromClosedPanel;
     MenuItem.OnActionExpandListener actionExpandListener;
     private boolean isToolbarSelectedVisible;
+    private Disposable searchDisposable = Disposables.disposed();
 
     @ProvidePresenter
     public MainPresenter providePresenter() {
@@ -126,6 +130,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         actionExpandListener = new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
+                miGps.setVisible(false);
                 notifyNavigationFragment(true);
                 return true;
             }
@@ -143,6 +148,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
                     slidingPaneLayout.closePane();
                     isSearchOpenedFromClosedPanel = false;
                 }
+                miGps.setVisible(true);
+                invalidateOptionsMenu();
                 return true;
             }
         };
@@ -184,9 +191,13 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     protected void onResume() {
         super.onResume();
         if (isToolbarSelectedVisible) showToolbarSelected(true);
+    }
 
+    public void syncDrawer() {
         if (drawer != null) {
             assert getSupportActionBar() != null;
+            getSupportActionBar().setHomeButtonEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             if (drawer.isDrawerOpen(GravityCompat.START))
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -196,6 +207,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
             drawer.addDrawerListener(this);
         }
 
+    }
+
+    public void unsyncDrawer() {
+        if (drawer != null) {
+            assert getSupportActionBar() != null;
+            if (drawer.isDrawerOpen(GravityCompat.START))
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            drawer.removeDrawerListener(toggle);
+        }
     }
 
     private void initSearchSuggestsAdapter() {
@@ -220,6 +240,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
                 !slidingPaneLayout.isOpen()) {
             slidingPaneLayout.openPane();
             isSearchOpenedFromClosedPanel = true;
+        } else if (item.getItemId() == R.id.action_gps) {
+            ((WeatherView) getSupportFragmentManager()
+                    .findFragmentByTag(TAG_WEATHER)).updateWeatherByGps();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -272,6 +296,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
         miSearch = menu.findItem(R.id.action_search);
+        miGps = menu.findItem(R.id.action_gps);
         miSearch.setOnActionExpandListener(actionExpandListener);
         searchView = (SearchView) miSearch.getActionView();
         searchView.findViewById(android.support.v7.appcompat.R.id.search_plate)
@@ -284,7 +309,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
         searchView.setOnSuggestionListener(this);
         searchView.setOnQueryTextFocusChangeListener(this);
         observeSearchInput(searchView);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void observeSearchInput(SearchView searchView) {
@@ -304,6 +329,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
                 })
                 .map(CharSequence::toString)
                 .flatMapCompletable(query -> mainPresenter.search(query))
+                .doOnSubscribe(disposable -> {
+                    searchDisposable.dispose();
+                    searchDisposable = disposable;
+                })
                 .subscribe(() -> {/*ignore*/}, Throwable::printStackTrace);
     }
 
@@ -324,7 +353,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     public void showSuggestions(String[] suggests) {
         final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, CITY});
         if (suggests != null) {
-            for (int i = 0; i < (suggests.length > 4 ? 4 : suggests.length) ; i++) {
+            for (int i = 0; i < (suggests.length > 4 ? 4 : suggests.length); i++) {
                 c.addRow(new Object[]{i, suggests[i]});
             }
         }
@@ -475,7 +504,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
     @Override
     public void onDrawerClosed(View drawerView) {
         if (isToolbarSelectedVisible) cancelPlacesSelection();
-        miSearch.setVisible(true);
     }
 
     @Override
@@ -485,14 +513,12 @@ public class MainActivity extends MvpAppCompatActivity implements MainView,
 
     @Override
     public void onDrawerSlide(View drawerView, float slideOffset) {
-        if (!miSearch.isVisible()) {
-            miSearch.setVisible(true);
-        }
-        miSearch.getIcon().setAlpha((int) ((1 - slideOffset) * 255));
+        int alpha = (int) ((1 - slideOffset) * 255);
+        miSearch.getIcon().setAlpha(alpha);
+        miGps.getIcon().setAlpha(alpha);
     }
 
     @Override
     public void onDrawerOpened(View drawerView) {
-        miSearch.setVisible(false);
     }
 }

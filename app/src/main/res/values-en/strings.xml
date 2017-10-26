@@ -11,6 +11,7 @@
 
     <!-- Actionbar region -->
     <string name="main_activity_action_search">Search</string>
+    <string name="main_activity_action_gps">Load weather at current location</string>
     <string name="main_activity_action_search_hint">Specify place</string>
     <string name="main_activity_action_search_settings_description">City list</string>
     <!-- Endregion -->
@@ -40,8 +41,7 @@
     <!--Endregion-->
 
     <!-- About fragment -->
-    <string name="about_fragment_description">Application for the weather monitor.
-        Data provided by OpenWeatherMap.</string>
+    <string name="about_fragment_description">Application for the weather monitor.\n\nData provided by OpenWeatherMap.</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>
     <!-- Endregion -->
 

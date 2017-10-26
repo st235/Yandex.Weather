@@ -52,6 +52,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import sasd97.java_blog.xyz.yandexweather.R;
 import sasd97.java_blog.xyz.yandexweather.WeatherApp;
+import sasd97.java_blog.xyz.yandexweather.data.models.places.Place;
 import sasd97.java_blog.xyz.yandexweather.domain.models.WeatherModel;
 import sasd97.java_blog.xyz.yandexweather.presentation.main.MainActivity;
 import sasd97.java_blog.xyz.yandexweather.presentation.weather.pager.RecyclerFragment;
@@ -148,8 +149,6 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             forecastRecycler.setLayoutManager(layoutManager);
             forecastRecycler.setHasFixedSize(true);
         }
-
-//            layoutManager.scrollToPositionWithOffset(0, 0);
 
         if (isTabletHorizontal) {
             assert pager != null;
@@ -251,16 +250,25 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     public void playGpsAnimation() {
         TransitionManager.beginDelayedTransition(viewGroup, new Fade());
         gpsAnimationView.setVisibility(View.VISIBLE);
-        gpsAnimationView.playAnimation();
         weatherCard.setVisibility(View.INVISIBLE);
+        forecastRecycler.setVisibility(View.INVISIBLE);
+        gpsAnimationView.playAnimation();
     }
 
     @Override
-    public void stopGpsAnimation() {
+    public void stopGpsAnimation(Place place) {
         TransitionManager.beginDelayedTransition(viewGroup, new Fade());
         gpsAnimationView.setVisibility(View.INVISIBLE);
-        gpsAnimationView.cancelAnimation();
+        forecastRecycler.setVisibility(View.VISIBLE);
         weatherCard.setVisibility(View.VISIBLE);
+        gpsAnimationView.cancelAnimation();
+
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(place.getName());
+    }
+
+    @Override
+    public void updateWeatherByGps() {
+        presenter.updateByGps();
     }
 
     private void showGpsSettingsDialog() {
@@ -379,6 +387,8 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
         ((MainActivity) getActivity()).changeSearchIconVisibility(this);
         appBarLayout.setExpanded(appBarIsExpanded);
+
+        ((MainActivity)getActivity()).syncDrawer();
     }
 
     /*For correct work of swipeRefreshLayout in conjunction with appBarLayout*/
