@@ -4,7 +4,9 @@
     <item
         android:drawable="@color/colorPrimary"/>
 
-    <item
-        android:drawable="@drawable/cloudy"
-        android:gravity="center"/>
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/logo_weather_white"/>
+    </item>
 </layer-list>

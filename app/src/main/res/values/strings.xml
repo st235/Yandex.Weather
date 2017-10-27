@@ -61,7 +61,7 @@
 
     <!-- Weather fragment -->
     <string name="weather_fragment_current_temperature">&#xf055; %1$.0f %2$s</string>
-    <string name="weather_fragment_current_temperature_extreme">%1$.0f %3$s\n%2$.0f %3$s</string>
+    <string name="weather_fragment_current_temperature_extreme" translatable="false">%1$.0f %3$s\n%2$.0f %3$s</string>
     <string name="weather_fragment_wind_speed">&#xf082; %0$.0f %2$s</string>
     <string name="weather_fragment_pressure">&#xf079; %0$.0f %2$s</string>
     <string name="weather_fragment_humidity">&#xf04e; %1$.0f %%</string>

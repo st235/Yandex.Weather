@@ -111,7 +111,8 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
         return placesInteractor.getCurrentPlace()
                 .onErrorResumeNext(locationNotAdded -> updateLocationPlace(runnable))
                 .flatMap(place -> weatherInteractor.updateForecast16(place)
-                        .zipWith(weatherInteractor.updateForecast5(place), this::zipWithWeatherTypes)
+                        .zipWith(weatherInteractor.updateForecast5(place),
+                                this::zipWithWeatherTypes)
                         .map(hashMap -> Pair.create(hashMap.keySet(), place)))
                 .doOnSuccess(setAndPlace -> Observable.fromArray(setAndPlace.first
                         .toArray(new WeatherModel[setAndPlace.first.size()]))
@@ -133,6 +134,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .doOnSuccess(place -> getViewState().stopGpsAnimation(place))
                 .doOnError(gpsDisabled -> {
                     if (gpsDisabled.getMessage().contains("ACCESS_COARSE_LOCATION") ||
+                            gpsDisabled.getMessage().contains("ACCESS_FINE_LOCATION") ||
                             gpsDisabled.getLocalizedMessage().equals(GPS_DISABLED)) {
                         getViewState().requestEnablingGps(callingMethod);
                     }

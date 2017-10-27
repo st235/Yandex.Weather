@@ -1,6 +1,6 @@
 ext.versions = [
-        code                         : 5,
-        name                         : '0.0.4',
+        code                         : 1,
+        name                         : '1.0',
 
         richTextViewCode             : 4,
         richTextViewName             : '1.0.0',

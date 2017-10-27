@@ -9,7 +9,6 @@ import android.util.TypedValue;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /**
@@ -38,10 +37,7 @@ public class AndroidUtils {
     public static boolean isLocationPermissionsDenied(Context context) {
         int fineLocPerm = ContextCompat.checkSelfPermission(
                 context, ACCESS_FINE_LOCATION);
-        int coarseLocPerm = ContextCompat.checkSelfPermission(
-                context, ACCESS_COARSE_LOCATION);
 
-        return fineLocPerm == PackageManager.PERMISSION_DENIED ||
-                coarseLocPerm == PackageManager.PERMISSION_DENIED;
+        return fineLocPerm == PackageManager.PERMISSION_DENIED;
     }
 }

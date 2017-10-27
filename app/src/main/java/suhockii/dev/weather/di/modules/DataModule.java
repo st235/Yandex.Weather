@@ -4,7 +4,6 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.location.LocationManager;
 
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -37,9 +36,11 @@ public class DataModule {
     @Provides
     @Singleton
     public OkHttpClient provideOkhttpClient() {
-        return new OkHttpClient.Builder()
-                .addNetworkInterceptor(new StethoInterceptor())
-                .build();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+//        if (BuildConfig.DEBUG) {
+//            builder.addNetworkInterceptor(new StethoInterceptor());
+//        }
+        return builder.build();
     }
 
     @Provides

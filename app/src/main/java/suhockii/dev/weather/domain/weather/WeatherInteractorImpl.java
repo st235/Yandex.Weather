@@ -32,6 +32,7 @@ import suhockii.dev.weather.domain.models.WeatherModel;
 import suhockii.dev.weather.presentation.weatherTypes.ClearSky;
 import suhockii.dev.weather.presentation.weatherTypes.Sunny;
 import suhockii.dev.weather.presentation.weatherTypes.WeatherType;
+import timber.log.Timber;
 
 import static suhockii.dev.weather.domain.converters.ConvertersConfig.PRESSURE_CONVERTERS_KEY;
 import static suhockii.dev.weather.domain.converters.ConvertersConfig.SPEED_CONVERTERS_KEY;
@@ -94,6 +95,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     @Override
     public Single<List<WeatherType>> updateForecast5(@NonNull Place place) {
         return repository.getForecast5(place)
+                .doOnError(throwable -> Timber.d(throwable.toString()))
                 .map(ResponseForecast5::getForecasts)
                 .flatMapIterable(responseForecast5 -> responseForecast5)
                 .map(ResponseWeather::getWeatherId)

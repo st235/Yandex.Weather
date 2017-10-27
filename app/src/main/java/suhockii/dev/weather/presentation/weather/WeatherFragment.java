@@ -235,6 +235,11 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         presenter.updateByGps();
     }
 
+    @Override
+    public void showError(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
     private void showGpsSettingsDialog() {
         googleApiClient = new GoogleApiClient.Builder(getContext())
                 .addApi(LocationServices.API)

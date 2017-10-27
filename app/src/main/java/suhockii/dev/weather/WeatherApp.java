@@ -7,13 +7,11 @@ import android.support.v7.app.AppCompatDelegate;
 
 import com.crashlytics.android.Crashlytics;
 import com.evernote.android.job.JobManager;
-import com.facebook.stetho.Stetho;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
-import io.fabric.sdk.android.Fabric;
 import javax.inject.Inject;
 
-import suhockii.dev.xyz.richtextview.FontProvider;
+import io.fabric.sdk.android.Fabric;
 import suhockii.dev.weather.background.UpdateWeatherJob;
 import suhockii.dev.weather.data.AppRepository;
 import suhockii.dev.weather.di.AppComponent;
@@ -22,6 +20,7 @@ import suhockii.dev.weather.di.MainComponent;
 import suhockii.dev.weather.di.modules.AppModule;
 import suhockii.dev.weather.di.modules.MainModule;
 import suhockii.dev.weather.di.modules.NavigationModule;
+import suhockii.dev.xyz.richtextview.FontProvider;
 import timber.log.Timber;
 
 /**
@@ -59,7 +58,6 @@ public class WeatherApp extends Application {
         AndroidThreeTen.init(this);
         onScheduleJob();
         Timber.plant(new Timber.DebugTree());
-        Stetho.initializeWithDefaults(this);
     }
 
     private void onScheduleJob() {

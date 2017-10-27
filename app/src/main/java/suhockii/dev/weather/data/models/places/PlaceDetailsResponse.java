@@ -50,11 +50,9 @@ public class PlaceDetailsResponse {
      * "A44, Юж. Судан" or "пер. Корженевского 4, Минск, Беларусь"
      */
     public String getCity() {
-        if (resultArray[0].formattedAddress == null) {
+        if (resultArray[3].formattedAddress == null) {
             return UNKNOWN_CITY;
         }
-        String[] addressParts = resultArray[0].formattedAddress.split(COMMA);
-        int cityNamePos = addressParts.length == 1 ? 0 : addressParts.length - 2;
-        return addressParts[cityNamePos];
+        return resultArray[1].formattedAddress;
     }
 }

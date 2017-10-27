@@ -31,4 +31,5 @@ public interface WeatherView extends MvpView {
     void showGpsSearch();
     void stopGpsAnimation(Place place);
     void updateWeatherByGps();
+    void showError(String msg);
 }
