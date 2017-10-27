@@ -5,7 +5,9 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fragment_padding">16dp</dimen>
-    <dimen name="card_corner_radius">12dp</dimen>
+    <dimen name="card_corner_radius">16dp</dimen>
+    <dimen name="card_margin">8dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
     <dimen name="content_outer_margin">16dp</dimen>
     <dimen name="drawer_width">320dp</dimen>
     <dimen name="drawer_minus_panel_width">240dp</dimen>

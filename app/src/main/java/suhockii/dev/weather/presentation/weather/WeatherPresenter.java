@@ -72,7 +72,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .subscribe((place, throwable) -> {/*ignore*/});
     }
 
-    public void getWeather(Place place) {
+    private void getWeather(Place place) {
         weatherInteractor.getWeather(place)
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .onErrorResumeNext(weatherNotAdded -> weatherNotAdded.getLocalizedMessage().equals(WEATHER_NOT_ADDED) ?
@@ -131,7 +131,7 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .map(placeDetails -> new Place(placeDetails.getCity(), placeDetails.getCoords(), placeDetails.getPlaceId()))
                 .doOnSuccess(placesInteractor::updateCurrentPlace)
-                .doOnSuccess(place -> getViewState().stopGpsAnimation(place))
+                .doOnSuccess(place -> getViewState().showPlaceName(place.getName()))
                 .doOnError(gpsDisabled -> {
                     if (gpsDisabled.getMessage().contains("ACCESS_COARSE_LOCATION") ||
                             gpsDisabled.getMessage().contains("ACCESS_FINE_LOCATION") ||

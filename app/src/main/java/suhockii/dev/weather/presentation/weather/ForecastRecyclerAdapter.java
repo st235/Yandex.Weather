@@ -43,7 +43,6 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
     private final List<WeatherType[]> weatherTypes;
     private final boolean[] expandedPositions = new boolean[5];
     private final Settings settings;
-    private final boolean isSecondary;
 
     private RecyclerView recyclerView;
 
@@ -59,13 +58,12 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
     }
 
     public ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
-                                   Settings settings, boolean isSecondary) {
+                                   Settings settings) {
         WeatherModel[] weatherModelArray = forecasts.keySet().toArray(new WeatherModel[0]);
         WeatherType[][] weatherTypesArray = forecasts.values().toArray(new WeatherType[0][]);
         this.weatherModels = new ArrayList<>(Arrays.asList(weatherModelArray));
         this.weatherTypes = new ArrayList<>(Arrays.asList(weatherTypesArray));
         this.settings = settings;
-        this.isSecondary = isSecondary;
     }
 
     @Override
@@ -82,8 +80,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        @LayoutRes int layoutRes = isSecondary ?
-                R.layout.item_forecast_expanded : R.layout.item_forecast_collapsed;
+        @LayoutRes int layoutRes = R.layout.item_forecast;
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(layoutRes, parent, false);
 
@@ -146,7 +143,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
     private void setData(RecyclerViewHolder holder, int position, Resources resources) {
         WeatherModel weather = weatherModels.get(position);
 
-        holder.date.setText(position == 0 && !isSecondary ? resources.getString(R.string.tomorrow) : weather.getReadableDate());
+        holder.date.setText(position == 0 ? resources.getString(R.string.tomorrow) : weather.getReadableDate());
         holder.tempMain.setText(resources.getString(R.string.forecasts_temperature_iconyfied,
                 weather.getDayTemperature(), obtainTemperatureTitle(resources, settings.getTemp())));
         holder.tempMorning.setText(resources.getString(R.string.forecasts_temperature,

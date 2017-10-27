@@ -9,9 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
-import android.support.transition.AutoTransition;
+import android.support.transition.ChangeBounds;
+import android.support.transition.Explode;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
+import android.support.transition.TransitionSet;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -50,9 +52,10 @@ import java.util.Set;
 import butterknife.BindBool;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
 import suhockii.dev.weather.R;
 import suhockii.dev.weather.WeatherApp;
-import suhockii.dev.weather.data.models.places.Place;
 import suhockii.dev.weather.domain.models.WeatherModel;
 import suhockii.dev.weather.presentation.main.MainActivity;
 import suhockii.dev.weather.presentation.weatherTypes.WeatherType;
@@ -83,7 +86,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @BindView(R.id.fragment_weather_swipe_to_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.fragment_weather_view_group) ViewGroup viewGroup;
     @BindView(R.id.fragment_weather_temperature_extreme) TextView weatherTemperatureExtreme;
-    @BindView(R.id.fragment_weather_recycler_forecast) @Nullable RecyclerView forecastRecycler;
+    @BindView(R.id.fragment_weather_recycler_forecast) RecyclerView forecastRecycler;
     @BindView(R.id.fragment_weather_appbarlayout) @Nullable AppBarLayout appBarLayout;
     @BindView(R.id.fragment_weather_gps_animation) LottieAnimationView gpsAnimationView;
     @BindBool(R.bool.is_tablet_horizontal) boolean isTabletHorizontal;
@@ -99,6 +102,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     private Set<Runnable> runnables;
     private boolean isGpsDialogShown;
     private boolean canScrollRecycler = true;
+    private Disposable animDisposable = Disposables.disposed();
 
     @ProvidePresenter
     public WeatherPresenter providePresenter() {
@@ -142,39 +146,30 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
             forecastRecycler.setLayoutManager(layoutManager);
             forecastRecycler.setHasFixedSize(true);
         }
-
+        weatherCard.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void showWeather(@NonNull WeatherModel weather, @NonNull WeatherType type) {
-        TransitionManager.beginDelayedTransition(viewGroup, new Fade());
-        gpsAnimationView.setVisibility(View.INVISIBLE);
-        forecastRecycler.setVisibility(View.VISIBLE);
-        weatherCard.setVisibility(View.VISIBLE);
         gpsAnimationView.cancelAnimation();
-
+        weatherCard.setVisibility(View.INVISIBLE);
+        TransitionManager.beginDelayedTransition(viewGroup, new TransitionSet()
+                .addTransition(new Explode())
+                .addTransition(new Fade()));
+        gpsAnimationView.setVisibility(View.INVISIBLE);
+        weatherCard.setVisibility(View.VISIBLE);
         updateWeatherTheme(type.getCardColor(), type.getTextColor());
         updateWeather(weather, type.getIconRes(), type.getTitleRes());
     }
 
     @Override
-    public void stopRefreshing() {
-        if (!swipeRefreshLayout.isRefreshing()) return;
-        swipeRefreshLayout.setRefreshing(false);
-    }
-
-    @Override
-    public void updateContent() {
-        presenter.updateContent();
-    }
-
-    @Override
     public void showForecast(Pair<Map<WeatherModel, WeatherType[]>, Settings> pair) {
-        forecastRecycler.setVisibility(View.INVISIBLE);
-        TransitionManager.beginDelayedTransition(viewGroup, new AutoTransition());
+        TransitionManager.beginDelayedTransition(viewGroup, new TransitionSet()
+                .addTransition(new Explode())
+                .addTransition(new Fade()));
 
         assert forecastRecycler != null;
-        forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second, false)
+        forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second)
                 .setOnDisableScrollListener(disableScroll -> {
                     this.canScrollRecycler = disableScroll;
 
@@ -189,6 +184,17 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         forecastRecycler.setVisibility(View.VISIBLE);
         forecastRecycler.setAdapter(forecastRecyclerAdapter);
         forecastRecycler.scrollTo(0, 0);
+    }
+
+    @Override
+    public void stopRefreshing() {
+        if (!swipeRefreshLayout.isRefreshing()) return;
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void updateContent() {
+        presenter.updateContent();
     }
 
     @Override
@@ -226,8 +232,8 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     }
 
     @Override
-    public void stopGpsAnimation(Place place) {
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle(place.getName());
+    public void showPlaceName(String placeName) {
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle(placeName);
     }
 
     @Override
@@ -370,6 +376,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @Override
     public void onPause() {
         super.onPause();
+        animDisposable.dispose();
         if (appBarLayout != null) appBarLayout.removeOnOffsetChangedListener(this);
     }
 }
