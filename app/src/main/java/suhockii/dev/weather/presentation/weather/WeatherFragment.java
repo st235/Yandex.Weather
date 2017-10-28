@@ -9,9 +9,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
-import android.support.transition.ChangeBounds;
 import android.support.transition.Explode;
 import android.support.transition.Fade;
+import android.support.transition.Transition;
+import android.support.transition.TransitionListenerAdapter;
 import android.support.transition.TransitionManager;
 import android.support.transition.TransitionSet;
 import android.support.v4.content.ContextCompat;
@@ -103,6 +104,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     private boolean isGpsDialogShown;
     private boolean canScrollRecycler = true;
     private Disposable animDisposable = Disposables.disposed();
+    private boolean forecastLoaded;
 
     @ProvidePresenter
     public WeatherPresenter providePresenter() {
@@ -151,28 +153,33 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
     @Override
     public void showWeather(@NonNull WeatherModel weather, @NonNull WeatherType type) {
-        gpsAnimationView.cancelAnimation();
-        weatherCard.setVisibility(View.INVISIBLE);
-        TransitionManager.beginDelayedTransition(viewGroup, new TransitionSet()
-                .addTransition(new Explode())
-                .addTransition(new Fade()));
-        gpsAnimationView.setVisibility(View.INVISIBLE);
-        weatherCard.setVisibility(View.VISIBLE);
+        if (!forecastLoaded) {
+            weatherCard.setVisibility(View.INVISIBLE);
+        }
         updateWeatherTheme(type.getCardColor(), type.getTextColor());
         updateWeather(weather, type.getIconRes(), type.getTitleRes());
     }
 
     @Override
     public void showForecast(Pair<Map<WeatherModel, WeatherType[]>, Settings> pair) {
+        forecastLoaded = true;
+        weatherCard.setVisibility(View.INVISIBLE);
+        forecastRecycler.setVisibility(View.INVISIBLE);
         TransitionManager.beginDelayedTransition(viewGroup, new TransitionSet()
                 .addTransition(new Explode())
-                .addTransition(new Fade()));
+                .addTransition(new Fade())
+                .addListener(new TransitionListenerAdapter() {
+                    @Override
+                    public void onTransitionEnd(@NonNull Transition transition) {
+                        super.onTransitionEnd(transition);
+                        forecastLoaded = false;
+                    }
+                }));
 
         assert forecastRecycler != null;
         forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second)
                 .setOnDisableScrollListener(disableScroll -> {
                     this.canScrollRecycler = disableScroll;
-
                     if (!disableScroll) {
                         getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -180,10 +187,13 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     }
                 });
+        weatherCard.setVisibility(View.VISIBLE);
+        gpsAnimationView.setVisibility(View.INVISIBLE);
         forecastRecyclerAdapter.setHasStableIds(true);
-        forecastRecycler.setVisibility(View.VISIBLE);
         forecastRecycler.setAdapter(forecastRecyclerAdapter);
         forecastRecycler.scrollTo(0, 0);
+        forecastRecycler.setVisibility(View.VISIBLE);
+        gpsAnimationView.cancelAnimation();
     }
 
     @Override
@@ -306,7 +316,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         weatherTemperature.setText(getString(R.string.weather_fragment_current_temperature,
                 weather.getTemperature(), obtainTemperatureTitle()));
         weatherTemperatureExtreme.setText(getString(R.string.weather_fragment_current_temperature_extreme,
-                weather.getMaxTemperature(), weather.getMinTemperature(), obtainTemperatureTitle()));
+                weather.getMaxTemperature(), weather.getMinTemperature() - 1, obtainTemperatureTitle()));
         weatherPressure.setText(getString(R.string.weather_fragment_pressure,
                 weather.getPressure(), obtainPressureTitle()));
         weatherWindSpeed.setText(getString(R.string.weather_fragment_wind_speed,

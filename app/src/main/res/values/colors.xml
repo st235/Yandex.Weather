@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#F44336</color>
-    <color name="colorPrimaryDark">#AF0F17</color>
+    <color name="colorPrimaryDark">#ba000d</color>
     <color name="colorAccent">#2D3A4B</color>
     <color name="colorTextPrimary">#424242</color>
     <color name="colorTextSecondary">#FAFAF7</color>
@@ -19,10 +19,10 @@
     <color name="colorClearNightCard">#212121</color>
     <color name="colorClearNightText">#FAFAF7</color>
 
-    <color name="colorFoggyCard">#A6B0C4</color>
+    <color name="colorFoggyCard">#B0BEC5</color>
     <color name="colorFoggyText">#FAFAF7</color>
 
-    <color name="colorCloudyCard">#78909C</color>
+    <color name="colorCloudyCard">#42A5F5</color>
     <color name="colorCloudyText">#FAFAF7</color>
 
     <color name="colorRainyCard">#EF5350</color>
@@ -34,7 +34,7 @@
     <color name="colorThunderCard">#26A69A</color>
     <color name="colorThunderText">#FAFAF7</color>
 
-    <color name="colorDrizzleCard">#8797A0</color>
+    <color name="colorDrizzleCard">#7986CB</color>
     <color name="colorDrizzleText">#FAFAF7</color>
 
     <color name="bright_pink">#f44336</color>
@@ -49,12 +49,12 @@
     <color name="magenta2">#607D8B</color>
 
     <array name="rainbow">
-        <item>@color/bright_pink</item>
-        <item>@color/red</item>
-        <item>@color/orange</item>
-        <item>@color/yellow</item>
+        <item>@color/colorDrizzleCard</item>
+        <item>@color/colorThunderCard</item>
+        <item>@color/colorRainyCard</item>
+        <item>@color/colorCloudyCard</item>
+        <item>@color/colorSnowyCard</item>
         <item>@color/chartreuse</item>
-        <item>@color/spring_green</item>
         <item>@color/blue</item>
         <item>@color/violet</item>
         <item>@color/magenta</item>

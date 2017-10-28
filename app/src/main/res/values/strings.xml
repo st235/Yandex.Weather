@@ -54,8 +54,8 @@
     <!--Endregion-->
 
     <!-- About fragment -->
-    <string name="about_fragment_description">Application for the weather monitor.
-        Mobilization was carried out within the framework of the project.</string>
+    <string name="about_fragment_description">Application for the weather monitor</string>
+    <string name="about_fragment_icons_license">Weather icons by @erikflowers (GitHub)</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>
     <!-- Endregion -->
 
@@ -68,6 +68,7 @@
     <!-- Endregion -->
 
     <!-- Forecasts -->
+    <string name="api_license">Данные предоставлены сервисом OpenWeatherMap</string>
     <string name="forecasts_temperature_iconyfied" translatable="false">&#xf055;    %1$.0f %2$s</string>
     <string name="forecasts_temperature" translatable="false">%1$.0f %2$s</string>
     <string name="forecasts_current_temperature_extreme" translatable="false">%1$.0f %3$s\n%2$.0f %3$s</string>

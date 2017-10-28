@@ -41,7 +41,8 @@
     <!--Endregion-->
 
     <!-- About fragment -->
-    <string name="about_fragment_description">Application for the weather monitor.\n\nData provided by OpenWeatherMap.</string>
+    <string name="about_fragment_description">Application for the weather monitor</string>
+    <string name="about_fragment_icons_license">Weather icons by @erikflowers (GitHub)</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>
     <!-- Endregion -->
 
@@ -53,6 +54,7 @@
     <!-- Endregion -->
 
     <!-- Forecasts -->
+    <string name="api_license">Data provided by OpenWeatherMap</string>
     <string name="forecast_more">More</string>
     <!-- Endregion -->
 

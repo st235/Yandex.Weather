@@ -2,6 +2,7 @@ package suhockii.dev.weather.presentation.weather;
 
 import android.content.res.Resources;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +39,9 @@ import suhockii.dev.weather.utils.Settings;
  */
 
 public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecyclerAdapter.RecyclerViewHolder> {
-    private static final int TYPE_EXPANDED = 1;
+    private static final int TYPE_FORECAST = 1;
+    private static final int TYPE_LICENSE = 2;
+    public static final int API_LICENCE_COUNT = 1;
     private final List<WeatherModel> weatherModels;
     private final List<WeatherType[]> weatherTypes;
     private final boolean[] expandedPositions = new boolean[5];
@@ -57,8 +60,8 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         return this;
     }
 
-    public ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
-                                   Settings settings) {
+    ForecastRecyclerAdapter(Map<WeatherModel, WeatherType[]> forecasts,
+                            Settings settings) {
         WeatherModel[] weatherModelArray = forecasts.keySet().toArray(new WeatherModel[0]);
         WeatherType[][] weatherTypesArray = forecasts.values().toArray(new WeatherType[0][]);
         this.weatherModels = new ArrayList<>(Arrays.asList(weatherModelArray));
@@ -80,7 +83,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        @LayoutRes int layoutRes = R.layout.item_forecast;
+        @LayoutRes int layoutRes = viewType == TYPE_LICENSE ? R.layout.item_api_license : R.layout.item_forecast;
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(layoutRes, parent, false);
 
@@ -90,7 +93,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
 
     @Override
     public int getItemViewType(int position) {
-        return TYPE_EXPANDED;
+        return position == getItemCount() - 1 ? TYPE_LICENSE : TYPE_FORECAST;
     }
 
     @Override
@@ -100,6 +103,10 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
 
     @Override
     public void onBindViewHolder(ForecastRecyclerAdapter.RecyclerViewHolder holder, int position) {
+        if (position == getItemCount() - 1) {
+            onBindViewApiLicense(holder);
+            return;
+        }
         Resources resources = holder.itemView.getResources();
         setTheme(holder, position);
         setData(holder, position, resources);
@@ -136,10 +143,15 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
                 }, Throwable::printStackTrace);
     }
 
+    private void onBindViewApiLicense(RecyclerViewHolder holder) {
+//        holder.date
+    }
+
     /**
      * Set icon morning because forecast16 response contains only 1 weather type for whole day,
      * and we put it in [0] position in array.
      */
+    @SuppressWarnings("ConstantConditions")
     private void setData(RecyclerViewHolder holder, int position, Resources resources) {
         WeatherModel weather = weatherModels.get(position);
 
@@ -172,6 +184,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         holder.iconMain.setText(weatherTypes.get(position)[0].getIconRes());
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void setTheme(RecyclerViewHolder holder, int position) {
         int cardColor = weatherTypes.get(position)[0].getCardColor();
         int textColor = weatherTypes.get(position)[0].getTextColor();
@@ -202,6 +215,7 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
         holder.tvMax.setTextColor(textColor);
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void updateContentSize(RecyclerViewHolder holder, boolean newStateIsCollapsed, boolean isExpandable) {
         int visibility = newStateIsCollapsed ? View.GONE : View.VISIBLE;
         holder.tvMorning.setVisibility(visibility);
@@ -230,29 +244,29 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
 
     @Override
     public int getItemCount() {
-        return weatherModels.size();
+        return weatherModels.size() + API_LICENCE_COUNT;
     }
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.content_forecast_expand) TextView expandTv;
-        @BindView(R.id.content_forecast_date) TextView date;
-        @BindView(R.id.content_forecast_temp_night) TextView tempNight;
-        @BindView(R.id.content_forecast_temp_morning) TextView tempMorning;
-        @BindView(R.id.content_forecast_temp_main) TextView tempMain;
-        @BindView(R.id.content_forecast_temp_extreme) TextView tempExtreme;
-        @BindView(R.id.content_forecast_temp_evening) TextView tempEvening;
-        @BindView(R.id.content_forecast_temp_day) TextView tempDay;
-        @BindView(R.id.content_forecast_icon_day) TextView iconDay;
-        @BindView(R.id.content_forecast_icon_night) TextView iconNight;
-        @BindView(R.id.content_forecast_icon_morning) TextView iconMorning;
-        @BindView(R.id.content_forecast_icon_evening) TextView iconEvening;
-        @BindView(R.id.content_forecast_icon_main) TextView iconMain;
-        @BindView(R.id.content_forecast_tv_day) TextView tvDay;
-        @BindView(R.id.content_forecast_tv_evening) TextView tvEvening;
-        @BindView(R.id.content_forecast_tv_morning) TextView tvMorning;
-        @BindView(R.id.content_forecast_tv_night) TextView tvNight;
-        @BindView(R.id.content_forecast_max) TextView tvMax;
-        @BindView(R.id.content_forecast_min) TextView tvMin;
+        @BindView(R.id.content_forecast_expand) @Nullable TextView expandTv;
+        @BindView(R.id.content_forecast_date) @Nullable TextView date;
+        @BindView(R.id.content_forecast_temp_night) @Nullable TextView tempNight;
+        @BindView(R.id.content_forecast_temp_morning) @Nullable TextView tempMorning;
+        @BindView(R.id.content_forecast_temp_main) @Nullable TextView tempMain;
+        @BindView(R.id.content_forecast_temp_extreme) @Nullable TextView tempExtreme;
+        @BindView(R.id.content_forecast_temp_evening) @Nullable TextView tempEvening;
+        @BindView(R.id.content_forecast_temp_day) @Nullable TextView tempDay;
+        @BindView(R.id.content_forecast_icon_day) @Nullable TextView iconDay;
+        @BindView(R.id.content_forecast_icon_night) @Nullable TextView iconNight;
+        @BindView(R.id.content_forecast_icon_morning) @Nullable TextView iconMorning;
+        @BindView(R.id.content_forecast_icon_evening) @Nullable TextView iconEvening;
+        @BindView(R.id.content_forecast_icon_main) @Nullable TextView iconMain;
+        @BindView(R.id.content_forecast_tv_day) @Nullable TextView tvDay;
+        @BindView(R.id.content_forecast_tv_evening) @Nullable TextView tvEvening;
+        @BindView(R.id.content_forecast_tv_morning) @Nullable TextView tvMorning;
+        @BindView(R.id.content_forecast_tv_night) @Nullable TextView tvNight;
+        @BindView(R.id.content_forecast_max) @Nullable TextView tvMax;
+        @BindView(R.id.content_forecast_min) @Nullable TextView tvMin;
 
         RecyclerViewHolder(View itemView) {
             super(itemView);

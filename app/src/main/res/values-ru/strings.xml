@@ -42,7 +42,8 @@
     <string name="night">Ночь</string>
     <!--Endregion-->
     <!-- About fragment -->
-    <string name="about_fragment_description">Погодное приложение.\n\nДанные предоставлены сервисом OpenWeatherMap.</string>
+    <string name="about_fragment_description">Погодное приложение</string>
+    <string name="about_fragment_icons_license">Иконки погоды @erikflowers (GitHub)</string>
     <string name="about_fragment_footer">#yamblz, 2017</string>
     <!-- Endregion -->
 
@@ -54,6 +55,7 @@
     <!-- Endregion -->
 
     <!-- Forecasts -->
+    <string name="api_license">Данные предоставлены сервисом OpenWeatherMap</string>
     <string name="forecast_more">Подробнее</string>
     <!-- Endregion -->
 
