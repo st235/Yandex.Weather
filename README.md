@@ -1,8 +1,10 @@
 # Yandex.Weather
 Homework Application. Made to display the weather.
 
+[<img src="https://play.google.com/intl/en_us/badges/images/badge_new.png">](https://play.google.com/store/apps/details?id=suhockii.dev.weather)
+
 ## Screens
-<img src="https://github.com/sasd97/Yandex.Weather/blob/dev/images/icon.png" width="270" height="480"> <img src="https://github.com/sasd97/Yandex.Weather/blob/dev/images/splash.png" width="270" height="480"> <img src="https://github.com/sasd97/Yandex.Weather/blob/dev/images/sunny.png" width="270" height="480"> <img src="https://github.com/sasd97/Yandex.Weather/blob/dev/images/rainy.png" width="270" height="480"> <img src="https://github.com/sasd97/Yandex.Weather/blob/dev/images/thunder.png" width="270" height="480"> <img src="https://github.com/sasd97/Yandex.Weather/blob/dev/images/settings.png" width="270" height="480"> 
+<img src="https://github.com/sasd97/Yandex.Weather/blob/dev/images/icon.png" width="270" height="480"> <img src="https://github.com/sasd97/Yandex.Weather/blob/dev/images/splash.png" width="270" height="480"> <img src="https://github.com/sasd97/Yandex.Weather/blob/dev/images/sunny.png" width="270" height="480"> 
 
 ## API
 To display the weather was used an open API. [OpenWeatherAPI](https://openweathermap.org/)
@@ -15,7 +17,7 @@ Weather Icons licensed under [SIL OFL 1.1](http://scripts.sil.org/cms/scripts/pa
 
 MIT License
 
-Copyright (c) 2017 Alexander Dadukin
+Copyright (c) 2017 Maksim Sukhotski, Alexander Dadukin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
