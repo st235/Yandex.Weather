@@ -38,7 +38,7 @@ import suhockii.dev.weather.utils.Settings;
  * Created by Maksim Sukhotski on 4/22/2017.
  */
 
-public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecyclerAdapter.RecyclerViewHolder> {
+class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecyclerAdapter.RecyclerViewHolder> {
     private static final int TYPE_FORECAST = 1;
     private static final int TYPE_LICENSE = 2;
     public static final int API_LICENCE_COUNT = 1;
@@ -104,7 +104,6 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
     @Override
     public void onBindViewHolder(ForecastRecyclerAdapter.RecyclerViewHolder holder, int position) {
         if (position == getItemCount() - 1) {
-            onBindViewApiLicense(holder);
             return;
         }
         Resources resources = holder.itemView.getResources();
@@ -141,10 +140,6 @@ public class ForecastRecyclerAdapter extends RecyclerView.Adapter<ForecastRecycl
                     updateContentSize(holder, needCollapsing, isExpandable);
                     expandedPositions[position] = !needCollapsing;
                 }, Throwable::printStackTrace);
-    }
-
-    private void onBindViewApiLicense(RecyclerViewHolder holder) {
-//        holder.date
     }
 
     /**

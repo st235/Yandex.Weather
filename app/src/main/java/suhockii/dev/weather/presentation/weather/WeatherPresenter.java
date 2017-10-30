@@ -64,6 +64,9 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
 
     void updateContent() {
         placesInteractor.getCurrentPlace()
+                .compose(schedulers.getIoToMainTransformerSingle())
+                .doOnSubscribe(disposable -> getViewState().hideWeatherAndForecast())
+                .compose(schedulers.getMainToIoTransformerSingle())
                 .onErrorResumeNext(locationNotAdded -> updateLocationPlace(this::updateContent))
                 .doOnSuccess(place -> {
                     getWeather(place);

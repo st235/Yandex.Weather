@@ -28,4 +28,5 @@ public interface WeatherView extends MvpView {
     void showPlaceName(String placeName);
     void updateWeatherByGps();
     void showError(String msg);
+    void hideWeatherAndForecast();
 }

@@ -5,42 +5,7 @@
 
     <application
         android:name=".WeatherAppDebug"
-        android:allowBackup="true"
-        tools:replace="android:name"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        tools:replace="android:name">
 
-        <activity
-            android:name="suhockii.dev.weather.presentation.main.MainActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:theme="@style/SplashScreenTheme"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH"/>
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
-        </activity>
-
-        <meta-data
-            android:name="WEATHER_API_KEY"
-            android:value="38c3816a0d5664a2d18c447348f50f09"/>
-        <meta-data
-            android:name="PLACES_API_KEY"
-            android:value="AIzaSyAyERQ5bFC9b7d9w57x0p5dgA6M0lLOlu8"/>
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="f779c23c3f096ce55675eb5a228961f2811e8fa2" />
     </application>
 </manifest>

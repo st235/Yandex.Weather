@@ -43,8 +43,8 @@
     <!--Endregion-->
     <!-- About fragment -->
     <string name="about_fragment_description">Погодное приложение</string>
-    <string name="about_fragment_icons_license">Иконки погоды @erikflowers (GitHub)</string>
-    <string name="about_fragment_footer">#yamblz, 2017</string>
+    <string name="about_fragment_icons_license">Иконки погоды @erikflowers \n(GitHub)</string>
+    <string name="about_fragment_footer">Версия 1.0</string>
     <!-- Endregion -->
 
     <!-- Weather fragment -->

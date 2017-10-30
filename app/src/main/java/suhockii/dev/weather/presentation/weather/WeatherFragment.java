@@ -11,8 +11,6 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.transition.Explode;
 import android.support.transition.Fade;
-import android.support.transition.Transition;
-import android.support.transition.TransitionListenerAdapter;
 import android.support.transition.TransitionManager;
 import android.support.transition.TransitionSet;
 import android.support.v4.content.ContextCompat;
@@ -104,7 +102,9 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     private boolean isGpsDialogShown;
     private boolean canScrollRecycler = true;
     private Disposable animDisposable = Disposables.disposed();
-    private boolean forecastLoaded;
+    private boolean forecastIsLoaded;
+    private WeatherModel currentWeather;
+    private WeatherType currentWType;
 
     @ProvidePresenter
     public WeatherPresenter providePresenter() {
@@ -153,28 +153,32 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
 
     @Override
     public void showWeather(@NonNull WeatherModel weather, @NonNull WeatherType type) {
-        if (!forecastLoaded) {
-            weatherCard.setVisibility(View.INVISIBLE);
+        if (forecastIsLoaded) {
+            updateWeatherTheme(type.getCardColor(), type.getTextColor());
+            updateWeather(weather, type.getIconRes(), type.getTitleRes());
+            weatherCard.setVisibility(View.VISIBLE);
+            currentWeather = null;
+            currentWeather = null;
+        } else {
+            currentWeather = weather;
+            currentWType = type;
         }
-        updateWeatherTheme(type.getCardColor(), type.getTextColor());
-        updateWeather(weather, type.getIconRes(), type.getTitleRes());
+        appBarLayout.setExpanded(true);
     }
 
     @Override
     public void showForecast(Pair<Map<WeatherModel, WeatherType[]>, Settings> pair) {
-        forecastLoaded = true;
-        weatherCard.setVisibility(View.INVISIBLE);
+        forecastIsLoaded = true;
         forecastRecycler.setVisibility(View.INVISIBLE);
+
+        if (currentWeather != null) {
+            weatherCard.setVisibility(View.INVISIBLE);
+            updateWeatherTheme(currentWType.getCardColor(), currentWType.getTextColor());
+            updateWeather(currentWeather, currentWType.getIconRes(), currentWType.getTitleRes());
+        }
         TransitionManager.beginDelayedTransition(viewGroup, new TransitionSet()
                 .addTransition(new Explode())
-                .addTransition(new Fade())
-                .addListener(new TransitionListenerAdapter() {
-                    @Override
-                    public void onTransitionEnd(@NonNull Transition transition) {
-                        super.onTransitionEnd(transition);
-                        forecastLoaded = false;
-                    }
-                }));
+                .addTransition(new Fade()));
 
         assert forecastRecycler != null;
         forecastRecyclerAdapter = new ForecastRecyclerAdapter(pair.first, pair.second)
@@ -187,7 +191,9 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
                         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     }
                 });
-        weatherCard.setVisibility(View.VISIBLE);
+        if (currentWeather != null) {
+            weatherCard.setVisibility(View.VISIBLE);
+        }
         gpsAnimationView.setVisibility(View.INVISIBLE);
         forecastRecyclerAdapter.setHasStableIds(true);
         forecastRecycler.setAdapter(forecastRecyclerAdapter);
@@ -254,6 +260,11 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
     @Override
     public void showError(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void hideWeatherAndForecast() {
+        forecastIsLoaded = false;
     }
 
     private void showGpsSettingsDialog() {
@@ -371,9 +382,10 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         super.onResume();
         if (appBarLayout != null) appBarLayout.addOnOffsetChangedListener(this);
         ((MainActivity) getActivity()).changeSearchIconVisibility(this);
-        appBarLayout.setExpanded(appBarIsExpanded);
+        appBarLayout.setExpanded(true);
 
         ((MainActivity) getActivity()).syncDrawer();
+        layoutManager.scrollToPositionWithOffset(0,0);
     }
 
     /*For correct work of swipeRefreshLayout in conjunction with appBarLayout*/
