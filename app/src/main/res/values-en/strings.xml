@@ -43,7 +43,7 @@
     <!-- About fragment -->
     <string name="about_fragment_description">Application for the weather monitor</string>
     <string name="about_fragment_icons_license">Weather icons by @erikflowers \n(GitHub)</string>
-    <string name="about_fragment_footer">Version 1.0.2</string>
+    <string name="about_fragment_footer">Version 1.0.3</string>
     <!-- Endregion -->
 
     <!-- Weather fragment -->

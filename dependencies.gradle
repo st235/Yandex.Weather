@@ -1,5 +1,5 @@
 ext.versions = [
-        code                         : 3,
+        code                         : 4,
         name                         : '1.0.2',
 
         richTextViewCode             : 4,

@@ -19,7 +19,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class LocationProvider implements LocationListener {
     public static final String GPS_DISABLED = "Gps disabled";
-    private static final long MIN_TIME_BW_UPDATES = 20000;
+    private static final long MIN_TIME_BW_UPDATES = 7000;
     private static final int MIN_DISTANCE_CHANGE_FOR_UPDATES = 1;
 
     private final LocationManager locationManager;
@@ -36,11 +36,6 @@ public class LocationProvider implements LocationListener {
         Location location = null;
         boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-        if (!isGPSEnabled) {
-            Timber.d("GPS disabled");
-            emitter.onError(new Resources.NotFoundException(GPS_DISABLED));
-            return null;
-        }
         // getting network status
         boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
@@ -52,20 +47,14 @@ public class LocationProvider implements LocationListener {
                         MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                 location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             } catch (Exception e) {
-                if (emitter != null) {
-                    emitter.onError(new Resources.NotFoundException(GPS_DISABLED));
-                    return null;
-                }
+
 
             }
-        } else if (emitter != null) {
-            emitter.onError(new Resources.NotFoundException(GPS_DISABLED));
-            return null;
 
         }
 
         //TODO implement when user not want GPS enabling
-        if (isNetworkEnabled) {
+        if (isGPSEnabled) {
             try {
                 if (location == null) {
                     Timber.d("Requesting location updates");
@@ -79,15 +68,12 @@ public class LocationProvider implements LocationListener {
                 }
 
             } catch (Exception e) {
-                if (emitter != null){
+                if (emitter != null) {
                     emitter.onError(new Resources.NotFoundException(GPS_DISABLED));
-                    return null;
                 }
             }
         } else if (emitter != null) {
             emitter.onError(new Resources.NotFoundException(GPS_DISABLED));
-            return null;
-
         }
         List<String> providers = locationManager.getProviders(true);
         log(providers);
@@ -99,6 +85,9 @@ public class LocationProvider implements LocationListener {
             if (location == null || l.getAccuracy() < location.getAccuracy()) {
                 location = l;
             }
+        }
+        if (location != null) {
+            emitter.onSuccess(new LatLng(location.getLatitude(), location.getLongitude()));
         }
         return location;
     }
