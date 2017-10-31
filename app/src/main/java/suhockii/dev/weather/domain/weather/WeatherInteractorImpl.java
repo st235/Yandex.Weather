@@ -30,6 +30,7 @@ import suhockii.dev.weather.data.models.weather.ResponseWeather;
 import suhockii.dev.weather.domain.converters.Converter;
 import suhockii.dev.weather.domain.models.WeatherModel;
 import suhockii.dev.weather.presentation.weatherTypes.ClearSky;
+import suhockii.dev.weather.presentation.weatherTypes.Cloudy;
 import suhockii.dev.weather.presentation.weatherTypes.Sunny;
 import suhockii.dev.weather.presentation.weatherTypes.WeatherType;
 import timber.log.Timber;
@@ -161,22 +162,45 @@ public class WeatherInteractorImpl implements WeatherInteractor {
             if (!isDetailedForecast) {
                 continue;
             }
-            if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[0])) {
-                currentWeatherTypes[1] = type;
-            }
-            if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[1])) {
-                currentWeatherTypes[2] = type;
-            }
-            if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[2])) {
-                currentWeatherTypes[3] = type;
-            }
-            if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[3])) {
-                if (type instanceof Sunny) {
-                    currentWeatherTypes[4] = new ClearSky();
-                } else {
-                    currentWeatherTypes[4] = type;
+            if (weather.getForecastWeatherIds()[0] != null) {
+                if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[0])) {
+                    currentWeatherTypes[1] = type;
                 }
+            } else {
+                currentWeatherTypes[1] = new Cloudy();
             }
+
+            if (weather.getForecastWeatherIds()[1] != null) {
+                if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[1])) {
+                    currentWeatherTypes[2] = type;
+                }
+            } else {
+                currentWeatherTypes[2] = new Cloudy();
+            }
+
+            if (weather.getForecastWeatherIds()[2] != null) {
+                if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[2])) {
+                    currentWeatherTypes[3] = type;
+                }
+            } else {
+                currentWeatherTypes[3] = new Cloudy();
+            }
+
+            if (weather.getForecastWeatherIds()[3] != null) {
+                if (type.isForecastIdApplicable(weather.getForecastWeatherIds()[3])) {
+                    if (type instanceof Sunny) {
+                        currentWeatherTypes[4] = new ClearSky();
+                    } else {
+                        currentWeatherTypes[4] = type;
+                    }
+                }
+            } else {
+                currentWeatherTypes[4] = new Cloudy();
+            }
+
+        }
+        if (isDetailedForecast) {
+            currentWeatherTypes[2] = currentWeatherTypes[0];
         }
         return new Pair<>(weather, currentWeatherTypes);
     }

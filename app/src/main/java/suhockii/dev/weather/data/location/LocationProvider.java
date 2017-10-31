@@ -39,29 +39,55 @@ public class LocationProvider implements LocationListener {
         if (!isGPSEnabled) {
             Timber.d("GPS disabled");
             emitter.onError(new Resources.NotFoundException(GPS_DISABLED));
+            return null;
         }
         // getting network status
         boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
         if (isNetworkEnabled) {
-            locationManager.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    MIN_TIME_BW_UPDATES,
-                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            try {
+                locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        MIN_TIME_BW_UPDATES,
+                        MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            } catch (Exception e) {
+                if (emitter != null) {
+                    emitter.onError(new Resources.NotFoundException(GPS_DISABLED));
+                    return null;
+                }
+
+            }
+        } else if (emitter != null) {
+            emitter.onError(new Resources.NotFoundException(GPS_DISABLED));
+            return null;
+
         }
 
         //TODO implement when user not want GPS enabling
-        if (isGPSEnabled) {
-            if (location == null) {
-                Timber.d("Requesting location updates");
-                locationManager.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        MIN_TIME_BW_UPDATES,
-                        MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                location = locationManager
-                        .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (isNetworkEnabled) {
+            try {
+                if (location == null) {
+                    Timber.d("Requesting location updates");
+
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    location = locationManager
+                            .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                }
+
+            } catch (Exception e) {
+                if (emitter != null){
+                    emitter.onError(new Resources.NotFoundException(GPS_DISABLED));
+                    return null;
+                }
             }
+        } else if (emitter != null) {
+            emitter.onError(new Resources.NotFoundException(GPS_DISABLED));
+            return null;
+
         }
         List<String> providers = locationManager.getProviders(true);
         log(providers);
