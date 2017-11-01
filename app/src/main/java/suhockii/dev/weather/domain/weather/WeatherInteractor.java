@@ -31,6 +31,7 @@ public interface WeatherInteractor {
     int getTemperatureUnits();
     int getPressureUnits();
     int getSpeedUnits();
+    WeatherModel convertModel(WeatherModel weather);
 
     Set<WeatherType> getWeatherTypes();
 }

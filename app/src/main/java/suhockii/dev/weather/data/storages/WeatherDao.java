@@ -10,16 +10,16 @@ import java.util.List;
 import io.reactivex.Single;
 import suhockii.dev.weather.domain.models.WeatherModel;
 
-import static suhockii.dev.weather.domain.models.WeatherModel.WEATHER_TABEL;
+import static suhockii.dev.weather.domain.models.WeatherModel.WEATHER_TABLE;
 
 @Dao
 public interface WeatherDao {
-    @Query("SELECT * FROM " + WEATHER_TABEL + " WHERE placeId IN (:placeId) ORDER BY uid ASC")
+    @Query("SELECT * FROM " + WEATHER_TABLE + " WHERE placeId IN (:placeId) ORDER BY uid ASC")
     Single<List<WeatherModel>> getForecast(String placeId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertForecast(List<WeatherModel> forecast);
 
-    @Query("DELETE FROM " + WEATHER_TABEL + " WHERE placeId = (:placeId)")
+    @Query("DELETE FROM " + WEATHER_TABLE + " WHERE placeId = (:placeId)")
     void removeForecast(String placeId);
 }

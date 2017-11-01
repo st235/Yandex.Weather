@@ -26,6 +26,7 @@ import suhockii.dev.weather.data.storages.PrefsStorage;
 import suhockii.dev.weather.data.storages.WeatherDao;
 
 import static android.content.Context.LOCATION_SERVICE;
+import static suhockii.dev.weather.data.storages.AppDatabase.MIGRATION_1_2;
 
 /**
  * Created by alexander on 13/07/2017.
@@ -102,7 +103,9 @@ public class DataModule {
     @Singleton
     @Provides
     AppDatabase provideDatabase(Context context) {
-        return Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DATABASE_NAME).build();
+        return Room.databaseBuilder(context, AppDatabase.class, AppDatabase.DATABASE_NAME)
+                .addMigrations(MIGRATION_1_2)
+                .build();
     }
 
     @Singleton

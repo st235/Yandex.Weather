@@ -112,7 +112,6 @@ public class WeatherInteractorImpl implements WeatherInteractor {
                 .flatMapIterable(forecasts -> forecasts)
                 .filter(this::isForFuture)
                 .map(WeatherForecast::toWeatherModel)
-                .map(this::convertModel)
                 .map(weatherModel -> addWeatherType(weatherModel, weatherTypes))
                 .collectInto(new LinkedHashMap<>(), (map, pair) -> map.put(pair.first, pair.second));
                 /*pair.first is weather, pair.second is weather type*/
@@ -130,7 +129,10 @@ public class WeatherInteractorImpl implements WeatherInteractor {
     @Override
     public Single<List<WeatherModel>> getForecast(Place place, boolean needUpdate) {
         return repository.getForecast(place != null ? place.getPlaceId() : "", needUpdate)
-                .toSingle()
+                .toObservable()
+                .flatMapIterable(weatherModels -> weatherModels)
+                .map(this::convertModel)
+                .toList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -233,7 +235,7 @@ public class WeatherInteractorImpl implements WeatherInteractor {
         return repository.getSpeedUnits();
     }
 
-    private WeatherModel convertModel(WeatherModel weather) {
+    public WeatherModel convertModel(WeatherModel weather) {
         return new WeatherModel.Builder(weather)
                 .temperature(applyConverter(repository.getTemperatureUnits(),
                         weather.getTemperature(), temperatureConverters))

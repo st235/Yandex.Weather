@@ -80,7 +80,8 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .compose(schedulers.getIoToMainTransformerSingle())
                 .onErrorResumeNext(weatherNotAdded -> weatherNotAdded.getLocalizedMessage().equals(WEATHER_NOT_ADDED) ?
                         updateWeather(() -> this.getWeather(place)) : null)
-                .filter(weatherModel -> weatherModel != null).toSingle()
+                .filter(weatherModel -> weatherModel != null)
+                .toSingle()
                 .subscribe(this::chooseWeatherType, throwable -> getViewState().stopRefreshing());
     }
 
@@ -122,7 +123,11 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                         .doOnNext(weatherModel -> weatherModel.setPlaceId(setAndPlace.second.getPlaceId()))
                         .subscribe())
                 .map(pairOfMapAndPlace -> new ArrayList<>(pairOfMapAndPlace.first))
-                .flatMap(weatherInteractor::saveForecast);
+                .flatMap(weatherInteractor::saveForecast)
+                .toObservable()
+                .flatMapIterable(weatherModels -> weatherModels)
+                .map(weatherInteractor::convertModel)
+                .toList();
     }
 
     @SuppressWarnings({"ResourceType"})
@@ -177,7 +182,8 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
     }
 
     private Pair<Map<WeatherModel, WeatherType[]>, Settings> addSettings(
-            Map<WeatherModel, WeatherType[]> forecasts) {
+                    Map<WeatherModel,
+                    WeatherType[]> forecasts) {
         return new Pair<>(forecasts,
                 new Settings(weatherInteractor.getTemperatureUnits(),
                         weatherInteractor.getSpeedUnits(),

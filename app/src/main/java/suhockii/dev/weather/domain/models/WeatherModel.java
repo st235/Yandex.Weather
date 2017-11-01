@@ -23,7 +23,7 @@ import static suhockii.dev.weather.WeatherApp.SPACE;
 
 @Entity(tableName = "Weather")
 public class WeatherModel {
-    public static final String WEATHER_TABEL = "Weather";
+    public static final String WEATHER_TABLE = "Weather";
 
     @Expose
     @PrimaryKey

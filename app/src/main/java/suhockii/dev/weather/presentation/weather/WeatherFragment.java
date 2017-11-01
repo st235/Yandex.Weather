@@ -400,5 +400,7 @@ public class WeatherFragment extends MvpAppCompatFragment implements WeatherView
         super.onPause();
         animDisposable.dispose();
         if (appBarLayout != null) appBarLayout.removeOnOffsetChangedListener(this);
+        currentWeather = null;
+        currentWType = null;
     }
 }
