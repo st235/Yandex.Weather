@@ -126,8 +126,12 @@ public class WeatherPresenter extends MvpPresenter<WeatherView> {
                 .flatMap(weatherInteractor::saveForecast)
                 .toObservable()
                 .flatMapIterable(weatherModels -> weatherModels)
-                .map(weatherInteractor::convertModel)
-                .toList();
+                .map(weatherModel -> {
+                    WeatherModel weatherModelConv = weatherInteractor.convertModel(weatherModel);
+                    return weatherModelConv;
+                })
+                .toList()
+                .doOnSuccess(weatherModels -> {weatherModels.get(0).getForecastWeatherIds();});
     }
 
     @SuppressWarnings({"ResourceType"})

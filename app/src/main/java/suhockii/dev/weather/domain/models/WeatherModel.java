@@ -123,6 +123,7 @@ public class WeatherModel {
         this.eveningTemperature = builder.eveningTemperature;
         this.dayTemperature = builder.dayTemperature;
         this.morningTemperature = builder.morningTemperature;
+        this.forecastWeatherIds = builder.forecastIds;
     }
 
     public void generateUid(int pos) {
@@ -380,6 +381,7 @@ public class WeatherModel {
         private float dayTemperature;
         private float morningTemperature;
         private boolean isForecast;
+        private Integer[] forecastIds;
 
         public Builder() {
         }
@@ -407,6 +409,7 @@ public class WeatherModel {
             eveningTemperature = weather.getEveningTemperature();
             dayTemperature = weather.getDayTemperature();
             morningTemperature = weather.getMorningTemperature();
+            forecastIds = weather.getForecastWeatherIds();
         }
 
         public Builder readableDate(String readableDate) {

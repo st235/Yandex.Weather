@@ -44,7 +44,7 @@
     <!-- About fragment -->
     <string name="about_fragment_description">Погодное приложение</string>
     <string name="about_fragment_icons_license">Иконки погоды @erikflowers \n(GitHub)</string>
-    <string name="about_fragment_footer">Версия 1.0.3</string>
+    <string name="about_fragment_footer">Версия 1.0.6</string>
     <!-- Endregion -->
 
     <!-- Weather fragment -->
