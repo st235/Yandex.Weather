@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="suhockii.dev.weather">
+
+    <application
+        android:name=".WeatherAppDebug"
+        tools:replace="android:name">
+
+    </application>
+</manifest>

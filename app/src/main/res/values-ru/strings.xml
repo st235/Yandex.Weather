@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Я.Погода</string>
+    <string name="app_name">Погода</string>
 
     <!-- Navigation drawer region -->
     <string name="main_activity_navigation_weather">Погода</string>
@@ -12,6 +12,7 @@
 
     <!-- Actionbar region -->
     <string name="main_activity_action_search">Поиск</string>
+    <string name="main_activity_action_gps">Загрузить погоду в текущем местоположении</string>
     <string name="main_activity_action_search_hint">Укажите место</string>
     <string name="main_activity_action_search_settings_description">Список городов</string>
     <!-- Endregion -->
@@ -41,16 +42,21 @@
     <string name="night">Ночь</string>
     <!--Endregion-->
     <!-- About fragment -->
-    <string name="about_fragment_description">Погодное приложение. Сделано в рамках проекта "Мобилизация".</string>
-    <string name="about_fragment_footer">#yamblz, 2017</string>
+    <string name="about_fragment_description">Погодное приложение</string>
+    <string name="about_fragment_icons_license">Иконки погоды @erikflowers \n(GitHub)</string>
+    <string name="about_fragment_footer">Версия 1.0.6</string>
     <!-- Endregion -->
 
     <!-- Weather fragment -->
     <string name="weather_fragment_current_temperature">&#xf055; %1$.0f %2$s</string>
-    <string name="weather_fragment_current_temperature_extreme">%1$.0f %3$s\n%2$.0f %3$s</string>
     <string name="weather_fragment_wind_speed">&#xf082; %0$.0f %2$s</string>
     <string name="weather_fragment_pressure">&#xf079; %0$.0f %2$s</string>
     <string name="weather_fragment_humidity">&#xf04e; %1$.0f %%</string>
+    <!-- Endregion -->
+
+    <!-- Forecasts -->
+    <string name="api_license">Данные предоставлены сервисом OpenWeatherMap</string>
+    <string name="forecast_more">Подробнее</string>
     <!-- Endregion -->
 
     <!-- Settings fragment -->
@@ -64,10 +70,12 @@
     <string name="settings_fragment_available_intervals_cancel">Отмена</string>
     <string name="settings_fragment_available_intervals_ok">Применить</string>
     <string name="settings_fragment_available_intervals_switcher">Разрешить работу в фоне</string>
-    <string name="today_card">Сегодня, </string>
+    <string name="today_card">Сегодня,&#160;</string>
 
     <!--Navigation fragment-->
     <string name="navigation_fragment_settings">Настройки</string>
+    <string name="main_activity_action_search_place">Поиск места&#8230;</string>
+    <string name="on_gps_need_off">Вы всегда можете самостоятельно найти нужное вам место, нажав на 🔍</string>
 
     <string-array name="settings_fragment_available_interval_titles">
         <item>15 минут</item>

@@ -7,7 +7,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/splash_screen_logo"/>
+            android:src="@drawable/logo_weather_white"/>
     </item>
-
 </layer-list>

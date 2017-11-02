@@ -6,12 +6,13 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingRight="16dp">
 
     <TextView
         android:id="@+id/item_place_name"
         style="@style/TextBase"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/select_height"
         android:layout_toEndOf="@+id/item_place_flip_layout"
         android:layout_toRightOf="@+id/item_place_flip_layout"
@@ -19,7 +20,7 @@
         android:text="City 17"
         android:textSize="18sp"/>
 
-    <sasd97.java_blog.xyz.yandexweather.utils.FlipLayout
+    <suhockii.dev.weather.utils.FlipLayout
         android:id="@+id/item_place_flip_layout"
         android:layout_width="80dp"
         android:layout_height="@dimen/select_height"
@@ -29,5 +30,5 @@
         <include layout="@layout/part_item_place"/>
 
         <include layout="@layout/part_item_place_selected"/>
-    </sasd97.java_blog.xyz.yandexweather.utils.FlipLayout>
+    </suhockii.dev.weather.utils.FlipLayout>
 </RelativeLayout>

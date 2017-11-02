@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="sasd97.java_blog.xyz.yandexweather">
+          package="suhockii.dev.weather">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".WeatherApp"
+        android:name="suhockii.dev.weather.WeatherApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,10 +15,11 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".presentation.main.MainActivity"
+            android:name="suhockii.dev.weather.presentation.main.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/SplashScreenTheme"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -34,9 +36,12 @@
 
         <meta-data
             android:name="WEATHER_API_KEY"
-            android:value="38c3816a0d5664a2d18c447348f50f09"/>
+            android:value="f66b70ebb071127760c387562b9308c8"/>
         <meta-data
             android:name="PLACES_API_KEY"
-            android:value="AIzaSyAyERQ5bFC9b7d9w57x0p5dgA6M0lLOlu8"/>
+            android:value="AIzaSyDJD6Kv7jdrXXuV8GhcpOPUhPp10xKAIcU"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="f779c23c3f096ce55675eb5a228961f2811e8fa2" />
     </application>
 </manifest>

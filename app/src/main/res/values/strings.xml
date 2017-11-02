@@ -12,11 +12,17 @@
     <string name="add_place">Add place</string>
     <!-- Endregion -->
 
+    <!-- Forecasts -->
+    <string name="forecast_more">More</string>
+    <!-- Endregion -->
+
     <!-- Actionbar region -->
     <string name="main_activity_action_search">Search</string>
+    <string name="main_activity_action_gps">Load weather at current location</string>
     <string name="main_activity_action_search_hint">Specify place</string>
     <string name="main_activity_action_search_settings_description">City list</string>
     <string name="main_activity_action_search_label" translatable="false">@string/app_name</string>
+    <string name="main_activity_action_search_place">Location update...</string>
     <!-- Endregion -->
 
     <!--Time-->
@@ -48,20 +54,22 @@
     <!--Endregion-->
 
     <!-- About fragment -->
-    <string name="about_fragment_description">Application for the weather monitor.
-        Mobilization was carried out within the framework of the project.</string>
-    <string name="about_fragment_footer">#yamblz, 2017</string>
+    <string name="about_fragment_description">Application for the weather monitor</string>
+    <string name="about_fragment_icons_license">Weather icons by @erikflowers \n(GitHub)</string>
+    <string name="about_fragment_footer">Version 1.0.6</string>
     <!-- Endregion -->
 
     <!-- Weather fragment -->
     <string name="weather_fragment_current_temperature">&#xf055; %1$.0f %2$s</string>
-    <string name="weather_fragment_current_temperature_extreme">%1$.0f %3$s\n%2$.0f %3$s</string>
+    <string name="weather_fragment_current_temperature_extreme" translatable="false">%1$.0f %3$s\n%2$.0f %3$s</string>
     <string name="weather_fragment_wind_speed">&#xf082; %0$.0f %2$s</string>
     <string name="weather_fragment_pressure">&#xf079; %0$.0f %2$s</string>
     <string name="weather_fragment_humidity">&#xf04e; %1$.0f %%</string>
     <!-- Endregion -->
 
     <!-- Forecasts -->
+    <string name="api_license">Данные предоставлены сервисом OpenWeatherMap</string>
+    <string name="forecasts_temperature_iconyfied" translatable="false">&#xf055;    %1$.0f %2$s</string>
     <string name="forecasts_temperature" translatable="false">%1$.0f %2$s</string>
     <string name="forecasts_current_temperature_extreme" translatable="false">%1$.0f %3$s\n%2$.0f %3$s</string>
     <string name="forecasts_wind_speed" translatable="false">&#xf082; %0$.0f %2$s</string>
@@ -82,6 +90,7 @@
     <string name="settings_fragment_available_intervals_switcher">Enable background updates</string>
     <string name="navigation_fragment_settings">Settings</string>
     <string name="today_card">Today, </string>
+    <string name="on_gps_need_off">You can always find the place you need by clicking on 🔍</string>
 
     <string-array name="settings_fragment_available_interval_titles">
         <item>15 minutes</item>

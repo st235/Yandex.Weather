@@ -39,7 +39,7 @@
                     android:clickable="true"
                     android:padding="16dp">
 
-                    <sasd97.java_blog.xyz.richtextview.RichTextView
+                    <suhockii.dev.xyz.richtextview.RichTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
@@ -75,7 +75,7 @@
                     android:clickable="true"
                     android:padding="16dp">
 
-                    <sasd97.java_blog.xyz.richtextview.RichTextView
+                    <suhockii.dev.xyz.richtextview.RichTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -109,7 +109,7 @@
                     android:clickable="true"
                     android:padding="16dp">
 
-                    <sasd97.java_blog.xyz.richtextview.RichTextView
+                    <suhockii.dev.xyz.richtextview.RichTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -170,7 +170,7 @@
                     android:textSize="18sp"
                     android:padding="16dp" />
 
-                <sasd97.java_blog.xyz.richtextview.RichTextView
+                <suhockii.dev.xyz.richtextview.RichTextView
                     android:id="@+id/fragment_settings_update_interval"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -182,5 +182,13 @@
                     app:fontAsset="weather_icons.ttf" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:lottie_fileName="gears.json"
+            app:lottie_autoPlay="true"
+            android:layout_marginBottom="32dp"
+            app:lottie_loop="true"/>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
